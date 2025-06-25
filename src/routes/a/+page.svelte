@@ -3,17 +3,17 @@
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
-	const { driver } = $derived(data);
+	const { driver, count } = $derived(data);
 
-	const cypher = 'MATCH (u:User) RETURN u AS User LIMIT 10';
+	const cypher = 'MATCH (p:Project) RETURN p AS Project LIMIT 10';
 
-	interface UserProps {
-		name: string;
+	interface ProjectProps {
+		title: string;
 	}
 
-	type User = Node<Integer, UserProps>;
+	type Project = Node<Integer, ProjectProps>;
 
-	let users: User[] = $state([]);
+	let projects: Project[] = $state([]);
 	let awaiting = $state(false);
 
 	async function send() {
@@ -21,7 +21,7 @@
 		awaiting = true;
 		try {
 			const res = await session.executeRead((tx) => tx.run(cypher));
-			users = res.records.map((record) => record.get('User'));
+			projects = res.records.map((record) => record.get('Project'));
 		} finally {
 			awaiting = false;
 			await session.close();
@@ -31,14 +31,14 @@
 
 <h1>Welcome to Obsidian 2.0.0 😎</h1>
 <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
-<button onclick={send}>Get Users</button>
+<button onclick={send}>Get Projects</button>
 
 {#if awaiting}
-	<p>Loading Users</p>
-{:else if users}
+	<p>loading will take {count} seconds</p>
+{:else if projects}
 	<ul>
-		{#each users as user (user.identity)}
-			<li>{user.properties.name}</li>
+		{#each projects as project (project.identity)}
+			<li>{project.properties.title}</li>
 		{/each}
 	</ul>
 {/if}
