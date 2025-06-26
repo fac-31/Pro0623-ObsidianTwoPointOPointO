@@ -28,3 +28,7 @@ jobs:
 
       - name: Type Check
         run: npm run check
+        env:
+          PUBLIC_NEO4J_URL: ${{ secrets.PUBLIC_NEO4J_URL }}
+          PUBLIC_NEO4J_USERNAME: ${{ secrets.PUBLIC_NEO4J_USERNAME }}
+          PUBLIC_NEO4J_PASSWORD: ${{ secrets.PUBLIC_NEO4J_PASSWORD }}
