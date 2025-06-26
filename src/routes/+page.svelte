@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { Integer, Node } from 'neo4j-driver';
+	import { Integer, Neo4jError, Node, Session, type QueryResult } from 'neo4j-driver';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
 	const { driver } = $derived(data);
-
-	const cypher = 'MATCH (u:User) RETURN u AS User LIMIT 10';
 
 	interface UserProps {
 		name: string;
@@ -14,16 +12,43 @@
 	type User = Node<Integer, UserProps>;
 
 	let users: User[] = $state([]);
-	let awaiting = $state(false);
+	let newUser: User | null = $state(null);
+	let newName: string = $state('');
+	let deleteName: string = $state('');
 
-	async function send() {
+	let errorMessage: string = $state('');
+
+	const readUsers = async (session: Session) => {
+		newUser = null;
+		const res = await session.executeRead((tx) =>
+			tx.run('MATCH (u:User) RETURN u AS User LIMIT 10')
+		);
+		users = res.records.map((record) => record.get('User'));
+	};
+
+	const writeUser = async (session: Session) => {
+		users = [];
+		const res = await session.executeWrite((tx) =>
+			tx.run('MERGE (u:User {name: $name}) RETURN u AS User', { name: newName })
+		);
+		newUser = res.records[0].get('User');
+	};
+
+	const deleteUser = async (session: Session) => {
+		users = [];
+		await session.executeWrite((tx) =>
+			tx.run('MATCH (u:User {name: $name}) DETACH DELETE u', { name: deleteName })
+		);
+	};
+
+	async function send(executeFunction: (session: Session) => void) {
 		const session = driver.session();
-		awaiting = true;
 		try {
-			const res = await session.executeRead((tx) => tx.run(cypher));
-			users = res.records.map((record) => record.get('User'));
+			await executeFunction(session);
+		} catch (error: any) {
+			console.error(error);
+			errorMessage = error.message;
 		} finally {
-			awaiting = false;
 			await session.close();
 		}
 	}
@@ -31,14 +56,34 @@
 
 <h1>Welcome to Obsidian 2.0.0 😎</h1>
 <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
-<button onclick={send}>Get Users</button>
+<button onclick={() => send(readUsers)}>Get Users</button>
 
-{#if awaiting}
-	<p>Loading Users</p>
-{:else if users}
+{#if users}
 	<ul>
 		{#each users as user (user.identity)}
 			<li>{user.properties.name}</li>
 		{/each}
 	</ul>
 {/if}
+
+<h2>Add New User</h2>
+<form onsubmit={() => send(writeUser)}>
+	<label>
+		User
+		<input type="text" bind:value={newName} />
+	</label>
+	<button type="submit">Add User</button>
+</form>
+
+{#if newUser}
+	<p>New User <strong>{newUser.properties.name}</strong> Created</p>
+{/if}
+
+<h2>Delete User</h2>
+<form onsubmit={() => send(deleteUser)}>
+	<label>
+		User
+		<input type="text" bind:value={deleteName} />
+	</label>
+	<button type="submit">Delete User</button>
+</form>
