@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Integer, Neo4jError, Node, Session, type QueryResult } from 'neo4j-driver';
+	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -43,11 +43,16 @@
 
 	async function send(executeFunction: (session: Session) => void) {
 		const session = driver.session();
+		errorMessage = '';
 		try {
 			await executeFunction(session);
-		} catch (error: any) {
+		} catch (error) {
 			console.error(error);
-			errorMessage = error.message;
+			if (error instanceof Neo4jError) {
+				errorMessage = error.message;
+			} else {
+				errorMessage = String(error);
+			}
 		} finally {
 			await session.close();
 		}
@@ -56,6 +61,10 @@
 
 <h1>Welcome to Obsidian 2.0.0 😎</h1>
 <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+
+{#if errorMessage}
+	<p>Error: {errorMessage}</p>
+{/if}
 <button onclick={() => send(readUsers)}>Get Users</button>
 
 {#if users}
