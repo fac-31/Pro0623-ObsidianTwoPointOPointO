@@ -1,13 +1,26 @@
 <script lang="ts">
-	const { action, formData } = $props();
+	import type { ActionData } from '../../routes/auth/login/$types';
+
+	type Entry = {
+		name: string;
+		type: string;
+	};
+
+	interface AuthFormProps {
+		entries: Entry[];
+		action: string;
+		formData: ActionData;
+	}
+
+	const { entries, action, formData }: AuthFormProps = $props();
 </script>
 
 <form method="POST" {action}>
 	{#if formData?.error}<p class="error">{formData?.message}</p>{/if}
-	{#each Object.entries(formData) as [key, value]}
+	{#each entries as entry}
 		<label>
-			{key}
-			<input name={key} type={key === 'password' ? 'password' : 'text'} value={value ?? ''} />
+			{entry.name}
+			<input name={entry.name} type={entry.type} value={''} />
 		</label>
 	{/each}
 	<button class="button">Log In</button>
