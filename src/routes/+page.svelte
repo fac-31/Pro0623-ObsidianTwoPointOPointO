@@ -1,9 +1,6 @@
 <script lang="ts">
+	import driver from '$lib/db/neo4j';
 	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
-	import type { PageProps } from './$types';
-
-	const { data }: PageProps = $props();
-	const { driver } = $derived(data);
 
 	interface UserProps {
 		name: string;
