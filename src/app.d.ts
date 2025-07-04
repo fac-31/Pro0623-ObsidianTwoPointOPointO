@@ -11,6 +11,7 @@ declare global {
 			}>;
 			session: Session | null;
 			user: User | null;
+			profile: User | null;
 		}
 		interface PageData {
 			session: Session | null;

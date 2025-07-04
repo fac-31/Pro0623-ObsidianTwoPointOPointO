@@ -1,19 +1,8 @@
 import { createBrowserClient, createServerClient, isBrowser } from '@supabase/ssr';
-import neo4j from 'neo4j-driver';
-import {
-	PUBLIC_NEO4J_URL,
-	PUBLIC_NEO4J_USERNAME,
-	PUBLIC_NEO4J_PASSWORD,
-	PUBLIC_SUPABASE_URL,
-	PUBLIC_SUPABASE_ANON_KEY
-} from '$env/static/public';
+import driver from '$lib/db/neo4j';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import type { LayoutLoad } from './$types';
-
-const neo4jConfig = {
-	url: PUBLIC_NEO4J_URL,
-	username: PUBLIC_NEO4J_USERNAME,
-	password: PUBLIC_NEO4J_PASSWORD
-};
+import type { Node, Integer } from 'neo4j-driver';
 
 export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 	/**
@@ -52,14 +41,27 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 		data: { user }
 	} = await supabase.auth.getUser();
 
-	const driver = neo4j.driver(
-		neo4jConfig.url,
-		neo4j.auth.basic(neo4jConfig.username, neo4jConfig.password)
-	);
-
 	if (!user) {
-		return { session, supabase, driver, user: null };
+		return { session, supabase, user: null, profile: null };
 	}
 
-	return { session, supabase, driver, user };
+	interface UserProps {
+		name: string;
+		authid: string;
+	}
+
+	type User = Node<Integer, UserProps>;
+
+	let profile: User;
+	const neo4jsession = driver.session();
+	try {
+		const res = await neo4jsession.executeWrite((tx) =>
+			tx.run('MATCH (u:User {authid: $authid}) RETURN u as User', { authid: user.id })
+		);
+		profile = res.records[0].get('User');
+	} finally {
+		await neo4jsession.close();
+	}
+
+	return { session, supabase, user, profile };
 };
