@@ -1,9 +1,10 @@
 <script lang="ts">
+	import driver from '$lib/db/neo4j';
 	import { Integer, Node } from 'neo4j-driver';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
-	const { driver, count } = $derived(data);
+	const { count } = $derived(data);
 
 	const cypher = 'MATCH (p:Project) RETURN p AS Project LIMIT 10';
 
