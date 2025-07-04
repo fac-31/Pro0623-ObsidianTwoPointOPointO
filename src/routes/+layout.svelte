@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 
 	const { data, children } = $props();
-	const { user, profile, supabase, session } = $derived(data);
+	const { profile, supabase, session } = $derived(data);
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, newSession) => {
@@ -25,6 +25,6 @@
 	<h1>Hello {profile.properties.name}</h1>
 	<button onclick={logout}>Log Out</button>
 {:else}
-	<a href="auth/login">Log In</a>
+	<a href="auth">Log In</a>
 {/if}
 {@render children()}

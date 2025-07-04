@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ActionData } from '../../routes/auth/login/$types';
+	import type { ActionData } from '../../routes/auth/$types';
 
 	type Entry = {
 		name: string;
@@ -17,10 +17,10 @@
 
 <form method="POST" {action}>
 	{#if formData?.error}<p class="error">{formData?.message}</p>{/if}
-	{#each entries as entry}
-		<label>
+	{#each entries as entry (entry.name)}
+		<label for={entry.name}>
 			{entry.name}
-			<input name={entry.name} type={entry.type} value={''} />
+			<input name={entry.name} type={entry.type} />
 		</label>
 	{/each}
 	<button class="button">Log In</button>

@@ -45,6 +45,8 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 		return { session, supabase, user: null, profile: null };
 	}
 
+	console.log('User:', user);
+
 	interface UserProps {
 		name: string;
 		authid: string;
@@ -59,6 +61,9 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 			tx.run('MATCH (u:User {authid: $authid}) RETURN u as User', { authid: user.id })
 		);
 		profile = res.records[0].get('User');
+	} catch (error) {
+		console.error('Error:', error);
+		return { session, supabase, user, profile: null };
 	} finally {
 		await neo4jsession.close();
 	}
