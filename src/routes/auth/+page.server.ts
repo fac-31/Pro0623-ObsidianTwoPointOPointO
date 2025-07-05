@@ -16,7 +16,7 @@ export const actions: Actions = {
 		if (error) {
 			return fail(400, { email, error: true, message: error.message, state: 'logIn' });
 		} else {
-			redirect(303, '/');
+			throw redirect(303, '/');
 		}
 	},
 	signup: async ({ request, locals: { supabase } }) => {
@@ -102,6 +102,6 @@ export const actions: Actions = {
 			}
 		}
 
-		redirect(303, '/');
+		throw redirect(303, '/');
 	}
 };
