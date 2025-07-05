@@ -4,10 +4,11 @@
 
 	const { form }: PageProps = $props();
 
-	let loggingIn = $state(true);
+	let formState = $state();
+	formState = form?.state || 'logIn';
 </script>
 
-{#if loggingIn}
+{#if formState === 'logIn'}
 	<AuthForm
 		action="?/login"
 		entries={[
@@ -16,7 +17,8 @@
 		]}
 		formData={form}
 	/>
-{:else}
+	<button onclick={() => (formState = 'signUp')}>Don't Have an Account? Sign Up</button>
+{:else if formState === 'signUp'}
 	<AuthForm
 		action="?/signup"
 		entries={[
@@ -27,5 +29,5 @@
 		]}
 		formData={form}
 	/>
+	<button onclick={() => (formState = 'logIn')}>Already Have an Account? Log In</button>
 {/if}
-<button onclick={() => (loggingIn = !loggingIn)}>{loggingIn ? 'Sign Up' : 'Log In'}</button>
