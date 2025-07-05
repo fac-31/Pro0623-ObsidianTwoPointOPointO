@@ -1,1 +1,15 @@
-@import 'tailwindcss';
+@import 'tailwindcss/theme.css';
+@import 'tailwindcss/preflight.css';
+@import 'tailwindcss/utilities.css';
+@import 'tailwindcss/theme.css';
+
+@theme {
+	--p: 222 100% 60%; /* primary */
+	--pc: 0 0% 100%; /* primary-content */
+	--s: 276 100% 60%; /* secondary */
+	--sc: 0 0% 100%; /* secondary-content */
+	--a: 42 100% 50%; /* accent */
+	--ac: 0 0% 100%; /* accent-content */
+	--n: 219 14% 28%; /* neutral */
+	--nc: 0 0% 100%; /* neutral-content */
+}
