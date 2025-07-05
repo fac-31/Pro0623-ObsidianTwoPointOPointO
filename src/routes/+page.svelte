@@ -1,6 +1,7 @@
 <script lang="ts">
 	import driver from '$lib/db/neo4j';
 	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
+	import GridLayout from '../lib/layout/grid.svelte';
 
 	interface UserProps {
 		name: string;
