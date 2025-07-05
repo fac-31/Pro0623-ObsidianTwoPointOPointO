@@ -6,28 +6,48 @@
 
 	let formState = $state();
 	formState = form?.state || 'logIn';
+
+	const toggleForm = (toState: string) => {
+		formState = toState;
+		form!.error = false;
+	};
 </script>
 
-{#if formState === 'logIn'}
-	<AuthForm
-		action="?/login"
-		entries={[
-			{ name: 'email', type: 'email' },
-			{ name: 'password', type: 'password' }
-		]}
-		formData={form}
-	/>
-	<button onclick={() => (formState = 'signUp')}>Don't Have an Account? Sign Up</button>
-{:else if formState === 'signUp'}
-	<AuthForm
-		action="?/signup"
-		entries={[
-			{ name: 'username', type: 'text' },
-			{ name: 'email', type: 'email' },
-			{ name: 'password', type: 'password' },
-			{ name: 'password-check', type: 'password' }
-		]}
-		formData={form}
-	/>
-	<button onclick={() => (formState = 'logIn')}>Already Have an Account? Log In</button>
-{/if}
+<section class="flex flex-col items-center justify-center h-screen">
+	{#if formState === 'logIn'}
+		<AuthForm
+			action="?/login"
+			entries={[
+				{ name: 'username', label: 'Username', type: 'text' },
+				{ name: 'email', label: 'Email', type: 'email' },
+				{ name: 'password', label: 'Password', type: 'password' }
+			]}
+			buttonText="Log In"
+			formData={form}
+		/>
+		<button
+			onclick={() => toggleForm('signUp')}
+			class="text-sm text-black hover:underline cursor-pointer"
+		>
+			Don't Have an Account? Sign Up
+		</button>
+	{:else if formState === 'signUp'}
+		<AuthForm
+			action="?/signup"
+			entries={[
+				{ name: 'username', label: 'Username', type: 'text' },
+				{ name: 'email', label: 'Email', type: 'email' },
+				{ name: 'password', label: 'Password', type: 'password' },
+				{ name: 'password-check', label: 'Confirm Password', type: 'password' }
+			]}
+			buttonText="Sign Up"
+			formData={form}
+		/>
+		<button
+			onclick={() => toggleForm('logIn')}
+			class="text-sm text-black hover:underline cursor-pointer"
+		>
+			Already Have an Account? Log In
+		</button>
+	{/if}
+</section>
