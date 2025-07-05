@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import '../app.css';
 
 	const { data, children } = $props();
 	const { profile, supabase, session } = $derived(data);
