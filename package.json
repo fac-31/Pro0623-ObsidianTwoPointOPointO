@@ -14,11 +14,13 @@
 		"lint": "prettier --check . && eslint .",
 		"test": "vitest run",
 		"test:ui": "vitest --ui",
-		"test:watch": "vitest"
+		"test:watch": "vitest",
+		"test:e2e": "playwright test"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
+		"@playwright/test": "^1.53.2",
 		"@sveltejs/adapter-auto": "^6.0.0",
 		"@sveltejs/kit": "^2.22.0",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
@@ -26,6 +28,7 @@
 		"@testing-library/svelte": "^5.2.8",
 		"@testing-library/user-event": "^14.6.1",
 		"@types/neo4j": "^2.0.6",
+		"@types/node": "^24.0.10",
 		"@vitest/ui": "^3.2.4",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
