@@ -1,5 +1,5 @@
 import driver from '$lib/db/neo4j';
-import { Neo4jError, Session } from 'neo4j-driver';
+import { Session } from 'neo4j-driver';
 import data from '$lib/db/seed.json';
 
 interface Edge {
@@ -15,8 +15,6 @@ interface Entity {
 	properties: Record<string, unknown>[];
 	edges: Edge[];
 }
-
-let errorMessage: string = '';
 
 const processEntity = async (session: Session, entity: Entity) => {
 	await session.executeWrite(async (tx) => {
@@ -46,16 +44,10 @@ const processEntity = async (session: Session, entity: Entity) => {
 async function send(executeFunction: (session: Session) => Promise<void>) {
 	console.log('SENDING');
 	const session = driver.session();
-	errorMessage = '';
 	try {
 		await executeFunction(session);
 	} catch (error) {
 		console.error(error);
-		if (error instanceof Neo4jError) {
-			errorMessage = error.message;
-		} else {
-			errorMessage = String(error);
-		}
 	} finally {
 		await session.close();
 	}
