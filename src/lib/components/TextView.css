@@ -1,0 +1,94 @@
+.container {
+	display: flex;
+	gap: 2rem;
+	font-family: monospace;
+	white-space: pre;
+}
+
+.ascii-tree {
+	flex: 1 1 60%;
+}
+
+.node-button {
+	all: unset;
+	color: #007acc;
+	cursor: pointer;
+	font-weight: normal;
+}
+
+.node-button:focus {
+	outline: 2px solid #007acc;
+	background: #eef;
+}
+
+/* Incoming node button aligned left, no indent */
+.incoming-node {
+	display: inline-block;
+	margin-right: 0.3ch;
+}
+
+/* The connection line for incoming below the node, left aligned */
+.incoming-line {
+	margin-left: 0;
+	margin-bottom: 0.7em;
+}
+
+/* Blank line for visual separation */
+.blank-line {
+	height: 1.2em;
+}
+
+/* Selected node is bold and on its own line */
+.selected-node {
+	display: block;
+	font-weight: bold;
+	margin-left: 0;
+	margin-bottom: 0.5em;
+}
+
+/* Outgoing group: connection line + node, indented */
+.outgoing-group {
+	display: flex;
+	align-items: center;
+	margin-left: 14ch; /* Indent outgoing group under selected node */
+	margin-bottom: 0.3em;
+}
+
+.connection-line {
+	color: #888;
+	margin-right: 0.5ch;
+	white-space: nowrap;
+}
+
+/* Outgoing node button */
+.outgoing-node {
+	display: inline-block;
+}
+
+/* Properties box styling */
+.properties-box {
+	flex: 1 1 35%;
+	border: 1px solid #ddd;
+	padding: 1rem;
+	background: #f9f9f9;
+	font-size: 0.9rem;
+	overflow-wrap: break-word;
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.properties-box h2 {
+	margin-top: 0;
+	font-weight: bold;
+	font-size: 1.1rem;
+	margin-bottom: 0.5rem;
+}
+
+.properties-box ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+.properties-box li {
+	margin-bottom: 0.3rem;
+}

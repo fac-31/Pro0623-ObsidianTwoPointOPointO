@@ -46,6 +46,7 @@
 		"@tailwindcss/vite": "^4.1.11",
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.50.3",
+		"cytoscape": "^3.32.0",
 		"neo4j-driver": "^5.28.1",
 		"tailwindcss": "^4.1.11"
 	}
