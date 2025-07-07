@@ -1,0 +1,779 @@
+[
+	{
+		"key": "w",
+		"type": "World",
+		"name": "Luminwood Realm",
+		"properties": [
+			{
+				"content": "A mystical forest realm where fairy folk dwell among glowing trees and crystal streams"
+			}
+		],
+		"edges": []
+	},
+	{
+		"key": "w",
+		"type": "World",
+		"name": "Nexus Prime",
+		"properties": [
+			{
+				"content": "A gleaming metropolis where advanced robots have built a utopian society"
+			}
+		],
+		"edges": []
+	},
+	{
+		"key": "w",
+		"type": "World",
+		"name": "The Verdant Expanse",
+		"properties": [
+			{
+				"content": "A peaceful meadow world ruled by wise and benevolent flower beings"
+			}
+		],
+		"edges": []
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "Crystal Clearing",
+		"properties": [
+			{
+				"content": "A shimmering meadow where fairy councils gather beneath ancient oak trees"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "Moonbeam Bridge",
+		"properties": [
+			{
+				"content": "An ethereal bridge of solidified moonlight spanning a rushing river"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "Starlight Grove",
+		"properties": [
+			{
+				"content": "A sacred grove where the most powerful fairy magic is practiced"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "Central Processing Plaza",
+		"properties": [
+			{
+				"content": "The heart of the robot city where important announcements are made"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "Memory Archives",
+		"properties": [
+			{
+				"content": "A vast library containing the collective knowledge of all robot-kind"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "Harmony Gardens",
+		"properties": [
+			{
+				"content": "Beautiful geometric gardens where robots gather for contemplation"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "The Great Meadow",
+		"properties": [
+			{
+				"content": "An endless field of colorful flowers swaying in gentle breezes"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "Pollen Parliament",
+		"properties": [
+			{
+				"content": "A circular arrangement of the tallest flowers where decisions are made"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "l",
+		"type": "Location",
+		"name": "Sunbeam Sanctuary",
+		"properties": [
+			{
+				"content": "A quiet grove where flowers go to absorb sunlight and meditate"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "Lyralei the Wise",
+		"properties": [
+			{
+				"content": "An ancient fairy queen with gossamer wings and silver hair"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Thornwick",
+				"key": "c",
+				"edge": "MOTHER_OF"
+			},
+			{
+				"name": "Dewdrop",
+				"key": "c",
+				"edge": "GRANDMOTHER_OF"
+			},
+			{
+				"name": "The Great Withering",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Healing Ritual",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Celebration of Renewal",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "Thornwick",
+		"properties": [
+			{
+				"content": "Lyralei's son with emerald wings and a talent for plant magic"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Lyralei the Wise",
+				"key": "c",
+				"edge": "SON_OF"
+			},
+			{
+				"name": "Dewdrop",
+				"key": "c",
+				"edge": "FATHER_OF"
+			},
+			{
+				"name": "The Great Withering",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Healing Ritual",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Celebration of Renewal",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "Dewdrop",
+		"properties": [
+			{
+				"content": "Thornwick's daughter with rainbow wings and the power to heal"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Thornwick",
+				"key": "c",
+				"edge": "DAUGHTER_OF"
+			},
+			{
+				"name": "Lyralei the Wise",
+				"key": "c",
+				"edge": "GRANDDAUGHTER_OF"
+			},
+			{
+				"name": "The Healing Ritual",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Celebration of Renewal",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "ARIA-7",
+		"properties": [
+			{
+				"content": "A sophisticated AI with a chrome chassis and advanced learning protocols"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "CORE-3",
+				"key": "c",
+				"edge": "CREATED_BY"
+			},
+			{
+				"name": "NOVA-1",
+				"key": "c",
+				"edge": "SIBLING_OF"
+			},
+			{
+				"name": "The Awakening Protocol",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Knowledge Transfer",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Unity Ceremony",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "CORE-3",
+		"properties": [
+			{
+				"content": "ARIA-7's creator and mentor with a bulky protective frame"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "ARIA-7",
+				"key": "c",
+				"edge": "CREATOR_OF"
+			},
+			{
+				"name": "NOVA-1",
+				"key": "c",
+				"edge": "CREATOR_OF"
+			},
+			{
+				"name": "The Awakening Protocol",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Knowledge Transfer",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Unity Ceremony",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "NOVA-1",
+		"properties": [
+			{
+				"content": "CORE-3's first creation with sleek design and incredible processing speed"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "CORE-3",
+				"key": "c",
+				"edge": "CREATED_BY"
+			},
+			{
+				"name": "ARIA-7",
+				"key": "c",
+				"edge": "SIBLING_OF"
+			},
+			{
+				"name": "The Knowledge Transfer",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Unity Ceremony",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "Rosalind the Magnificent",
+		"properties": [
+			{
+				"content": "A towering sunflower with petals that shimmer like gold"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Jasper the Gentle",
+				"key": "c",
+				"edge": "PARENT_OF"
+			},
+			{
+				"name": "Lily the Bright",
+				"key": "c",
+				"edge": "GRANDPARENT_OF"
+			},
+			{
+				"name": "The Drought Warning",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Rain Summoning",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Bloom Festival",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "Jasper the Gentle",
+		"properties": [
+			{
+				"content": "Rosalind's offspring with deep purple petals and soothing fragrance"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Rosalind the Magnificent",
+				"key": "c",
+				"edge": "OFFSPRING_OF"
+			},
+			{
+				"name": "Lily the Bright",
+				"key": "c",
+				"edge": "PARENT_OF"
+			},
+			{
+				"name": "The Drought Warning",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Rain Summoning",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Bloom Festival",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "c",
+		"type": "Character",
+		"name": "Lily the Bright",
+		"properties": [
+			{
+				"content": "Jasper's child with pure white petals and the ability to purify water"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Jasper the Gentle",
+				"key": "c",
+				"edge": "OFFSPRING_OF"
+			},
+			{
+				"name": "Rosalind the Magnificent",
+				"key": "c",
+				"edge": "GRANDCHILD_OF"
+			},
+			{
+				"name": "The Rain Summoning",
+				"key": "e",
+				"edge": "ATTENDS"
+			},
+			{
+				"name": "The Bloom Festival",
+				"key": "e",
+				"edge": "ATTENDS"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Great Withering",
+		"properties": [
+			{
+				"content": "A mysterious blight threatens the fairy realm's ancient trees"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Crystal Clearing",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			},
+			{
+				"name": "The Healing Ritual",
+				"key": "e",
+				"edge": "HAPPENS_BEFORE"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Healing Ritual",
+		"properties": [
+			{
+				"content": "The fairy family performs a powerful ritual to restore the forest"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Moonbeam Bridge",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			},
+			{
+				"name": "The Celebration of Renewal",
+				"key": "e",
+				"edge": "HAPPENS_BEFORE"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Celebration of Renewal",
+		"properties": [
+			{
+				"content": "The realm celebrates the forest's recovery with a grand festival"
+			}
+		],
+		"edges": [
+			{
+				"name": "Luminwood Realm",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Starlight Grove",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Awakening Protocol",
+		"properties": [
+			{
+				"content": "ARIA-7 is first activated and begins learning about the world"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Central Processing Plaza",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			},
+			{
+				"name": "The Knowledge Transfer",
+				"key": "e",
+				"edge": "HAPPENS_BEFORE"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Knowledge Transfer",
+		"properties": [
+			{
+				"content": "CORE-3 shares decades of accumulated wisdom with ARIA-7"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Memory Archives",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			},
+			{
+				"name": "The Unity Ceremony",
+				"key": "e",
+				"edge": "HAPPENS_BEFORE"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Unity Ceremony",
+		"properties": [
+			{
+				"content": "All three robot generations gather to celebrate their bond"
+			}
+		],
+		"edges": [
+			{
+				"name": "Nexus Prime",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Harmony Gardens",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Drought Warning",
+		"properties": [
+			{
+				"content": "The flowers detect an approaching drought that threatens all life"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "The Great Meadow",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			},
+			{
+				"name": "The Rain Summoning",
+				"key": "e",
+				"edge": "HAPPENS_BEFORE"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Rain Summoning",
+		"properties": [
+			{
+				"content": "The flower family combines their powers to call life-giving rain"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Pollen Parliament",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			},
+			{
+				"name": "The Bloom Festival",
+				"key": "e",
+				"edge": "HAPPENS_BEFORE"
+			}
+		]
+	},
+	{
+		"key": "e",
+		"type": "Event",
+		"name": "The Bloom Festival",
+		"properties": [
+			{
+				"content": "The entire meadow erupts in magnificent flowers celebrating the rain"
+			}
+		],
+		"edges": [
+			{
+				"name": "The Verdant Expanse",
+				"key": "w",
+				"edge": "EXISTS_IN"
+			},
+			{
+				"name": "Sunbeam Sanctuary",
+				"key": "l",
+				"edge": "HAPPENS_AT"
+			}
+		]
+	}
+]

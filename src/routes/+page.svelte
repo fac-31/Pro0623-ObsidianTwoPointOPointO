@@ -1,6 +1,7 @@
 <script lang="ts">
 	import driver from '$lib/db/neo4j';
 	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
+	import seedData from '$lib/utils/create-utils';
 
 	interface UserProps {
 		name: string;
@@ -113,4 +114,10 @@
 		</label>
 		<button type="submit" class="px-3 py-1 border rounded hover:bg-gray-100"> Delete User </button>
 	</form>
+	<div>
+		<button onclick={seedData} class="px-3 py-1 border rounded hover:bg-gray-100"
+			>Seed Data Button</button
+		>
+		<p>But there's no need because the db is already seeded!</p>
+	</div>
 </main>
