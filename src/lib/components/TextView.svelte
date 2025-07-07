@@ -81,7 +81,7 @@
 		<h2>Selected Node Properties</h2>
 		{#if selectedNodeId}
 			<ul>
-				{#each Object.entries(getNode(selectedNodeId)?.data ?? {}) as [key, value]}
+				{#each Object.entries(getNode(selectedNodeId)?.data ?? {}) as [key, value] (key)}
 					<li><strong>{key}:</strong> {value}</li>
 				{/each}
 			</ul>
