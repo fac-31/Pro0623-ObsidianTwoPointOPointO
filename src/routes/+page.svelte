@@ -5,6 +5,7 @@
 
 	interface UserProps {
 		name: string;
+		authid: string;
 	}
 
 	type User = Node<Integer, UserProps>;
