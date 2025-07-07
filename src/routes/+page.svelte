@@ -3,6 +3,8 @@
 	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
 	import seedData from '$lib/utils/create-utils';
 
+	let id = 'hello';
+
 	interface UserProps {
 		name: string;
 		authid: string;
@@ -61,7 +63,7 @@
 	<h1 class="text-xl font-semibold">Welcome to Obsidian 2.0.0 😎</h1>
 
 	<a
-		href="/dashboard"
+		href={`/worlds/${id}`}
 		class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
 	>
 		Tester Dashboard

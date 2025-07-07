@@ -3,8 +3,8 @@ import type { RequestHandler } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
 import type { GraphData, GraphNode, GraphEdge } from '$lib/types/graph';
 
-export const GET: RequestHandler = async ({ params }) => {
-	const { id } = params;
+export const GET: RequestHandler = async () => {
+	console.log('HELLLLLLOOO!');
 	const session = driver.session();
 
 	try {
@@ -13,8 +13,7 @@ export const GET: RequestHandler = async ({ params }) => {
       MATCH (n)-[r]->(m)
       RETURN n, r, m
       LIMIT 500
-    `,
-			{ id }
+    `
 		);
 
 		const nodes = new Map<string, GraphNode>();
@@ -48,6 +47,8 @@ export const GET: RequestHandler = async ({ params }) => {
 			nodes: Array.from(nodes.values()),
 			edges
 		};
+		console.log('hello from server?');
+		console.log(graphData);
 
 		return json(graphData);
 	} catch (err) {
