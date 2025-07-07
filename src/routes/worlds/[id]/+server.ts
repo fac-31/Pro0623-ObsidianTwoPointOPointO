@@ -4,7 +4,6 @@ import { json } from '@sveltejs/kit';
 import type { GraphData, GraphNode, GraphEdge } from '$lib/types/graph';
 
 export const GET: RequestHandler = async () => {
-	console.log('HELLLLLLOOO!');
 	const session = driver.session();
 
 	try {
@@ -47,8 +46,6 @@ export const GET: RequestHandler = async () => {
 			nodes: Array.from(nodes.values()),
 			edges
 		};
-		console.log('hello from server?');
-		console.log(graphData);
 
 		return json(graphData);
 	} catch (err) {

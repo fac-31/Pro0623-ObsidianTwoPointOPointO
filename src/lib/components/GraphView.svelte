@@ -2,7 +2,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
-	import FloatingButton from '$lib/components/FloatingButton.svelte';
 
 	export let graphData: GraphData;
 
@@ -45,25 +44,13 @@
 	onDestroy(() => {
 		cy?.destroy();
 	});
-
-	function handleClick() {
-		alert('moar multiverses');
-	}
 </script>
 
-<div class="rounded-xl bg-base-300 text-base p-4 h-full w-full relative">
-	<p>The multiverse exists... eventually</p>
-
+<div>
 	<div
 		bind:this={container}
 		style="width: 100%; height: 600px;"
 		role="application"
 		aria-label="Graph view"
 	></div>
-
-	<FloatingButton
-		ariaLabel="moar multiverses"
-		onClick={handleClick}
-		position="absolute bottom-6 right-6"
-	/>
 </div>

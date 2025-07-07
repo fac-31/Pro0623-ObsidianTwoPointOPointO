@@ -3,12 +3,12 @@
 	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
 	import seedData from '$lib/utils/create-utils';
 
-	let id = 'hello';
-
 	interface UserProps {
 		name: string;
 		authid: string;
 	}
+
+	let id = 'someid';
 
 	type User = Node<Integer, UserProps>;
 
