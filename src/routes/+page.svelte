@@ -1,9 +1,11 @@
 <script lang="ts">
 	import driver from '$lib/db/neo4j';
 	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
+	import seedData from '$lib/utils/create-utils';
 
 	interface UserProps {
 		name: string;
+		authid: string;
 	}
 
 	type User = Node<Integer, UserProps>;
@@ -12,7 +14,6 @@
 	let newUser: User | null = $state(null);
 	let newName: string = $state('');
 	let deleteName: string = $state('');
-
 	let errorMessage: string = $state('');
 
 	const readUsers = async (session: Session) => {
@@ -56,40 +57,67 @@
 	}
 </script>
 
-<h1>Welcome to Obsidian 2.0.0 😎</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<main class="max-w-xl mx-auto p-4 space-y-6 text-sm">
+	<h1 class="text-xl font-semibold">Welcome to Obsidian 2.0.0 😎</h1>
 
-{#if errorMessage}
-	<p>Error: {errorMessage}</p>
-{/if}
-<button onclick={() => send(readUsers)}>Get Users</button>
+	<a
+		href="/dashboard"
+		class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+	>
+		Tester Dashboard
+	</a>
 
-{#if users}
-	<ul>
-		{#each users as user (user.identity)}
-			<li>{user.properties.name}</li>
-		{/each}
-	</ul>
-{/if}
+	<p>
+		Visit
+		<a href="https://svelte.dev/docs/kit" class="underline text-blue-600"> svelte.dev/docs/kit </a>
+		to read the documentation
+	</p>
 
-<h2>Add New User</h2>
-<form onsubmit={() => send(writeUser)}>
-	<label>
-		User
-		<input type="text" bind:value={newName} />
-	</label>
-	<button type="submit">Add User</button>
-</form>
+	{#if errorMessage}
+		<p class="text-red-600">Error: {errorMessage}</p>
+	{/if}
 
-{#if newUser}
-	<p>New User <strong>{newUser.properties.name}</strong> Created</p>
-{/if}
+	<button onclick={() => send(readUsers)} class="px-3 py-1 border rounded hover:bg-gray-100">
+		Get Users
+	</button>
 
-<h2>Delete User</h2>
-<form onsubmit={() => send(deleteUser)}>
-	<label>
-		User
-		<input type="text" bind:value={deleteName} />
-	</label>
-	<button type="submit">Delete User</button>
-</form>
+	{#if users}
+		<ul class="list-disc list-inside">
+			{#each users as user (user.identity)}
+				<li>{user.properties.name}</li>
+			{/each}
+		</ul>
+	{/if}
+
+	<h2 class="text-lg font-medium">Add New User</h2>
+	<form onsubmit={() => send(writeUser)} class="space-y-2">
+		<label class="block">
+			User
+			<input type="text" bind:value={newName} class="block mt-1 border px-2 py-1 w-full rounded" />
+		</label>
+		<button type="submit" class="px-3 py-1 border rounded hover:bg-gray-100"> Add User </button>
+	</form>
+
+	{#if newUser}
+		<p>New User <strong>{newUser.properties.name}</strong> Created</p>
+	{/if}
+
+	<h2 class="text-lg font-medium">Delete User</h2>
+	<form onsubmit={() => send(deleteUser)} class="space-y-2">
+		<label class="block">
+			User
+			<input
+				type="text"
+				bind:value={deleteName}
+				class="block mt-1 border px-2 py-1 w-full rounded"
+			/>
+		</label>
+		<button type="submit" class="px-3 py-1 border rounded hover:bg-gray-100"> Delete User </button>
+	</form>
+	<div>
+		<button onclick={seedData} class="px-3 py-1 border rounded hover:bg-gray-100"
+			>Seed Data Button</button
+		>
+		<p>But there's no need because the db is already seeded!</p>
+	</div>
+</main>
