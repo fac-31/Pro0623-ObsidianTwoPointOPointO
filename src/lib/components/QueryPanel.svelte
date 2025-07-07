@@ -1,10 +1,12 @@
 <script lang="ts">
 	let selectedTab = 'tab1';
+
+	function handleClick() {
+		alert('fetch');
+	}
 </script>
 
 <div class="rounded-xl bg-base-300 text-base p-4 h-full w-full">
-	<h2 class="font-bold text-lg mb-4">Text Window</h2>
-
 	<div class="tabs tabs-lift">
 		<input
 			type="radio"
@@ -16,7 +18,12 @@
 			checked
 		/>
 		<div class="tab-content bg-base-100 p-6 h-full w-full">
-			<textarea class="textarea w-full h-full rounded-xl" placeholder="Ask me something"></textarea>
+			<textarea
+				class="textarea textarea-ghost w-full h-full rounded-xl"
+				placeholder="Ask me something"
+			></textarea>
+
+			<button class="btn btn-secondary" on:click={handleClick}>Enter</button>
 		</div>
 
 		<input
@@ -28,8 +35,12 @@
 			bind:group={selectedTab}
 		/>
 		<div class="tab-content bg-base-100 p-6 h-full w-full">
-			<textarea class="textarea w-full h-full rounded-xl" placeholder="Or give me a command"
+			<textarea
+				class="textarea textarea-ghost w-full h-full rounded-xl"
+				placeholder="Or give me a command"
 			></textarea>
+
+			<button class="btn btn-secondary" on:click={handleClick}>Enter</button>
 		</div>
 
 		<input
@@ -41,8 +52,12 @@
 			bind:group={selectedTab}
 		/>
 		<div class="tab-content bg-base-100 p-6 h-full w-full">
-			<textarea class="textarea w-full h-full rounded-xl" placeholder="Get me to make something"
+			<textarea
+				class="textarea textarea-ghost w-full h-full rounded-xl"
+				placeholder="Get me to make something"
 			></textarea>
+
+			<button class="btn btn-secondary" on:click={handleClick}>Enter</button>
 		</div>
 	</div>
 </div>

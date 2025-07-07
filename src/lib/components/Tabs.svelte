@@ -8,6 +8,6 @@
 	setContext('tabs', { group, selectedTab });
 </script>
 
-<div class="tabs tabs-lifted w-full">
+<div class="tabs tabs-lift w-full">
 	<slot />
 </div>
