@@ -1,11 +1,14 @@
 <script lang="ts">
 	import driver from '$lib/db/neo4j';
 	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
+	import seedData from '$lib/utils/create-utils';
 
 	interface UserProps {
 		name: string;
 		authid: string;
 	}
+
+	let id = 'someid';
 
 	type User = Node<Integer, UserProps>;
 
@@ -58,6 +61,14 @@
 
 <main class="max-w-xl mx-auto p-4 space-y-6 text-sm">
 	<h1 class="text-xl font-semibold">Welcome to Obsidian 2.0.0 😎</h1>
+
+	<a
+		href={`/worlds/${id}`}
+		class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+	>
+		Tester Dashboard
+	</a>
+
 	<p>
 		Visit
 		<a href="https://svelte.dev/docs/kit" class="underline text-blue-600"> svelte.dev/docs/kit </a>
@@ -105,4 +116,10 @@
 		</label>
 		<button type="submit" class="px-3 py-1 border rounded hover:bg-gray-100"> Delete User </button>
 	</form>
+	<div>
+		<button onclick={seedData} class="px-3 py-1 border rounded hover:bg-gray-100"
+			>Seed Data Button</button
+		>
+		<p>But there's no need because the db is already seeded!</p>
+	</div>
 </main>
