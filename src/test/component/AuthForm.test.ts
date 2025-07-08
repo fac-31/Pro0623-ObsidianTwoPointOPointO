@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { expect, test, vi } from 'vitest';
 import AuthForm from '$lib/components/AuthForm.svelte';
-import type { ActionData } from '../routes/auth/$types';
+import type { ActionData } from '../../routes/auth/$types';
 
 test('submits the form when the button is clicked', async () => {
 	const user = userEvent.setup();

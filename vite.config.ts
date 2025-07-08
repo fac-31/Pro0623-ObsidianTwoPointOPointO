@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit(), devtoolsJson(), svelteTesting()],
 	test: {
+		include: ['src/test/component/**/*.test.ts'],
 		environment: 'jsdom',
 		setupFiles: ['./vitest-setup.ts']
 	},
