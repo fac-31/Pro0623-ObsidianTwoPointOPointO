@@ -18,17 +18,17 @@
 	});
 </script>
 
-<PaneGroup direction={$isSmallScreen ? 'vertical' : 'horizontal'} class="h-full">
-	<Pane defaultSize={70}>
+<PaneGroup direction={$isSmallScreen ? 'vertical' : 'horizontal'} class="h-full p-4">
+	<Pane defaultSize={80}>
 		<WorldView {graphData} />
 	</Pane>
-	<PaneResizer class={`bg-white cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
+	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
 	<Pane defaultSize={30}>
 		<PaneGroup direction={$isSmallScreen ? 'horizontal' : 'vertical'} class="h-full">
 			<Pane defaultSize={30}>
 				<QueryPanel />
 			</Pane>
-			<PaneResizer class={`bg-white cursor-grab ${$isSmallScreen ? 'w-2 h-full' : 'h-2 w-full'}`} />
+			<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'w-2 h-full' : 'h-2 w-full'}`} />
 			<Pane defaultSize={70}>
 				<InfoPanel />
 			</Pane>

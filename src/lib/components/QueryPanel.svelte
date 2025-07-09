@@ -6,7 +6,7 @@
 	}
 </script>
 
-<div class="bg-base-300 text-base p-4 h-full w-full">
+<div class="rounded-xl bg-base-300 text-base p-4 h-full w-full">
 	<div class="tabs tabs-lift">
 		<input
 			type="radio"

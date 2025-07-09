@@ -13,7 +13,7 @@
 	export let graphData: GraphData;
 </script>
 
-<div class="flex flex-col h-full w-full bg-base-300 relative">
+<div class="flex flex-col h-full w-full rounded-xl bg-base-300 relative">
 	<div class="flex-1 overflow-hidden">
 		{#if showGraph}
 			<GraphView {graphData} />

@@ -12,7 +12,7 @@
 	}
 </script>
 
-<div class="bg-base-300 text-base p-4 h-full w-full">
+<div class="rounded-xl bg-base-300 text-base p-4 h-full w-full">
 	<Tabs group="bottom_tabs">
 		<Tab name="bottom_tabs" label="Tab 1" value="tab1" checked />
 		<TabsPanel value="tab1">

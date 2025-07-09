@@ -24,7 +24,7 @@
 
 <!-- Global layout wrapper -->
 <div class="flex flex-col h-screen">
-	<header class="bg-base-200">
+	<header>
 		{#if profile}
 			<h1 class="text-4xl font-bold m-4">Hello {profile.properties.name}</h1>
 			<button
