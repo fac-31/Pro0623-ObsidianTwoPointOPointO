@@ -6,7 +6,7 @@
 	}
 </script>
 
-<div class="rounded-xl bg-base-300 text-base p-4 h-full w-full">
+<div class="bg-base-300 text-base p-4 h-full w-full">
 	<div class="tabs tabs-lift">
 		<input
 			type="radio"
@@ -61,3 +61,9 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.tab-content {
+		height: calc(100% - 3rem); /* Adjust based on tab height */
+	}
+</style>

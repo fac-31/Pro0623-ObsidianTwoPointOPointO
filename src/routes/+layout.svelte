@@ -22,15 +22,22 @@
 	};
 </script>
 
-{#if profile}
-	<h1 class="text-4xl font-bold m-4">Hello {profile.properties.name}</h1>
-	<button
-		onclick={logout}
-		class="bg-purple-800 text-white p-2 rounded-md absolute top-0 right-0 m-4">Log Out</button
-	>
-{:else}
-	<a href="auth" class="bg-purple-800 text-white p-2 rounded-md absolute top-0 right-0 m-4"
-		>Log In</a
-	>
-{/if}
-{@render children()}
+<!-- Global layout wrapper -->
+<div class="flex flex-col h-screen">
+	<header class="bg-base-200">
+		{#if profile}
+			<h1 class="text-4xl font-bold m-4">Hello {profile.properties.name}</h1>
+			<button
+				onclick={logout}
+				class="bg-purple-800 text-white p-2 rounded-md absolute top-0 right-0 m-4">Log Out</button
+			>
+		{:else}
+			<a href="auth" class="bg-purple-800 text-white p-2 rounded-md absolute top-0 right-0 m-4"
+				>Log In</a
+			>
+		{/if}
+	</header>
+	<main class="flex-1 ">
+		{@render children()}
+	</main>
+</div>

@@ -13,12 +13,14 @@
 	export let graphData: GraphData;
 </script>
 
-<div class="rounded-xl bg-base-300 text-base p-4 h-full w-full relative">
-	{#if showGraph}
-		<GraphView {graphData} />
-	{:else}
-		<TextView {graphData} />
-	{/if}
+<div class="flex flex-col h-full w-full bg-base-300 relative">
+	<div class="flex-1 overflow-hidden">
+		{#if showGraph}
+			<GraphView {graphData} />
+		{:else}
+			<TextView {graphData} />
+		{/if}
+	</div>
 
 	<FloatingButton
 		ariaLabel="toggle view"

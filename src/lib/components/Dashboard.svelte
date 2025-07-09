@@ -3,15 +3,35 @@
 	import WorldView from './WorldView.svelte';
 	import QueryPanel from './QueryPanel.svelte';
 	import InfoPanel from './InfoPanel.svelte';
-	//import TopNavBar from './TopNavBar.svelte';
+	import { PaneGroup, Pane, PaneResizer } from "paneforge";
+	import { readable } from 'svelte/store';
 
 	export let graphData: GraphData;
+
+	const isSmallScreen = readable(false, (set) => {
+		if (typeof window === 'undefined') return;
+		const mediaQuery = window.matchMedia('(max-width: 1023px)');
+		const onChange = () => set(mediaQuery.matches);
+		mediaQuery.addEventListener('change', onChange);
+		onChange(); // Set initial value
+		return () => mediaQuery.removeEventListener('change', onChange);
+	});
 </script>
 
-<div class="grid grid-cols-[2fr_1fr] grid-rows-[1fr_2fr] gap-4 h-screen p-4">
-	<!--<div aria-label="Navigation"><TopNavBar /></div>-->
-	<div aria-label="Nodes" class="row-span-2"><WorldView {graphData} /></div>
-	<div aria-label="Query panel"><QueryPanel /></div>
-	<div aria-label="Information Panel"><InfoPanel /></div>
-	<slot></slot>
-</div>
+<PaneGroup direction={$isSmallScreen ? 'vertical' : 'horizontal'} class="h-full">
+	<Pane defaultSize={70}>
+		<WorldView {graphData} />
+	</Pane>
+	<PaneResizer class={`bg-white cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
+	<Pane defaultSize={30}>
+		<PaneGroup direction={$isSmallScreen ? 'horizontal' : 'vertical'} class="h-full">
+			<Pane defaultSize={30}>
+				<QueryPanel />
+			</Pane>
+			<PaneResizer class={`bg-white cursor-grab ${$isSmallScreen ? 'w-2 h-full' : 'h-2 w-full'}`} />
+			<Pane defaultSize={70}>
+				<InfoPanel />
+			</Pane>
+		</PaneGroup>
+	</Pane>
+</PaneGroup>
