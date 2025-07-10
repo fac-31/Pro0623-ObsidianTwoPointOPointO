@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 
 test('Resizable panels update size after dragging', async ({ page }) => {
 	// Go to Tester Dashboard
-	await page.goto('/')
+	await page.goto('/');
 	await page.getByRole('link', { name: 'Tester Dashboard' }).click();
 	await expect(page.getByRole('heading', { name: 'Hello testing' })).toBeVisible();
 
@@ -78,5 +78,4 @@ test('Resizable panels update size after dragging', async ({ page }) => {
 		canvasAfter?.width !== canvasBefore?.width || canvasAfter?.height !== canvasBefore?.height,
 		'Canvas size should change after resize'
 	).toBe(true);
-
 });
