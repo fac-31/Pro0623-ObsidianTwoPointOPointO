@@ -3,7 +3,7 @@
 	import WorldView from './WorldView.svelte';
 	import QueryPanel from './QueryPanel.svelte';
 	import InfoPanel from './InfoPanel.svelte';
-	import { PaneGroup, Pane, PaneResizer } from "paneforge";
+	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import { readable } from 'svelte/store';
 
 	export let graphData: GraphData;
@@ -18,17 +18,28 @@
 	});
 </script>
 
-<PaneGroup direction={$isSmallScreen ? 'vertical' : 'horizontal'} class="h-full p-4">
+<PaneGroup
+	direction={$isSmallScreen ? 'vertical' : 'horizontal'}
+	class="h-full p-4"
+	data-testid="dashboard"
+>
 	<Pane defaultSize={80}>
 		<WorldView {graphData} />
 	</Pane>
 	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
 	<Pane defaultSize={30}>
-		<PaneGroup direction={$isSmallScreen ? 'horizontal' : 'vertical'} class="h-full">
+		<PaneGroup
+			direction={$isSmallScreen ? 'horizontal' : 'vertical'}
+			class="h-full"
+			data-testid="query-panel"
+		>
 			<Pane defaultSize={30}>
 				<QueryPanel />
 			</Pane>
-			<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'w-2 h-full' : 'h-2 w-full'}`} />
+			<PaneResizer
+				class={`cursor-grab ${$isSmallScreen ? 'w-2 h-full' : 'h-2 w-full'}`}
+				data-testid="info-panel"
+			/>
 			<Pane defaultSize={70}>
 				<InfoPanel />
 			</Pane>
