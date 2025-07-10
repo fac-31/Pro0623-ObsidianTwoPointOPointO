@@ -12,6 +12,8 @@ jobs:
       PUBLIC_NEO4J_PASSWORD: ${{ secrets.PUBLIC_NEO4J_PASSWORD }}
       PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
       PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+      TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+      TEST_PASS: ${{ secrets.TEST_PASS }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,12 +28,16 @@ jobs:
           PUBLIC_NEO4J_PASSWORD: ${{ secrets.PUBLIC_NEO4J_PASSWORD }}
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
           PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASS: ${{ secrets.TEST_PASS }}
         run: |
           echo "PUBLIC_NEO4J_URL=$PUBLIC_NEO4J_URL" >> .env
           echo "PUBLIC_NEO4J_USERNAME=$PUBLIC_NEO4J_USERNAME" >> .env
           echo "PUBLIC_NEO4J_PASSWORD=$PUBLIC_NEO4J_PASSWORD" >> .env
           echo "PUBLIC_SUPABASE_URL=$PUBLIC_SUPABASE_URL" >> .env
           echo "PUBLIC_SUPABASE_ANON_KEY=$PUBLIC_SUPABASE_ANON_KEY" >> .env
+          echo "TEST_EMAIL=$TEST_EMAIL" >> .env
+          echo "TEST_PASS=$TEST_PASS" >> .env
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests

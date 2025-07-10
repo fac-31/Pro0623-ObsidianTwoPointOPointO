@@ -61,3 +61,9 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.tab-content {
+		height: calc(100% - 3rem); /* Adjust based on tab height */
+	}
+</style>

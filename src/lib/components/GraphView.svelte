@@ -13,6 +13,7 @@
 			container,
 			elements: [...graphData.nodes, ...graphData.edges],
 			layout: { name: 'cose' },
+			wheelSensitivity: 2,
 			style: [
 				{
 					selector: 'node',
@@ -46,11 +47,6 @@
 	});
 </script>
 
-<div>
-	<div
-		bind:this={container}
-		style="width: 100%; height: 600px;"
-		role="application"
-		aria-label="Graph view"
-	></div>
+<div class="h-full w-full flex flex-col min-h-0">
+	<div bind:this={container} class="h-full w-full" role="application" aria-label="Graph view"></div>
 </div>
