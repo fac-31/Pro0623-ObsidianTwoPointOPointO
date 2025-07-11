@@ -17,7 +17,14 @@
 		"test:ui": "vitest --ui",
 		"test:watch": "vitest",
 		"test:a11y": "ts-node scripts/axe-test.ts",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"hello": "echo \"hello\"",
+		"commit": "cz"
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog"
+		}
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -29,17 +36,19 @@
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/svelte": "^5.2.8",
 		"@testing-library/user-event": "^14.6.1",
-		"autoprefixer": "^10.4.21",
-		"axe-core": "^4.10.3",
-		"daisyui": "^5.0.43",
 		"@types/node": "^24.0.10",
 		"@vitest/ui": "^3.2.4",
+		"autoprefixer": "^10.4.21",
+		"axe-core": "^4.10.3",
+		"commitizen": "^4.3.1",
+		"cz-conventional-changelog": "^3.3.0",
+		"daisyui": "^5.0.43",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-svelte": "^3.0.0",
 		"globals": "^16.0.0",
-		"postcss": "^8.5.6",
 		"jsdom": "^26.1.0",
+		"postcss": "^8.5.6",
 		"prettier": "^3.6.0",
 		"prettier-plugin-svelte": "^3.4.0",
 		"puppeteer": "^24.11.1",
