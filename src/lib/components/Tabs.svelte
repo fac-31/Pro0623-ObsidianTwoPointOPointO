@@ -1,13 +1,17 @@
 <script lang="ts">
-	import { setContext } from 'svelte';
-	import { writable, type Writable } from 'svelte/store';
-
-	export let group: string = 'tabs';
-	const selectedTab: Writable<string> = writable('tab1');
-
-	setContext('tabs', { group, selectedTab });
+	export let tabs: { id: number; label: string }[] = [];
+	export let activeTabId: number;
+	export let setActiveTab: (id: number) => void;
 </script>
 
-<div class="tabs tabs-lift w-full">
-	<slot />
+<div role="tablist" class="tabs tabs-lift">
+	{#each tabs as tab}
+		<button
+			role="tab"
+			class="tab {tab.id === activeTabId ? 'tab-active' : ''}"
+			on:click={() => setActiveTab(tab.id)}
+		>
+			{tab.label}
+		</button>
+	{/each}
 </div>

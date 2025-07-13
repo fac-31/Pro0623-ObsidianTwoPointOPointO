@@ -5,8 +5,27 @@
 	import InfoPanel from './InfoPanel.svelte';
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import { readable } from 'svelte/store';
+	import FloatingButton from './FloatingButton.svelte';
 
 	export let graphData: GraphData;
+
+	let tabs = [{ id: 1, label: 'Tab 1' }];
+	let activeTabId = 1;
+	let showTextView = false;
+
+	function addTab() {
+		const newId = tabs.length > 0 ? Math.max(...tabs.map((t) => t.id)) + 1 : 1;
+		tabs = [...tabs, { id: newId, label: `Tab ${newId}` }];
+		activeTabId = newId;
+	}
+
+	function setActiveTab(id: number) {
+		activeTabId = id;
+	}
+
+	function toggleTextView() {
+		showTextView = !showTextView;
+	}
 
 	const isSmallScreen = readable(false, (set) => {
 		if (typeof window === 'undefined') return;
@@ -24,7 +43,7 @@
 	data-testid="dashboard"
 >
 	<Pane defaultSize={80}>
-		<WorldView {graphData} />
+		<WorldView {graphData} showGraph={!showTextView} />
 	</Pane>
 	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
 	<Pane defaultSize={30}>
@@ -41,8 +60,10 @@
 				data-testid="info-panel"
 			/>
 			<Pane defaultSize={70}>
-				<InfoPanel />
+				<InfoPanel {tabs} {activeTabId} {setActiveTab} />
 			</Pane>
 		</PaneGroup>
 	</Pane>
 </PaneGroup>
+
+<FloatingButton onCreateNew={addTab} onDisplayText={toggleTextView} />
