@@ -66,4 +66,8 @@
 	</Pane>
 </PaneGroup>
 
-<FloatingButton onCreateNew={addTab} onDisplayText={toggleTextView} />
+<FloatingButton
+	onCreateNew={addTab}
+	onDisplayText={toggleTextView}
+	position="fixed bottom-6 right-6"
+/>
