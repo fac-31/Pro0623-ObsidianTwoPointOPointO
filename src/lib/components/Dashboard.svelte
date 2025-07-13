@@ -5,7 +5,6 @@
 	import InfoPanel from './InfoPanel.svelte';
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import { readable } from 'svelte/store';
-	import FloatingButton from './FloatingButton.svelte';
 
 	export let graphData: GraphData;
 
@@ -43,7 +42,7 @@
 	data-testid="dashboard"
 >
 	<Pane defaultSize={80}>
-		<WorldView {graphData} showGraph={!showTextView} />
+		<WorldView {graphData} showGraph={!showTextView} on:createNew={addTab} on:displayText={toggleTextView} />
 	</Pane>
 	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
 	<Pane defaultSize={30}>
@@ -65,9 +64,3 @@
 		</PaneGroup>
 	</Pane>
 </PaneGroup>
-
-<FloatingButton
-	onCreateNew={addTab}
-	onDisplayText={toggleTextView}
-	position="fixed bottom-6 right-6"
-/>

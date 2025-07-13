@@ -5,16 +5,16 @@
 	export let activeTabId: number;
 	export let setActiveTab: (id: number) => void;
 	export let onSave: () => void = () => {
-		console.log('Default save triggered');
+		console.log('Save triggered');
 	};
 	export let onDelete: () => void = () => {
-		console.log('Default delete triggered');
+		console.log('Delete triggered');
 	};
 </script>
 
 <div class="rounded-xl bg-base-300 text-base p-4 h-full w-full flex flex-col gap-4">
 	<Tabs {tabs} {activeTabId} {setActiveTab} />
-	<div class="flex-1 overflow-hidden">
+	<div class="flex-1 rounded-xl overflow-hidden bg-base-100">
 		{#each tabs as tab}
 			{#if tab.id === activeTabId}
 				<p>Content for {tab.label}</p>
