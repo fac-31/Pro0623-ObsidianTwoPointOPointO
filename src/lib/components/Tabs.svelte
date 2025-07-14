@@ -5,7 +5,7 @@
 </script>
 
 <div role="tablist" class="tabs tabs-lift">
-	{#each tabs as tab}
+	{#each tabs as tab (tab.id)}
 		<button
 			role="tab"
 			class="tab {tab.id === activeTabId ? 'tab-active' : ''}"

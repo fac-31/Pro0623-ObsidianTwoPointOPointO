@@ -24,7 +24,7 @@
 		<div class="flex items-center gap-2">
 			<span class="font-bold">Tab:</span>
 			<select class="select select-bordered w-full max-w-xs" on:change={handleSelect}>
-				{#each tabs as tab}
+				{#each tabs as tab (tab.id)}
 					<option value={tab.id} selected={tab.id === activeTabId}>{tab.label}</option>
 				{/each}
 			</select>
@@ -33,7 +33,7 @@
 		<Tabs {tabs} {activeTabId} {setActiveTab} />
 	{/if}
 	<div class="flex-1 rounded-xl overflow-hidden bg-base-100">
-		{#each tabs as tab}
+		{#each tabs as tab (tab.id)}
 			{#if tab.id === activeTabId}
 				<p>Content for {tab.label}</p>
 			{/if}
