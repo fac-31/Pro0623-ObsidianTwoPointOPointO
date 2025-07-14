@@ -3,7 +3,7 @@ name: Semantic Release
 on:
   push:
     branches:
-      - deploy
+      - deployment
 
 permissions:
   contents: read
