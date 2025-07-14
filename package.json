@@ -26,9 +26,6 @@
 		}
 	},
 	"semantic-release": {
-		"branches": [
-			"deployment"
-		],
 		"plugins": [
 			"@semantic-release/commit-analyzer",
 			"@semantic-release/release-notes-generator",
