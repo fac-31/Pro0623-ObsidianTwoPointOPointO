@@ -42,7 +42,12 @@
 	data-testid="dashboard"
 >
 	<Pane defaultSize={80}>
-		<WorldView {graphData} showGraph={!showTextView} on:createNew={addTab} on:displayText={toggleTextView} />
+		<WorldView
+			{graphData}
+			showGraph={!showTextView}
+			on:createNew={addTab}
+			on:displayText={toggleTextView}
+		/>
 	</Pane>
 	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
 	<Pane defaultSize={30}>
