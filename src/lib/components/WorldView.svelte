@@ -2,15 +2,21 @@
 	import type { GraphData } from '$lib/types/graph';
 	import GraphView from './GraphView.svelte';
 	import TextView from './TextView.svelte';
-	import FloatingButton from '$lib/components/FloatingButton.svelte';
-
-	let showGraph = true;
-
-	function handleClick() {
-		showGraph = !showGraph;
-	}
+	import FloatingButton from './FloatingButton.svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let graphData: GraphData;
+	export let showGraph: boolean;
+
+	const dispatch = createEventDispatcher();
+
+	function createNew() {
+		dispatch('createNew');
+	}
+
+	function displayText() {
+		dispatch('displayText');
+	}
 </script>
 
 <div class="flex flex-col h-full w-full rounded-xl bg-base-300 relative">
@@ -21,10 +27,9 @@
 			<TextView {graphData} />
 		{/if}
 	</div>
-
 	<FloatingButton
-		ariaLabel="toggle view"
-		onClick={handleClick}
+		onCreateNew={createNew}
+		onDisplayText={displayText}
 		position="absolute bottom-6 right-6"
 	/>
 </div>
