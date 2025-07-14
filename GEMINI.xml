@@ -1,0 +1,225 @@
+<overview>
+	This document describes a world building application that allows users to build and navigate through worlds mapped onto a graph database; the key feature is natural language querying powered by AI agents.
+</overview>
+
+<project_definition>
+	<core_concept>
+		World building app with graph database backend enabling natural language navigation through interconnected data structures
+	</core_concept>
+	<ai_architecture>
+		Four AI agents drive the core functionality of the application
+	</ai_architecture>
+</project_definition>
+
+<user_features>
+	<access_control>
+		<read_only_access>
+			Non-logged-in users can only read existing worlds created by others
+		</read_only_access>
+		<write_access>
+			Logged-in users can create worlds and all associated data within them
+		</write_access>
+	</access_control>
+	
+	<privacy_system>
+		<world_level>
+			Worlds can be designated as public or private upon creation
+		</world_level>
+		<granular_level>
+			Individual nodes, relationships, and properties can be made private independently
+		</granular_level>
+		<sharing_mechanism>
+			Private content can be shared directly with specific users; public data can also be shared directly
+		</sharing_mechanism>
+	</privacy_system>
+</user_features>
+
+<ui_structure>
+	<dashboard>
+		<graph_component>Visual representation of queried data</graph_component>
+		<query_component>Natural language input interface</query_component>
+		<info_component>Content display and editing interface</info_component>
+	</dashboard>
+	<authentication>
+		<login_page>User authentication interface</login_page>
+		<signup_page>User registration interface</signup_page>
+	</authentication>
+</ui_structure>
+
+<tech_stack>
+	<frontend_backend>SvelteKit 5</frontend_backend>
+	<languages>
+		<primary>Svelte</primary>
+		<secondary>TypeScript</secondary>
+	</languages>
+	<styling>
+		<framework>Tailwind 4</framework>
+		<ui_components>Daisy UI 5</ui_components>
+	</styling>
+	<database>Neo4j</database>
+</tech_stack>
+
+<data_architecture>
+	<graph_database>
+		<schema_status>Currently in development</schema_status>
+		<design_note>Schema input not required unless specifically requested</design_note>
+	</graph_database>
+	<vector_database>
+		<purpose>RAG functionality and semantic responses to node content</purpose>
+		<technology>Yet to be decided</technology>
+		<data_flow>Content from each node is sent to vector database for processing</data_flow>
+	</vector_database>
+</data_architecture>
+
+<query_component>
+	<functionality>
+		<input>Natural language queries for database retrieval</input>
+		<output>
+			<graph_view>Most relevant data displayed visually</graph_view>
+			<semantic_response>Contextual information in info component</semantic_response>
+		</output>
+	</functionality>
+	
+	<query_visualization_mapping>
+		<relationship_queries>
+			<example>Show all mother-to-son relationships</example>
+			<primary_display>Graph view shows connections</primary_display>
+			<secondary_display>Info component provides supportive content</secondary_display>
+		</relationship_queries>
+		<narrative_queries>
+			<example>Read a story occurring over several events</example>
+			<primary_display>Info component tells complete story</primary_display>
+			<secondary_display>Graph view shows sequential event representation</secondary_display>
+		</narrative_queries>
+	</query_visualization_mapping>
+	
+	<slash_commands>
+		<structure>'/[label] [label name]'</structure>
+		<example>'/character Nancy' returns character nodes named Nancy</example>
+		<functionality>
+			<search_scope>ONLY returns nodes, not relationships</search_scope>
+			<selection_process>User selects node to open in info component</selection_process>
+		</functionality>
+		<interface>
+			<dropdown_trigger>Typing '/' displays node type dropdown</dropdown_trigger>
+			<navigation>Arrow keys and tab for selection</navigation>
+			<filtering>Typing narrows available options dynamically</filtering>
+		</interface>
+	</slash_commands>
+</query_component>
+
+<graph_component>
+	<graph_view>
+		<display_rules>
+			<initial_state>Only worlds shown on page load</initial_state>
+			<query_dependent>Only queried nodes and edges are displayed</query_dependent>
+		</display_rules>
+		<interaction>
+			<node_click>Opens content in info component</node_click>
+			<navigation>Mouse movement for view adjustment</navigation>
+			<query_requirement>Graph changes require query component usage; not navigable by clicking</query_requirement>
+		</interaction>
+	</graph_view>
+	
+	<accessible_view>
+		<purpose>Addresses accessibility limitations of canvas-based graph view</purpose>
+		<representation>
+			<nodes>Displayed as card components</nodes>
+			<relationships>Shown as text descriptions</relationships>
+		</representation>
+		<navigation>
+			<mouse>Click-through functionality</mouse>
+			<keyboard>Full keyboard command support</keyboard>
+		</navigation>
+	</accessible_view>
+</graph_component>
+
+<info_component>
+	<core_functionalities>
+		<read_content>
+			<purpose>View content created by other users</purpose>
+			<trigger>Clicking on a node</trigger>
+			<access_level>READ ONLY</access_level>
+		</read_content>
+		<create_edit_content>
+			<purpose>Create and edit content in user's own world</purpose>
+			<access_level>WRITE ACCESS</access_level>
+		</create_edit_content>
+		<semantic_responses>
+			<purpose>Display query agent responses about queried data</purpose>
+			<access_level>READ ONLY</access_level>
+		</semantic_responses>
+	</core_functionalities>
+	
+	<tab_system>
+		<tab_creation>
+			<single_click>
+				<behavior>Opens new tab</behavior>
+				<replacement_rule>Content replaces previous if no changes made</replacement_rule>
+			</single_click>
+			<double_click>
+				<behavior>Always opens new tab regardless of existing content</behavior>
+			</double_click>
+			<edit_protection>
+				<rule>Edited content maintains its own tab and won't be replaced</rule>
+			</edit_protection>
+		</tab_creation>
+		<tab_management>
+			<capacity>Unlimited number of tabs supported</capacity>
+			<overflow_handling>
+				<threshold>10 tabs</threshold>
+				<solution>Kebab menu appears with dropdown list of remaining tabs</solution>
+			</overflow_handling>
+		</tab_management>
+	</tab_system>
+</info_component>
+
+<ai_agents>
+	<implementation_framework>
+		<primary>Langchain</primary>
+		<secondary>Langraph where applicable</secondary>
+	</implementation_framework>
+	
+	<implementation_order>
+		<agent_1>
+			<name>Relationship Query Agent</name>
+			<function>Translates natural language queries into database queries</function>
+			<output>Returns most relevant nodes and relationships to query</output>
+		</agent_1>
+		
+		<agent_2>
+			<name>Relationship Agent</name>
+			<function>Processes created/edited data from info component</function>
+			<process>
+				1. Translates data into database-compatible objects
+				2. Queries database to ensure proper node placement
+			</process>
+		</agent_2>
+		
+		<agent_3>
+			<name>Router Agent</name>
+			<implementation_note>Must be implemented before Semantic Query Agent but depends on it</implementation_note>
+			<function>
+				1. Sends user query to Semantic and Relationship Query agents
+				2. Receives feedback from both agents
+				3. Forms consolidated response
+			</function>
+		</agent_3>
+		
+		<agent_4>
+			<name>Semantic Query Agent</name>
+			<function>Retrieves relevant data from vector database based on user query</function>
+			<output>Returns text-based semantic responses</output>
+		</agent_4>
+	</implementation_order>
+</ai_agents>
+
+<constraints>
+	<excluded_functionality>
+		<note>Core functionality only - login, user settings, and styling details not included</note>
+	</excluded_functionality>
+	<database_schema>
+		<status>In development</status>
+		<input_policy>Database input not requested unless specifically asked</input_policy>
+	</database_schema>
+</constraints>
