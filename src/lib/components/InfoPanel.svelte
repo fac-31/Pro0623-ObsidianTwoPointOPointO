@@ -10,10 +10,28 @@
 	export let onDelete: () => void = () => {
 		console.log('Delete triggered');
 	};
+
+	$: useDropdown = tabs.length > 10;
+
+	function handleSelect(event: Event) {
+		const selectedId = (event.target as HTMLSelectElement).value;
+		setActiveTab(Number(selectedId));
+	}
 </script>
 
 <div class="rounded-xl bg-base-300 text-base p-4 h-full w-full flex flex-col gap-4">
-	<Tabs {tabs} {activeTabId} {setActiveTab} />
+	{#if useDropdown}
+		<div class="flex items-center gap-2">
+			<span class="font-bold">Tab:</span>
+			<select class="select select-bordered w-full max-w-xs" on:change={handleSelect}>
+				{#each tabs as tab}
+					<option value={tab.id} selected={tab.id === activeTabId}>{tab.label}</option>
+				{/each}
+			</select>
+		</div>
+	{:else}
+		<Tabs {tabs} {activeTabId} {setActiveTab} />
+	{/if}
 	<div class="flex-1 rounded-xl overflow-hidden bg-base-100">
 		{#each tabs as tab}
 			{#if tab.id === activeTabId}
