@@ -57,7 +57,7 @@
 						'border-width': 1,
 						'border-color': '#143261',
 						'border-opacity': 1,
-						'font-size': 6,
+						'font-size': 6
 					}
 				}
 			]
