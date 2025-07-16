@@ -7,6 +7,23 @@
 	import { readable } from 'svelte/store';
 
 	export let graphData: GraphData;
+	export let worldName: string;
+
+	let currentGraphData: GraphData = graphData;
+	let explanation: string = '';
+
+	function handleResult(event: CustomEvent) {
+		console.log('Dashboard: received event.detail:', event.detail);
+		const { graphData, explanation: newExplanation } = event.detail;
+
+		currentGraphData = {
+			nodes: [...graphData.nodes],
+			edges: [...graphData.edges]
+		};
+		console.log('Dashboard: currentGraphData now:', currentGraphData);
+
+		explanation = newExplanation;
+	}
 
 	let tabs = [{ id: 1, label: 'Tab 1' }];
 	let activeTabId = 1;
@@ -43,7 +60,7 @@
 >
 	<Pane defaultSize={80}>
 		<WorldView
-			{graphData}
+			graphData={currentGraphData}
 			showGraph={!showTextView}
 			on:createNew={addTab}
 			on:displayText={toggleTextView}
@@ -57,14 +74,14 @@
 			data-testid="query-panel"
 		>
 			<Pane defaultSize={30}>
-				<QueryPanel />
+				<QueryPanel {worldName} on:result={handleResult} />
 			</Pane>
 			<PaneResizer
 				class={`cursor-grab ${$isSmallScreen ? 'w-2 h-full' : 'h-2 w-full'}`}
 				data-testid="info-panel"
 			/>
 			<Pane defaultSize={70}>
-				<InfoPanel {tabs} {activeTabId} {setActiveTab} />
+				<InfoPanel {tabs} {activeTabId} {setActiveTab} {explanation} />
 			</Pane>
 		</PaneGroup>
 	</Pane>

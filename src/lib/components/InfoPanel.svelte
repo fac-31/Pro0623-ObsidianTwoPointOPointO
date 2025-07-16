@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Tabs from './Tabs.svelte';
 
+	export let explanation: string;
+
 	export let tabs: { id: number; label: string }[] = [];
 	export let activeTabId: number;
 	export let setActiveTab: (id: number) => void;
@@ -35,7 +37,7 @@
 	<div class="flex-1 rounded-xl overflow-hidden bg-base-100">
 		{#each tabs as tab (tab.id)}
 			{#if tab.id === activeTabId}
-				<p>Content for {tab.label}</p>
+				<p>Content for {tab.label}: {explanation}</p>
 			{/if}
 		{/each}
 	</div>

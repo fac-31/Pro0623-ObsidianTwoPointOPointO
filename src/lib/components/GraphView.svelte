@@ -42,6 +42,13 @@
 		});
 	});
 
+	$: if (cy && graphData) {
+		cy.elements().remove();
+		cy.add([...graphData.nodes, ...graphData.edges]);
+		cy.layout({ name: 'cose' }).run();
+		console.log('Graph data updated', graphData.nodes.length, graphData.edges.length);
+	}
+
 	onDestroy(() => {
 		cy?.destroy();
 	});

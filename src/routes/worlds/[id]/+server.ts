@@ -7,37 +7,40 @@ export const GET: RequestHandler = async () => {
 	const session = driver.session();
 
 	try {
-		const result = await session.run(
-			`
-      MATCH (n)-[r]->(m)
-      RETURN n, r, m
-      LIMIT 500
-    `
-		);
+		const result = await session.run(`
+			MATCH (w:World { name: "Luminwood Realm" })
+			CALL apoc.path.subgraphAll(w, {}) YIELD nodes, relationships
+			WITH nodes, relationships
+			UNWIND nodes AS n
+			UNWIND relationships AS r
+			WITH COLLECT(DISTINCT n) AS nodes, COLLECT(DISTINCT r) AS relationships
+			RETURN nodes, relationships
+    	`);
 
 		const nodes = new Map<string, GraphNode>();
 		const edges: GraphEdge[] = [];
 
-		for (const rec of result.records) {
-			const n = rec.get('n');
-			const m = rec.get('m');
-			const r = rec.get('r');
+		const resultNodes = result.records[0].get('nodes');
+		const resultRelationships = result.records[0].get('relationships');
 
-			nodes.set(n.identity.toString(), {
-				data: { id: n.identity.toString(), label: n.labels[0], ...n.properties }
+		for (const node of resultNodes) {
+			nodes.set(node.identity.toString(), {
+				data: {
+					id: node.identity.toString(),
+					label: node.labels[0],
+					...node.properties
+				}
 			});
+		}
 
-			nodes.set(m.identity.toString(), {
-				data: { id: m.identity.toString(), label: m.labels[0], ...m.properties }
-			});
-
+		for (const rel of resultRelationships) {
 			edges.push({
 				data: {
-					id: r.identity.toString(),
-					source: n.identity.toString(),
-					target: m.identity.toString(),
-					label: r.type,
-					...r.properties
+					id: rel.identity.toString(),
+					source: rel.start.toString(),
+					target: rel.end.toString(),
+					label: rel.type,
+					...rel.properties
 				}
 			});
 		}
