@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
+	import { selectedNode } from '$lib/stores/selectedNode';
 
 	export let graphData: GraphData;
 
@@ -39,6 +40,12 @@
 					}
 				}
 			]
+		});
+		cy.on('tap', 'node', (event) => {
+			const node = event.target;
+			selectedNode.set({
+				data: node.data() 
+			});
 		});
 	});
 
