@@ -48,7 +48,7 @@
 	class="h-full p-4"
 	data-testid="dashboard"
 >
-	<Pane defaultSize={76}  maxSize={70} class="relative">
+	<Pane defaultSize={76} maxSize={75} class="relative">
 		{#if showSearchBar}
 			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
 		{/if}
@@ -59,8 +59,15 @@
 			on:displayText={toggleTextView}
 		/>
 	</Pane>
-	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-6 w-full' : 'w-6 h-full'}`} />
-	<Pane >
+	<PaneResizer
+		class={`cursor-grab flex items-center justify-center ${
+			$isSmallScreen ? 'h-6 w-full' : 'w-6 h-full'
+		}`}
+	>
+		<div class={`bg-neutral-content rounded-full ${$isSmallScreen ? 'h-4 w-8' : 'w-1 h-8 p-1'}`}></div>
+	</PaneResizer>
+
+	<Pane>
 		{#if showQueryPanel || showInfoPanel}
 			<PaneGroup direction="vertical" class="h-full gap-9" data-testid="query-info-panel-group">
 				{#if showQueryPanel}
