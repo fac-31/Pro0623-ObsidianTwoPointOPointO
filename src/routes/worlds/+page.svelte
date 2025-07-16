@@ -5,4 +5,9 @@
 	export let data: { graphData: GraphData };
 </script>
 
-<Dashboard graphData={data.graphData}></Dashboard>
+<Dashboard
+	graphData={data.graphData}
+	showSearchBar={true}
+	showInfoPanelTabs={false}
+	showQueryPanel={false}
+></Dashboard>
