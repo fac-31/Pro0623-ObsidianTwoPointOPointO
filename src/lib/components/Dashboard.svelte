@@ -3,10 +3,17 @@
 	import WorldView from './WorldView.svelte';
 	import QueryPanel from './QueryPanel.svelte';
 	import InfoPanel from './InfoPanel.svelte';
+	import SearchBar from './SearchBar.svelte';
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import { readable } from 'svelte/store';
 
 	export let graphData: GraphData;
+
+	// Dashboard Options
+	export let showQueryPanel: boolean = true;
+	export let showInfoPanel: boolean = true;
+	export let showInfoPanelTabs: boolean = false;
+	export let showSearchBar: boolean = false;
 
 	let tabs = [{ id: 1, label: 'Tab 1' }];
 	let activeTabId = 1;
@@ -41,7 +48,10 @@
 	class="h-full p-4"
 	data-testid="dashboard"
 >
-	<Pane defaultSize={80}>
+	<Pane defaultSize={76}  maxSize={70} class="relative">
+		{#if showSearchBar}
+			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
+		{/if}
 		<WorldView
 			{graphData}
 			showGraph={!showTextView}
@@ -49,23 +59,27 @@
 			on:displayText={toggleTextView}
 		/>
 	</Pane>
-	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
-	<Pane defaultSize={30}>
-		<PaneGroup
-			direction={$isSmallScreen ? 'horizontal' : 'vertical'}
-			class="h-full"
-			data-testid="query-panel"
-		>
-			<Pane defaultSize={30}>
-				<QueryPanel />
-			</Pane>
-			<PaneResizer
-				class={`cursor-grab ${$isSmallScreen ? 'w-2 h-full' : 'h-2 w-full'}`}
-				data-testid="info-panel"
-			/>
-			<Pane defaultSize={70}>
-				<InfoPanel {tabs} {activeTabId} {setActiveTab} />
-			</Pane>
-		</PaneGroup>
+	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-6 w-full' : 'w-6 h-full'}`} />
+	<Pane >
+		{#if showQueryPanel || showInfoPanel}
+			<PaneGroup direction="vertical" class="h-full gap-9" data-testid="query-info-panel-group">
+				{#if showQueryPanel}
+					<Pane defaultSize={25} minSize={15}>
+						<QueryPanel isSmallScreen={$isSmallScreen} />
+					</Pane>
+				{/if}
+				{#if showInfoPanel}
+					<Pane>
+						<InfoPanel
+							showTabs={showInfoPanelTabs}
+							{tabs}
+							{activeTabId}
+							{setActiveTab}
+							isSmallScreen={$isSmallScreen}
+						/>
+					</Pane>
+				{/if}
+			</PaneGroup>
+		{/if}
 	</Pane>
 </PaneGroup>

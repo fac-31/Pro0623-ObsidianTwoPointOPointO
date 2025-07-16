@@ -1,13 +1,18 @@
 <script lang="ts">
-	function handleClick() {
-		alert('fetch');
-	}
+  export let isSmallScreen: boolean;
+
+  function handleClick() {
+    alert('fetch');
+  }
 </script>
 
-<div class="rounded-xl bg-base-300 text-base p-4 h-full w-full">
-	<div class="bg-base-100 p-6 rounded-xl h-full w-full">
-		<textarea class="textarea textarea-ghost w-full h-32 rounded-xl" placeholder="Ask me something"
-		></textarea>
-		<button class="btn btn-secondary mt-2" on:click={handleClick}>Enter</button>
-	</div>
+<div class="rounded-l text-base  h-full flex flex-col">
+  <div class="p-1 rounded-xl h-full w-full relative">
+    <textarea class="textarea resize-none w-full h-full" placeholder="Ask me something"></textarea>
+    <div class="absolute bottom-4 right-6">
+      <button class="btn btn-ghost btn-lg" on:click={handleClick}>
+        sumbit
+      </button>
+    </div>
+  </div>
 </div>
