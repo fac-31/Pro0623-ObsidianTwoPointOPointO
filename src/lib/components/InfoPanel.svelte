@@ -39,7 +39,7 @@
 				{#if $selectedNode}
 					<div class="p-4">
 						<h2 class="text-xl font-semibold mb-2">{$selectedNode.data.label}</h2>
-							<p>{$selectedNode.data.content}</p>
+						<p>{$selectedNode.data.content}</p>
 					</div>
 				{:else}
 					<p class="text-gray-400 italic p-4">No node selected.</p>
