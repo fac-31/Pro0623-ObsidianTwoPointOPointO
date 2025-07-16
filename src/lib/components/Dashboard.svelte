@@ -14,6 +14,7 @@
 	export let showInfoPanel: boolean = true;
 	export let showInfoPanelTabs: boolean = false;
 	export let showSearchBar: boolean = false;
+	export let dashboardButtons: { label: string; onClick: () => void; class?: string }[] = [];
 
 	let tabs = [{ id: 1, label: 'Tab 1' }];
 	let activeTabId = 1;
@@ -45,10 +46,10 @@
 
 <PaneGroup
 	direction={$isSmallScreen ? 'vertical' : 'horizontal'}
-	class="h-full p-4"
+	class="h-full py-4 px-6"
 	data-testid="dashboard"
 >
-	<Pane defaultSize={76} maxSize={75} class="relative">
+	<Pane defaultSize={80} minSize={20} class="relative">
 		{#if showSearchBar}
 			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
 		{/if}
@@ -59,30 +60,27 @@
 			on:displayText={toggleTextView}
 		/>
 	</Pane>
-	<PaneResizer
-		class={`cursor-grab flex items-center justify-center ${
-			$isSmallScreen ? 'h-6 w-full' : 'w-6 h-full'
-		}`}
-	>
-		<div class={`bg-neutral-content rounded-full ${$isSmallScreen ? 'h-4 w-8' : 'w-1 h-8 p-1'}`}></div>
-	</PaneResizer>
-
-	<Pane>
+	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
+	<Pane defaultSize={30} minSize={20}>
 		{#if showQueryPanel || showInfoPanel}
-			<PaneGroup direction="vertical" class="h-full gap-9" data-testid="query-info-panel-group">
+			<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
 				{#if showQueryPanel}
-					<Pane defaultSize={25} minSize={15}>
-						<QueryPanel isSmallScreen={$isSmallScreen} />
+					<Pane
+						defaultSize={$isSmallScreen ? 50 : 20}
+						minSize={$isSmallScreen ? 50 : 30}
+						maxSize={$isSmallScreen ? 50 : 20}
+					>
+						<QueryPanel />
 					</Pane>
 				{/if}
 				{#if showInfoPanel}
-					<Pane>
+					<Pane defaultSize={$isSmallScreen ? 50 : 80} minSize={$isSmallScreen ? 40 : 20}>
 						<InfoPanel
 							showTabs={showInfoPanelTabs}
+							buttons={dashboardButtons}
 							{tabs}
 							{activeTabId}
 							{setActiveTab}
-							isSmallScreen={$isSmallScreen}
 						/>
 					</Pane>
 				{/if}
