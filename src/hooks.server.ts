@@ -73,6 +73,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
 		!event.url.pathname.startsWith('/resources') &&
 		!event.url.pathname.startsWith('/worlds')
 	) {
+		console.log('Auth Denied - redirecting')
 		redirect(303, '/');
 	}
 
