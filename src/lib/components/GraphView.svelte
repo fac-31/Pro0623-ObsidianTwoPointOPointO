@@ -76,6 +76,7 @@
 
 			// Tapped on a node
 			if (target.isNode && target.isNode()) {
+				console.log('Node data:', target.data());
 				selectedNode.set({ data: target.data() });
 
 				cy.nodes().removeClass('selected');

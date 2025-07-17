@@ -10,6 +10,7 @@
 	export let graphData: GraphData;
 
 	// Dashboard Options
+	export let title: string;
 	export let showQueryPanel: boolean = true;
 	export let showInfoPanel: boolean = true;
 	export let showInfoPanelTabs: boolean = false;
