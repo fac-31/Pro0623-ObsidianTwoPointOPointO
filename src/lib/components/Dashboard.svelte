@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { GraphData } from '$lib/types/graph';
+	import type { GraphData, WorldInfo } from '$lib/types/graph';
 	import WorldView from './WorldView.svelte';
 	import QueryPanel from './QueryPanel.svelte';
 	import InfoPanel from './InfoPanel.svelte';
@@ -10,7 +10,8 @@
 	export let graphData: GraphData;
 
 	// Dashboard Options
-	export let title: string;
+	export let graphTitle: string;
+	export let worldInfo: WorldInfo | undefined = undefined;
 	export let showQueryPanel: boolean = true;
 	export let showInfoPanel: boolean = true;
 	export let showInfoPanelTabs: boolean = false;
@@ -82,6 +83,8 @@
 							{tabs}
 							{activeTabId}
 							{setActiveTab}
+							{graphTitle}
+							worldContent={worldInfo?.content}
 						/>
 					</Pane>
 				{/if}

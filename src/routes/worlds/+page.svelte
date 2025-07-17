@@ -26,4 +26,5 @@
 	showInfoPanelTabs={false}
 	showQueryPanel={false}
 	dashboardButtons={enterWorldButton}
+	graphTitle="Select a world."
 ></Dashboard>

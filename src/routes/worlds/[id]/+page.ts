@@ -15,5 +15,11 @@ export const load: Load = async ({ params, fetch }) => {
 		}
 	}));
 
-	return { graphData };
+	const graphTitle =
+		graphData.worldInfo?.name ||
+		graphData.worldInfo?.title ||
+		graphData.worldInfo?.label ||
+		'Untitled World';
+
+	return { graphData, graphTitle, worldInfo: graphData.worldInfo };
 };
