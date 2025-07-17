@@ -9,27 +9,35 @@ export const GET: RequestHandler = async ({ params }) => {
 	const worldId = params.id;
 
 	try {
-		const result = await session.run(
+		// World node
+		const worldResult = await session.run(`MATCH (w) WHERE elementId(w) = $worldId RETURN w`, {
+			worldId
+		});
+
+		if (worldResult.records.length === 0) {
+			return new Response('World not found', { status: 404 });
+		}
+
+		const worldNode: Node = worldResult.records[0].get('w');
+
+		// Neighbor nodes and their internal relationships
+		const graphResult = await session.run(
 			`
 			MATCH (w) WHERE elementId(w) = $worldId
 			MATCH (w)--(n)
-			WITH collect(DISTINCT n) as nodes
-			UNWIND nodes as a
+			WITH collect(DISTINCT n) AS nodes
+			UNWIND nodes AS a
 			OPTIONAL MATCH (a)-[r]-(b)
 			WHERE b IN nodes AND elementId(a) < elementId(b)
-			WITH nodes, collect(DISTINCT r) as relationships
+			WITH nodes, collect(DISTINCT r) AS relationships
 			RETURN nodes, relationships
 			`,
 			{ worldId }
 		);
 
-		if (result.records.length === 0) {
-			return new Response('World not found', { status: 404 });
-		}
-
-		const record = result.records[0];
-		const neighborNodes = record.get('nodes');
-		const relationships = record.get('relationships');
+		const graphRecord = graphResult.records[0];
+		const neighborNodes = graphRecord.get('nodes');
+		const relationships = graphRecord.get('relationships');
 
 		const nodes = new Map<string, GraphNode>();
 		const addNode = (node: Node) => {
@@ -55,7 +63,11 @@ export const GET: RequestHandler = async ({ params }) => {
 
 		const graphData: GraphData = {
 			nodes: Array.from(nodes.values()),
-			edges
+			edges,
+			worldInfo: {
+				label: worldNode.labels[0],
+				...worldNode.properties
+			}
 		};
 
 		return json(graphData);

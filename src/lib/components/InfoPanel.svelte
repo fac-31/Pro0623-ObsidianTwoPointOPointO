@@ -2,11 +2,13 @@
 	import Tabs from './Tabs.svelte';
 	import { selectedNode } from '$lib/stores/selectedNode';
 
+	export let graphTitle: string;
 	export let tabs: { id: number; label: string }[] = [];
 	export let activeTabId: number;
 	export let setActiveTab: (id: number) => void;
 	export let showTabs: boolean = true;
 	export let buttons: { label: string; onClick: () => void; class?: string }[] = [];
+	export let worldContent: string | undefined = undefined;
 
 	$: useDropdown = tabs.length > 10;
 
@@ -54,6 +56,11 @@
 					{/if}
 				</div>
 				<p>{$selectedNode.data.content}</p>
+			{:else if graphTitle}
+				<h2 class="text-xl font-semibold">{graphTitle}</h2>
+				{#if worldContent}
+					<p>{worldContent}</p>
+				{/if}
 			{:else}
 				<p class="text-gray-400 italic">No node selected.</p>
 			{/if}
