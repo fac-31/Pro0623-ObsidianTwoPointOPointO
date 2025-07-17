@@ -19,11 +19,11 @@
 </script>
 
 <div
-	class="rounded-4xl border-3 border-bg-base-300 text-base p-4 h-full w-full flex flex-col gap-4 pt-5 min-w-[300px]"
+	class="rounded-4xl border-3 border-bg-base-300 text-base p-4 h-full w-full flex flex-col"
 >
 	{#if showTabs}
 		{#if useDropdown}
-			<div class="flex items-center gap-2">
+			<div class="flex items-center">
 				<span class="font-bold">Tab:</span>
 				<select class="select select-bordered w-full max-w-xs" on:change={handleSelect}>
 					{#each tabs as tab (tab.id)}
@@ -36,7 +36,7 @@
 		{/if}
 	{/if}
 
-	<div class="flex-1 rounded-xl overflow-hidden p-4 flex gap-4 min-h-0">
+	<div class="flex-1 rounded-xl overflow-hidden p-2 flex gap-4 min-h-0">
 		<!-- Left content area -->
 		<div class="flex-1 overflow-auto">
 			{#if $selectedNode}
@@ -56,13 +56,15 @@
 					{/if}
 				</div>
 				<p>{$selectedNode.data.content}</p>
-			{:else if graphTitle}
-				<h2 class="text-xl font-semibold">{graphTitle}</h2>
-				{#if worldContent}
-					<p>{worldContent}</p>
-				{/if}
 			{:else}
-				<p class="text-gray-400 italic">No node selected.</p>
+				{#if graphTitle}
+					<h2 class="text-xl font-semibold">{graphTitle}</h2>
+					{#if worldContent}
+						<p>{worldContent}</p>
+					{/if}
+				{:else}
+					<p class="text-gray-400 italic">No node selected.</p>
+				{/if}
 			{/if}
 		</div>
 	</div>

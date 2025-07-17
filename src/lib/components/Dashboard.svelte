@@ -70,12 +70,12 @@
 		<div class={`bg-neutral-content/30 ${$isSmallScreen ? 'w-4/5 h-1' : 'h-4/5 w-1'}`}></div>
 	</PaneResizer>
 
-	<Pane defaultSize={30} minSize={20}>
+	<Pane defaultSize={30} minSize={25}>
 		{#if showQueryPanel || showInfoPanel}
 			<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
 				{#if showQueryPanel}
 					<Pane
-						class="min-h-30 max-h-35"
+						class="min-h-10 max-h-35"
 						defaultSize={$isSmallScreen ? 50 : 20}
 						minSize={$isSmallScreen ? 50 : 30}
 						maxSize={$isSmallScreen ? 50 : 20}
@@ -84,7 +84,7 @@
 					</Pane>
 				{/if}
 				{#if showInfoPanel}
-					<Pane class="min-h-40" defaultSize={$isSmallScreen ? 50 : 80} minSize={$isSmallScreen ? 40 : 20}>
+					<Pane class="min-h-20" defaultSize={$isSmallScreen ? 50 : 80} minSize={$isSmallScreen ? 40 : 20}>
 						<InfoPanel
 							showTabs={showInfoPanelTabs}
 							buttons={dashboardButtons}
