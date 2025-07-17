@@ -10,7 +10,7 @@ export const GET: RequestHandler = async () => {
 		const result = await session.run(
 			`
       MATCH (w:World)
-      RETURN w
+      RETURN w, elementId(w) as elementId
     `
 		);
 
@@ -18,8 +18,9 @@ export const GET: RequestHandler = async () => {
 
 		for (const rec of result.records) {
 			const w = rec.get('w');
+			const elementId = rec.get('elementId');
 			nodes.push({
-				data: { id: w.identity.toString(), label: w.labels[0], ...w.properties }
+				data: { id: elementId, label: w.labels[0], ...w.properties }
 			});
 		}
 
