@@ -84,7 +84,11 @@
 					</Pane>
 				{/if}
 				{#if showInfoPanel}
-					<Pane class="min-h-20" defaultSize={$isSmallScreen ? 50 : 80} minSize={$isSmallScreen ? 40 : 20}>
+					<Pane
+						class="min-h-20"
+						defaultSize={$isSmallScreen ? 50 : 80}
+						minSize={$isSmallScreen ? 40 : 20}
+					>
 						<InfoPanel
 							showTabs={showInfoPanelTabs}
 							buttons={dashboardButtons}
