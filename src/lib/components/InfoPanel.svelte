@@ -18,9 +18,7 @@
 	}
 </script>
 
-<div
-	class="rounded-4xl border-3 border-bg-base-300 text-base p-4 h-full w-full flex flex-col"
->
+<div class="rounded-4xl border-3 border-bg-base-300 text-base p-4 h-full w-full flex flex-col">
 	{#if showTabs}
 		{#if useDropdown}
 			<div class="flex items-center">
@@ -56,15 +54,13 @@
 					{/if}
 				</div>
 				<p>{$selectedNode.data.content}</p>
-			{:else}
-				{#if graphTitle}
-					<h2 class="text-xl font-semibold">{graphTitle}</h2>
-					{#if worldContent}
-						<p>{worldContent}</p>
-					{/if}
-				{:else}
-					<p class="text-gray-400 italic">No node selected.</p>
+			{:else if graphTitle}
+				<h2 class="text-xl font-semibold">{graphTitle}</h2>
+				{#if worldContent}
+					<p>{worldContent}</p>
 				{/if}
+			{:else}
+				<p class="text-gray-400 italic">No node selected.</p>
 			{/if}
 		</div>
 	</div>
