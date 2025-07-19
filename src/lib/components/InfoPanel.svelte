@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Tabs from './Tabs.svelte';
+	import { selectedNode } from '$lib/stores/selectedNode';
 
 	export let tabs: { id: number; label: string }[] = [];
 	export let activeTabId: number;
@@ -35,7 +36,14 @@
 	<div class="flex-1 rounded-xl overflow-hidden bg-base-100">
 		{#each tabs as tab (tab.id)}
 			{#if tab.id === activeTabId}
-				<p>Content for {tab.label}</p>
+				{#if $selectedNode}
+					<div class="p-4">
+						<h2 class="text-xl font-semibold mb-2">{$selectedNode.data.label}</h2>
+						<p>{$selectedNode.data.content}</p>
+					</div>
+				{:else}
+					<p class="text-gray-400 italic p-4">No node selected.</p>
+				{/if}
 			{/if}
 		{/each}
 	</div>
