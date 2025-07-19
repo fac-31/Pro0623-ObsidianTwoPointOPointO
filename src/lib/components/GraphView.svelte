@@ -18,7 +18,7 @@
 				{
 					selector: 'node',
 					style: {
-						label: 'data(label)',
+						label: 'data(name)',
 						'background-color': '#0074D9',
 						color: '#fff',
 						'text-valign': 'center',
