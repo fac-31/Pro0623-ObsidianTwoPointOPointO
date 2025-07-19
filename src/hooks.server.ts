@@ -70,7 +70,8 @@ const authGuard: Handle = async ({ event, resolve }) => {
 		!event.locals.session &&
 		event.url.pathname.length > 1 &&
 		!event.url.pathname.startsWith('/auth') &&
-		!event.url.pathname.startsWith('/resources')
+		!event.url.pathname.startsWith('/resources') &&
+		!event.url.pathname.startsWith('/worlds')
 	) {
 		redirect(303, '/');
 	}
