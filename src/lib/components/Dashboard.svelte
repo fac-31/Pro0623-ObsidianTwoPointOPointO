@@ -8,19 +8,7 @@
 
 	export let graphData: GraphData;
 
-	let tabs = [{ id: 1, label: 'Tab 1' }];
-	let activeTabId = 1;
 	let showTextView = false;
-
-	function addTab() {
-		const newId = tabs.length > 0 ? Math.max(...tabs.map((t) => t.id)) + 1 : 1;
-		tabs = [...tabs, { id: newId, label: `Tab ${newId}` }];
-		activeTabId = newId;
-	}
-
-	function setActiveTab(id: number) {
-		activeTabId = id;
-	}
 
 	function toggleTextView() {
 		showTextView = !showTextView;
@@ -45,7 +33,9 @@
 		<WorldView
 			{graphData}
 			showGraph={!showTextView}
-			on:createNew={addTab}
+			on:createNew={() => {
+				/* Placeholder for future implementation */
+			}}
 			on:displayText={toggleTextView}
 		/>
 	</Pane>
@@ -64,7 +54,7 @@
 				data-testid="info-panel"
 			/>
 			<Pane defaultSize={70}>
-				<InfoPanel {tabs} {activeTabId} {setActiveTab} />
+				<InfoPanel />
 			</Pane>
 		</PaneGroup>
 	</Pane>

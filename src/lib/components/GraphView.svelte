@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
+	import { registerNodeClickEvents } from '$lib/utils/graphClickHandler';
 
 	export let graphData: GraphData;
 
@@ -37,9 +38,17 @@
 						'font-size': 5,
 						width: 2
 					}
+				},
+				{
+					selector: 'node.selected',
+					style: {
+						'background-color': '#FF4136'
+					}
 				}
 			]
 		});
+
+		registerNodeClickEvents(cy);
 	});
 
 	onDestroy(() => {
