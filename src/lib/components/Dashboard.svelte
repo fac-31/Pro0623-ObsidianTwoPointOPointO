@@ -48,7 +48,7 @@
 
 <PaneGroup
 	direction={$isSmallScreen ? 'vertical' : 'horizontal'}
-	class="h-full py-4 px-6"
+	class="h-full py-4 px-3"
 	data-testid="dashboard"
 >
 	<Pane defaultSize={80} minSize={20} class="relative">
@@ -73,16 +73,6 @@
 	<Pane defaultSize={30} minSize={25}>
 		{#if showQueryPanel || showInfoPanel}
 			<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
-				{#if showQueryPanel}
-					<Pane
-						class="min-h-10 max-h-35"
-						defaultSize={$isSmallScreen ? 50 : 20}
-						minSize={$isSmallScreen ? 50 : 30}
-						maxSize={$isSmallScreen ? 50 : 20}
-					>
-						<QueryPanel />
-					</Pane>
-				{/if}
 				{#if showInfoPanel}
 					<Pane
 						class="min-h-20"
@@ -98,6 +88,16 @@
 							{graphTitle}
 							worldContent={worldInfo?.content}
 						/>
+					</Pane>
+				{/if}
+				{#if showQueryPanel}
+					<Pane
+						class="min-h-10 max-h-35"
+						defaultSize={$isSmallScreen ? 50 : 20}
+						minSize={$isSmallScreen ? 50 : 30}
+						maxSize={$isSmallScreen ? 50 : 20}
+					>
+						<QueryPanel />
 					</Pane>
 				{/if}
 			</PaneGroup>
