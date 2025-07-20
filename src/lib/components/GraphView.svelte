@@ -20,7 +20,7 @@
 					selector: 'node',
 					style: {
 						label: 'data(label)',
-						'background-color': '#0074D9',
+						'background-color': '#666666',
 						color: '#fff',
 						'text-valign': 'center',
 						'text-halign': 'center',
