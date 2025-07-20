@@ -86,6 +86,7 @@
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.50.3",
 		"@tailwindcss/vite": "^4.1.11",
+		"culori": "^4.0.2",
 		"cytoscape": "^3.32.0",
 		"dotenv": "^17.2.0",
 		"neo4j-driver": "^5.28.1",

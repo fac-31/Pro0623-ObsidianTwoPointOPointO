@@ -3,6 +3,7 @@
 	export let position: string = 'fixed bottom-6 right-6';
 	export let onDisplayText: () => void = () => {};
 	export let onCreateNew: () => void = () => {};
+	export let onToggleSettings: () => void = () => {};
 </script>
 
 <div class={`dropdown dropdown-top dropdown-center ${position}`}>
@@ -19,6 +20,9 @@
 		</li>
 		<li>
 			<button type="button" on:click={onCreateNew}>Create New</button>
+		</li>
+		<li>
+			<button type="button" on:click={onToggleSettings}>Settings</button>
 		</li>
 	</ul>
 </div>
