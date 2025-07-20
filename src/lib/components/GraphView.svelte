@@ -2,7 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
-	import { selectedNode } from '$lib/stores/selectedNode';
+	import { selectedNodesStore } from '$lib/stores/selectedNodes';
 
 	export let graphData: GraphData;
 
@@ -68,7 +68,7 @@
 
 			// Tapped on background
 			if (target === cy) {
-				selectedNode.set(null);
+				// Keeping tabs open, but visually deselecting
 				cy.nodes().removeClass('selected');
 				cy.elements().removeClass('faded');
 				return;
@@ -77,7 +77,7 @@
 			// Tapped on a node
 			if (target.isNode && target.isNode()) {
 				console.log('Node data:', target.data());
-				selectedNode.set({ data: target.data() });
+				selectedNodesStore.addNode({ data: target.data() });
 
 				cy.nodes().removeClass('selected');
 				cy.elements().removeClass('faded');
