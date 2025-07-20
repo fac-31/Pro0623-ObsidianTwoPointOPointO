@@ -78,3 +78,15 @@ export const GET: RequestHandler = async ({ params }) => {
 		await session.close();
 	}
 };
+
+export const POST: RequestHandler = async () => {
+	console.log('Building...');
+	const res = await fetch('http://localhost:8001/api/build', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	const data = await res.json();
+	return json(data, { status: 201 });
+};

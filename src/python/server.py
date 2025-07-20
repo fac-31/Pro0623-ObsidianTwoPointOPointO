@@ -31,9 +31,9 @@ async def test_route():
     return {"status": "ok", "message": "Python server is running!"}
 
 @app.post("/api/build")
-async def build_route(world):
-    build_world(world)
-    return {"statsus": "ok", "message": f"{world} has been built"}
+async def build_route():
+    build_world("Billy's World")
+    return {"status": "ok", "message": "world has been built"}
 
 if __name__ == "__main__":
     print("Starting World Builder server in API mode...")
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     # Disable reload in production and use 0.0.0.0 as host
     uvicorn.run(
         "server:app",
-        host="http://localhost",  # Changed from localhost to 0.0.0.0
+        host="localhost",  # Changed from localhost to 0.0.0.0
         port=port       # Use PORT from environment
              # Disable reload in production
     ) 
