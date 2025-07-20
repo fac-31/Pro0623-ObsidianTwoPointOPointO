@@ -1,45 +1,30 @@
 <script lang="ts">
-	import driver from '$lib/db/neo4j';
-	import { Integer, Node } from 'neo4j-driver';
-	import type { PageProps } from './$types';
+	import Dashboard from '$lib/components/Dashboard.svelte';
+	import type { GraphData } from '$lib/types/graph';
+	import { goto } from '$app/navigation';
+	import { get } from 'svelte/store';
+	import { selectedNode } from '$lib/stores/selectedNode';
 
-	const { data }: PageProps = $props();
-	const { count } = $derived(data);
+	export let data: { graphData: GraphData };
 
-	const cypher = 'MATCH (p:Project) RETURN p AS Project LIMIT 10';
-
-	interface ProjectProps {
-		title: string;
-	}
-
-	type Project = Node<Integer, ProjectProps>;
-
-	let projects: Project[] = $state([]);
-	let awaiting = $state(false);
-
-	async function send() {
-		const session = driver.session();
-		awaiting = true;
-		try {
-			const res = await session.executeRead((tx) => tx.run(cypher));
-			projects = res.records.map((record) => record.get('Project'));
-		} finally {
-			awaiting = false;
-			await session.close();
+	const enterWorld = () => {
+		const node = get(selectedNode);
+		if (node) {
+			const worldId = node.data.id;
+			goto(`/worlds/${worldId}`);
+		} else {
+			console.error('something went wrong');
 		}
-	}
+	};
+
+	const enterWorldButton = [{ label: 'Enter World', onClick: enterWorld, class: 'btn-primary' }];
 </script>
 
-<h1>Welcome to Obsidian 2.0.0 😎</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
-<button onclick={send}>Get Projects</button>
-
-{#if awaiting}
-	<p>loading will take {count} seconds</p>
-{:else if projects}
-	<ul>
-		{#each projects as project (project.identity)}
-			<li>{project.properties.title}</li>
-		{/each}
-	</ul>
-{/if}
+<Dashboard
+	graphData={data.graphData}
+	showSearchBar={true}
+	showInfoPanelTabs={false}
+	showQueryPanel={false}
+	dashboardButtons={enterWorldButton}
+	graphTitle="Select a world."
+></Dashboard>

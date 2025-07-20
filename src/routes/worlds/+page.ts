@@ -1,8 +1,8 @@
 import type { Load } from '@sveltejs/kit';
 import type { GraphData } from '$lib/types/graph';
 
-export const load: Load = async ({ params, fetch }) => {
-	const res = await fetch(`/worlds/${params.id}`);
+export const load: Load = async ({ fetch }) => {
+	const res = await fetch('/worlds');
 	if (!res.ok) throw new Error('Failed to fetch graph data');
 
 	const graphData: GraphData = await res.json();
@@ -15,11 +15,5 @@ export const load: Load = async ({ params, fetch }) => {
 		}
 	}));
 
-	const graphTitle =
-		graphData.worldInfo?.name ||
-		graphData.worldInfo?.title ||
-		graphData.worldInfo?.label ||
-		'Untitled World';
-
-	return { graphData, graphTitle, worldInfo: graphData.worldInfo };
+	return { graphData };
 };
