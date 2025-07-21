@@ -1,0 +1,45 @@
+name: AI Accessibility Audit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ai-accessibility-audit:
+    if: github.actor != 'google-labs-jules[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run AI Accessibility Audit
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/ai_accessibility_audit.js
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-accessibility-report
+          path: ai_accessibility_report.md
+
+      - name: Add note to accessibility report
+        run: |
+          echo -e "\n---\n**Note:** Any code created to fix the accessibility issues in this report must be good enough to pass the script \`prettier --write\` (which is called by \`npm run format\`) and also the script \`eslint\`. Please ensure your changes are formatted and linted before submitting a PR." >> ai_accessibility_report.md
+
+      - name: Create GitHub Issue from Accessibility Report
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: 'Accessibility Audit Report for ${{ github.sha }}'
+          content-filepath: ai_accessibility_report.md
+          labels: accessibility, audit, jules
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
