@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { worldId } from '$lib/stores/worldId';
 	import Dashboard from '$lib/components/Dashboard.svelte';
 	import type { GraphData } from '$lib/types/graph';
 	import { goto } from '$app/navigation';
@@ -10,9 +11,8 @@
 	const enterWorld = () => {
 		const node = get(activeNode);
 		if (node) {
-			const worldId = node.data.id;
-			localStorage.setItem('worldId', worldId);
-			goto(`/worlds/${worldId}`);
+			worldId.set(node.data.id);
+			goto(`/worlds/${$worldId}`);
 		} else {
 			console.error('something went wrong');
 		}
