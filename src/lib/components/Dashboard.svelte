@@ -39,7 +39,7 @@
 	class="h-full py-4 px-3"
 	data-testid="dashboard"
 >
-	<Pane defaultSize={80} minSize={20} class="relative">
+	<Pane defaultSize={80} minSize={20} class="relative" role="region" aria-label="World View">
 		{#if showSearchBar}
 			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
 		{/if}
@@ -53,7 +53,7 @@
 		<div class={`bg-neutral-content/30 ${$isSmallScreen ? 'w-4/5 h-1' : 'h-4/5 w-1'}`}></div>
 	</PaneResizer>
 
-	<Pane defaultSize={30} minSize={25}>
+	<Pane defaultSize={30} minSize={25} role="region" aria-label="Info and Query Panels">
 		{#if showQueryPanel || showInfoPanel}
 			<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
 				{#if showInfoPanel}
@@ -61,6 +61,8 @@
 						class="min-h-20"
 						defaultSize={$isSmallScreen ? 50 : 80}
 						minSize={$isSmallScreen ? 40 : 20}
+						role="region"
+						aria-label="Information Panel"
 					>
 						<InfoPanel buttons={dashboardButtons} {graphTitle} worldContent={worldInfo?.content} />
 					</Pane>
@@ -71,6 +73,8 @@
 						defaultSize={$isSmallScreen ? 50 : 20}
 						minSize={$isSmallScreen ? 50 : 30}
 						maxSize={$isSmallScreen ? 50 : 20}
+						role="region"
+						aria-label="Query Panel"
 					>
 						<QueryPanel />
 					</Pane>

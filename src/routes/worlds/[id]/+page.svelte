@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>{data.graphTitle}</title>
+</svelte:head>
+
 <script lang="ts">
 	import Dashboard from '$lib/components/Dashboard.svelte';
 	import type { GraphData, WorldInfo } from '$lib/types/graph';

@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>Welcome</title>
+</svelte:head>
+
 <script lang="ts">
 	import driver from '$lib/db/neo4j';
 	import { Integer, Neo4jError, Node, Session } from 'neo4j-driver';
@@ -82,7 +86,7 @@
 	</p>
 
 	{#if errorMessage}
-		<p class="text-red-600">Error: {errorMessage}</p>
+		<p class="text-red-600" role="alert">Error: {errorMessage}</p>
 	{/if}
 
 	<button onclick={() => send(readUsers)} class="px-3 py-1 border rounded hover:bg-gray-100">

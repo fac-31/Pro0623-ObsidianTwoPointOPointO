@@ -51,3 +51,18 @@
        * Location: Throughout the application.
        * Problem: Some elements have custom focus rings (e.g., FloatingButton.svelte), while others rely on the browser's default.
        * Suggestion: Implement a consistent, highly visible focus style for all interactive elements in your app.css.
+
+# Further Accessibility Actions
+
+*   **Missing alt text**: All `<img>` tags should have a descriptive `alt` attribute.
+*   **Click handler without keyboard support**: All elements with `on:click` handlers should be focusable and trigger on Enter/Space keydown.
+*   **No focus management in modals**: Modals should trap focus and return it to the previously focused element on close.
+*   **Color-only information**: Information should not be conveyed by color alone.
+*   **Missing live regions for dynamic content**: Dynamic content changes should be announced to screen readers using `role=\"status\"` or `role=\"alert\"`.
+*   **Forms without enhancement**: SvelteKit forms should use `use:enhance` for a better user experience.
+*   **Navigation without current page indication**: The current page in a navigation menu should be indicated with `aria-current=\"page\"`.
+*   **No focus management after navigation**: Focus should be moved to the main content or heading after a page navigation.
+*   **Missing skip links**: A "skip to main content" link should be provided.
+*   **Insufficient color contrast**: Text and UI elements should have sufficient color contrast.
+*   **Missing breadcrumbs**: Breadcrumbs should be provided on nested pages.
+*   **No reduced motion support**: Animations and transitions should be disabled for users who prefer reduced motion.
