@@ -14,23 +14,11 @@
 	export let worldInfo: WorldInfo | undefined = undefined;
 	export let showQueryPanel: boolean = true;
 	export let showInfoPanel: boolean = true;
-	export let showInfoPanelTabs: boolean = false;
+	export const showInfoPanelTabs: boolean = false;
 	export let showSearchBar: boolean = false;
 	export let dashboardButtons: { label: string; onClick: () => void; class?: string }[] = [];
 
-	let tabs = [{ id: 1, label: 'Tab 1' }];
-	let activeTabId = 1;
 	let showTextView = false;
-
-	function addTab() {
-		const newId = tabs.length > 0 ? Math.max(...tabs.map((t) => t.id)) + 1 : 1;
-		tabs = [...tabs, { id: newId, label: `Tab ${newId}` }];
-		activeTabId = newId;
-	}
-
-	function setActiveTab(id: number) {
-		activeTabId = id;
-	}
 
 	function toggleTextView() {
 		showTextView = !showTextView;
@@ -55,12 +43,7 @@
 		{#if showSearchBar}
 			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
 		{/if}
-		<WorldView
-			{graphData}
-			showGraph={!showTextView}
-			on:createNew={addTab}
-			on:displayText={toggleTextView}
-		/>
+		<WorldView {graphData} showGraph={!showTextView} on:displayText={toggleTextView} />
 	</Pane>
 	<PaneResizer
 		class={`${
@@ -79,15 +62,7 @@
 						defaultSize={$isSmallScreen ? 50 : 80}
 						minSize={$isSmallScreen ? 40 : 20}
 					>
-						<InfoPanel
-							showTabs={showInfoPanelTabs}
-							buttons={dashboardButtons}
-							{tabs}
-							{activeTabId}
-							{setActiveTab}
-							{graphTitle}
-							worldContent={worldInfo?.content}
-						/>
+						<InfoPanel buttons={dashboardButtons} {graphTitle} worldContent={worldInfo?.content} />
 					</Pane>
 				{/if}
 				{#if showQueryPanel}
