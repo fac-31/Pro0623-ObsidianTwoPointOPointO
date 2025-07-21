@@ -3,7 +3,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let worldName: string;
+	export let worldId: string;
 	let query = '';
 	let loading = false;
 	let error = '';
@@ -19,13 +19,13 @@
 		event.preventDefault();
 		error = '';
 
-		console.log(worldName);
+		console.log(worldId);
 
 		try {
 			const res = await fetch('/api/query', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ query, worldName })
+				body: JSON.stringify({ query, worldId })
 			});
 
 			if (!res.ok) {

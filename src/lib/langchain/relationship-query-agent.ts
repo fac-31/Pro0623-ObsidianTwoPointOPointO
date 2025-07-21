@@ -62,7 +62,7 @@ async function classifyQuery(userQuery: string): Promise<QueryType> {
 	return type as QueryType;
 }
 
-export async function handleQuery(userQuery: string, worldName: string) {
+export async function handleQuery(userQuery: string, worldId: string) {
 	const schema = graph.getSchema();
 	console.log(schema);
 
@@ -79,7 +79,7 @@ export async function handleQuery(userQuery: string, worldName: string) {
 
         You MUST ALWAYS begin your Cypher query with this world-scoping pattern:
 
-        MATCH (w:World { name: "${worldName}" })
+        MATCH (w:World { name: "${worldId}" })
         CALL apoc.path.subgraphAll(w, {}) YIELD nodes, relationships
         WITH nodes, relationships
 

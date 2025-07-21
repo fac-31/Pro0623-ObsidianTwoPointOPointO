@@ -5,12 +5,13 @@
 	import { get } from 'svelte/store';
 	import { activeNode } from '$lib/stores/selectedNodes';
 
-	export let data: { graphData: GraphData };
+	export let data: { graphData: GraphData; explanation: string };
 
 	const enterWorld = () => {
 		const node = get(activeNode);
 		if (node) {
 			const worldId = node.data.id;
+			localStorage.setItem('worldId', worldId);
 			goto(`/worlds/${worldId}`);
 		} else {
 			console.error('something went wrong');

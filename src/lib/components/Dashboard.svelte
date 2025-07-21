@@ -7,11 +7,11 @@
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import { readable } from 'svelte/store';
 
+	export let explanation: string = '';
 	export let graphData: GraphData;
-	export let worldName: string;
+	export let worldId: string = '';
 
 	let currentGraphData: GraphData = graphData;
-	let explanation: string = '';
 
 	function handleResult(event: CustomEvent) {
 		console.log('Dashboard: received event.detail:', event.detail);
@@ -83,7 +83,12 @@
 						defaultSize={$isSmallScreen ? 50 : 80}
 						minSize={$isSmallScreen ? 40 : 20}
 					>
-						<InfoPanel buttons={dashboardButtons} {graphTitle} worldContent={worldInfo?.content} />
+						<InfoPanel
+							{explanation}
+							buttons={dashboardButtons}
+							{graphTitle}
+							worldContent={worldInfo?.content}
+						/>
 					</Pane>
 				{/if}
 				{#if showQueryPanel}
@@ -93,7 +98,7 @@
 						minSize={$isSmallScreen ? 50 : 30}
 						maxSize={$isSmallScreen ? 50 : 20}
 					>
-						<QueryPanel {worldName} on:result={handleResult} />
+						<QueryPanel {worldId} on:result={handleResult} />
 					</Pane>
 				{/if}
 			</PaneGroup>
