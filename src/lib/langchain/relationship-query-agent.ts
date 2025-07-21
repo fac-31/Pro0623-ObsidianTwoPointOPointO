@@ -64,6 +64,7 @@ async function classifyQuery(userQuery: string): Promise<QueryType> {
 
 export async function handleQuery(userQuery: string, worldName: string) {
 	const schema = graph.getSchema();
+	console.log(schema);
 
 	const queryType = await classifyQuery(userQuery);
 	console.log('Query type:', queryType);
