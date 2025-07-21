@@ -61,9 +61,8 @@
 				on:keydown={handleKeyDown}
 				required
 			></textarea>
-		</form>
-		<div class="absolute bottom-4 right-6">
 			<button class="btn btn-ghost btn-lg" type="submit">Submit</button>
-		</div>
+		</form>
+		<!-- <div class="absolute bottom-4 right-6"></div> -->
 	</div>
 </div>
