@@ -50,8 +50,8 @@
 	}
 </script>
 
-<div class="rounded-xl bg-base-300 text-base p-4 h-full w-full">
-	<div class="bg-base-100 p-6 rounded-xl h-full w-full">
+<div class="rounded-4xl border-3 border-bg-base-300 text-base p-4 h-full flex flex-col">
+	<div class="p-1 rounded-xl h-full w-full relative">
 		<form on:submit|preventDefault={handleSubmit}>
 			<textarea
 				class="textarea textarea-ghost w-full h-32 rounded-xl"
@@ -61,7 +61,9 @@
 				on:keydown={handleKeyDown}
 				required
 			></textarea>
-			<button class="btn btn-secondary mt-2" type="submit">Enter</button>
 		</form>
+		<div class="absolute bottom-4 right-6">
+			<button class="btn btn-ghost btn-lg" type="submit">Submit</button>
+		</div>
 	</div>
 </div>

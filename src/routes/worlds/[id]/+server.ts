@@ -2,52 +2,72 @@ import driver from '$lib/db/neo4j';
 import type { RequestHandler } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
 import type { GraphData, GraphNode, GraphEdge } from '$lib/types/graph';
+import type { Node, Relationship } from 'neo4j-driver';
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({ params }) => {
 	const session = driver.session();
+	const worldId = params.id;
 
 	try {
-		const result = await session.run(`
-			MATCH (w:World { name: "Luminwood Realm" })
-			CALL apoc.path.subgraphAll(w, {}) YIELD nodes, relationships
-			WITH nodes, relationships
-			UNWIND nodes AS n
-			UNWIND relationships AS r
-			WITH COLLECT(DISTINCT n) AS nodes, COLLECT(DISTINCT r) AS relationships
+		// World node
+		const worldResult = await session.run(`MATCH (w) WHERE elementId(w) = $worldId RETURN w`, {
+			worldId
+		});
+
+		if (worldResult.records.length === 0) {
+			return new Response('World not found', { status: 404 });
+		}
+
+		const worldNode: Node = worldResult.records[0].get('w');
+
+		// Neighbor nodes and their internal relationships
+		const graphResult = await session.run(
+			`
+			MATCH (w) WHERE elementId(w) = $worldId
+			MATCH (w)--(n)
+			WITH collect(DISTINCT n) AS nodes
+			UNWIND nodes AS a
+			OPTIONAL MATCH (a)-[r]-(b)
+			WHERE b IN nodes AND elementId(a) < elementId(b)
+			WITH nodes, collect(DISTINCT r) AS relationships
 			RETURN nodes, relationships
-    	`);
+			`,
+			{ worldId }
+		);
+
+		const graphRecord = graphResult.records[0];
+		const neighborNodes = graphRecord.get('nodes');
+		const relationships = graphRecord.get('relationships');
 
 		const nodes = new Map<string, GraphNode>();
-		const edges: GraphEdge[] = [];
+		const addNode = (node: Node) => {
+			const elementId = node.elementId;
+			if (!nodes.has(elementId)) {
+				nodes.set(elementId, {
+					data: { id: elementId, label: node.labels[0], ...node.properties }
+				});
+			}
+		};
 
-		const resultNodes = result.records[0].get('nodes');
-		const resultRelationships = result.records[0].get('relationships');
+		neighborNodes.forEach(addNode);
 
-		for (const node of resultNodes) {
-			nodes.set(node.identity.toString(), {
-				data: {
-					id: node.identity.toString(),
-					label: node.labels[0],
-					...node.properties
-				}
-			});
-		}
-
-		for (const rel of resultRelationships) {
-			edges.push({
-				data: {
-					id: rel.identity.toString(),
-					source: rel.start.toString(),
-					target: rel.end.toString(),
-					label: rel.type,
-					...rel.properties
-				}
-			});
-		}
+		const edges: GraphEdge[] = relationships.map((rel: Relationship) => ({
+			data: {
+				id: rel.elementId,
+				source: rel.startNodeElementId,
+				target: rel.endNodeElementId,
+				label: rel.type,
+				...rel.properties
+			}
+		}));
 
 		const graphData: GraphData = {
 			nodes: Array.from(nodes.values()),
-			edges
+			edges,
+			worldInfo: {
+				label: worldNode.labels[0],
+				...worldNode.properties
+			}
 		};
 
 		return json(graphData);

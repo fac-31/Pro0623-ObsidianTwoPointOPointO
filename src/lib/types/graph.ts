@@ -16,7 +16,13 @@ export type GraphEdge = {
 	};
 };
 
+export type WorldInfo = {
+	label: string;
+	[key: string]: string;
+};
+
 export type GraphData = {
 	nodes: GraphNode[];
 	edges: GraphEdge[];
+	worldInfo?: WorldInfo;
 };

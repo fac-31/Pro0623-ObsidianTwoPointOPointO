@@ -6,20 +6,19 @@
 </script>
 
 <div class={`dropdown dropdown-top dropdown-center ${position}`}>
-	<div
-		tabindex="0"
-		role="button"
-		class="btn m-1 text-2xl bg-secondary text-primary-content rounded-full shadow-lg hover:bg-primary-focus focus:outline-none focus:ring-4 focus:ring-primary/50"
+	<button
 		aria-label={ariaLabel}
+		class="btn m-1 text-2xl bg-secondary text-primary-content rounded-full shadow-lg hover:bg-primary-focus focus:outline-none focus:ring-4 focus:ring-primary/50"
 	>
 		+
-	</div>
-	<ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-sm">
+	</button>
+
+	<ul class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-sm">
 		<li>
-			<a href="#" on:click|preventDefault={onDisplayText}>Display Text</a>
+			<button type="button" on:click={onDisplayText}>Display Text</button>
 		</li>
 		<li>
-			<a href="#" on:click|preventDefault={onCreateNew}>Create New</a>
+			<button type="button" on:click={onCreateNew}>Create New</button>
 		</li>
 	</ul>
 </div>

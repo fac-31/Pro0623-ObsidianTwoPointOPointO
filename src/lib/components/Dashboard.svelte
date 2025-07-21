@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type { GraphData } from '$lib/types/graph';
+	import type { GraphData, WorldInfo } from '$lib/types/graph';
 	import WorldView from './WorldView.svelte';
 	import QueryPanel from './QueryPanel.svelte';
 	import InfoPanel from './InfoPanel.svelte';
+	import SearchBar from './SearchBar.svelte';
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import { readable } from 'svelte/store';
 
@@ -25,19 +26,16 @@
 		explanation = newExplanation;
 	}
 
-	let tabs = [{ id: 1, label: 'Tab 1' }];
-	let activeTabId = 1;
+	// Dashboard Options
+	export let graphTitle: string;
+	export let worldInfo: WorldInfo | undefined = undefined;
+	export let showQueryPanel: boolean = true;
+	export let showInfoPanel: boolean = true;
+	export const showInfoPanelTabs: boolean = false;
+	export let showSearchBar: boolean = false;
+	export let dashboardButtons: { label: string; onClick: () => void; class?: string }[] = [];
+
 	let showTextView = false;
-
-	function addTab() {
-		const newId = tabs.length > 0 ? Math.max(...tabs.map((t) => t.id)) + 1 : 1;
-		tabs = [...tabs, { id: newId, label: `Tab ${newId}` }];
-		activeTabId = newId;
-	}
-
-	function setActiveTab(id: number) {
-		activeTabId = id;
-	}
 
 	function toggleTextView() {
 		showTextView = !showTextView;
@@ -55,34 +53,50 @@
 
 <PaneGroup
 	direction={$isSmallScreen ? 'vertical' : 'horizontal'}
-	class="h-full p-4"
+	class="h-full py-4 px-3"
 	data-testid="dashboard"
 >
-	<Pane defaultSize={80}>
+	<Pane defaultSize={80} minSize={20} class="relative">
+		{#if showSearchBar}
+			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
+		{/if}
 		<WorldView
 			graphData={currentGraphData}
 			showGraph={!showTextView}
-			on:createNew={addTab}
 			on:displayText={toggleTextView}
 		/>
 	</Pane>
-	<PaneResizer class={`cursor-grab ${$isSmallScreen ? 'h-2 w-full' : 'w-2 h-full'}`} />
-	<Pane defaultSize={30}>
-		<PaneGroup
-			direction={$isSmallScreen ? 'horizontal' : 'vertical'}
-			class="h-full"
-			data-testid="query-panel"
-		>
-			<Pane defaultSize={30}>
-				<QueryPanel {worldName} on:result={handleResult} />
-			</Pane>
-			<PaneResizer
-				class={`cursor-grab ${$isSmallScreen ? 'w-2 h-full' : 'h-2 w-full'}`}
-				data-testid="info-panel"
-			/>
-			<Pane defaultSize={70}>
-				<InfoPanel {tabs} {activeTabId} {setActiveTab} {explanation} />
-			</Pane>
-		</PaneGroup>
+	<PaneResizer
+		class={`${
+			$isSmallScreen ? 'h-5 w-full p-4' : 'w-5 h-full'
+		} flex items-center justify-center bg-base-100 `}
+	>
+		<div class={`bg-neutral-content/30 ${$isSmallScreen ? 'w-4/5 h-1' : 'h-4/5 w-1'}`}></div>
+	</PaneResizer>
+
+	<Pane defaultSize={30} minSize={25}>
+		{#if showQueryPanel || showInfoPanel}
+			<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
+				{#if showInfoPanel}
+					<Pane
+						class="min-h-20"
+						defaultSize={$isSmallScreen ? 50 : 80}
+						minSize={$isSmallScreen ? 40 : 20}
+					>
+						<InfoPanel buttons={dashboardButtons} {graphTitle} worldContent={worldInfo?.content} />
+					</Pane>
+				{/if}
+				{#if showQueryPanel}
+					<Pane
+						class="min-h-10 max-h-35"
+						defaultSize={$isSmallScreen ? 50 : 20}
+						minSize={$isSmallScreen ? 50 : 30}
+						maxSize={$isSmallScreen ? 50 : 20}
+					>
+						<QueryPanel {worldName} on:result={handleResult} />
+					</Pane>
+				{/if}
+			</PaneGroup>
+		{/if}
 	</Pane>
 </PaneGroup>

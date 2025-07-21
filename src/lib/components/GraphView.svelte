@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
+	import { selectedNodesStore } from '$lib/stores/selectedNodes';
 
 	export let graphData: GraphData;
 
@@ -19,11 +20,13 @@
 					selector: 'node',
 					style: {
 						label: 'data(label)',
-						'background-color': '#0074D9',
+						'background-color': '#666666',
 						color: '#fff',
 						'text-valign': 'center',
 						'text-halign': 'center',
-						'font-size': 5
+						'font-size': 5,
+						opacity: 1,
+						'border-width': 0
 					}
 				},
 				{
@@ -32,13 +35,57 @@
 						label: 'data(label)',
 						'curve-style': 'bezier',
 						'target-arrow-shape': 'triangle',
-						'line-color': '#ccc',
-						'target-arrow-color': '#ccc',
-						'font-size': 5,
+						'line-color': '#000', // Black edge line
+						'target-arrow-color': '#000', // Black arrow
+						color: '#fff', // White text label
+						'text-rotation': 'autorotate', // Label follows edge angle
+						'text-wrap': 'wrap',
+						'text-max-width': '80px',
+						'font-size': 3,
 						width: 2
+					}
+				},
+				{
+					selector: '.faded',
+					style: {
+						opacity: 0.1
+					}
+				},
+				{
+					selector: '.selected',
+					style: {
+						'border-width': 1,
+						'border-color': '#143261',
+						'border-opacity': 1,
+						'font-size': 6
 					}
 				}
 			]
+		});
+
+		cy.on('tap', (event) => {
+			const target = event.target;
+
+			// Tapped on background
+			if (target === cy) {
+				// Keeping tabs open, but visually deselecting
+				cy.nodes().removeClass('selected');
+				cy.elements().removeClass('faded');
+				return;
+			}
+
+			// Tapped on a node
+			if (target.isNode && target.isNode()) {
+				console.log('Node data:', target.data());
+				selectedNodesStore.addNode({ data: target.data() });
+
+				cy.nodes().removeClass('selected');
+				cy.elements().removeClass('faded');
+
+				target.addClass('selected');
+				const connected = target.closedNeighborhood();
+				cy.elements().difference(connected).addClass('faded');
+			}
 		});
 	});
 
