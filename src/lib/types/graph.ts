@@ -1,7 +1,8 @@
 export type GraphNode = {
 	data: {
 		id: string;
-		label: string;
+		name: string;
+		type: string;
 		[key: string]: string; // e.g., title, name, etc.
 	};
 };

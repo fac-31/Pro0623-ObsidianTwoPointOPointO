@@ -19,7 +19,7 @@
 				{
 					selector: 'node',
 					style: {
-						label: 'data(label)',
+						label: 'data(name)',
 						'background-color': '#666666',
 						color: '#fff',
 						'text-valign': 'center',
@@ -29,10 +29,11 @@
 						'border-width': 0
 					}
 				},
+
 				{
 					selector: 'edge',
 					style: {
-						label: 'data(label)',
+						label: 'data(name)',
 						'curve-style': 'bezier',
 						'target-arrow-shape': 'triangle',
 						'line-color': '#000', // Black edge line

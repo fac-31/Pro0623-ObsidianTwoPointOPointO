@@ -166,7 +166,8 @@ export async function handleQuery(userQuery: string, worldName: string) {
 			nodes.set(node.identity.toString(), {
 				data: {
 					id: node.identity.toString(),
-					label: node.labels?.[0] ?? 'Unknown',
+					name: node.properties.name ?? 'Anon',
+					type: node.labels?.[0] ?? 'Unknown',
 					...node.properties
 				}
 			});
