@@ -5,8 +5,8 @@
 
 	export let worldId: string;
 	let query = '';
-	let loading = false;
-	let error = '';
+	// let loading = false;
+	// let error = '';
 
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter' && !event.shiftKey) {
@@ -17,7 +17,6 @@
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
-		error = '';
 
 		console.log(worldId);
 
@@ -44,8 +43,6 @@
 				errorMessage = err;
 			}
 			console.error(errorMessage);
-		} finally {
-			loading = false;
 		}
 	}
 </script>
