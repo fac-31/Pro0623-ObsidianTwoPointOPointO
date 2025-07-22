@@ -3,6 +3,26 @@
 	export let position: string = 'fixed bottom-6 right-6';
 	export let onDisplayText: () => void = () => {};
 	export let onCreateNew: () => void = () => {};
+
+	import { page } from '$app/state';
+
+	const buildWorldAPI = async () => {
+		console.log('Building world with ID (API):', page.params.id);
+		try {
+			const response = await fetch(`/api/build`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ worldId: page.params.id })
+			});
+			if (!response.ok) {
+				throw new Error('Failed to build world');
+			}
+			const result = await response.json();
+			console.log('World built successfully:', result);
+		} catch (error) {
+			console.error('Error building world:', error);
+		}
+	};
 </script>
 
 <div class={`dropdown dropdown-top dropdown-center ${position}`}>
@@ -20,6 +40,9 @@
 		</li>
 		<li>
 			<a href="#" on:click|preventDefault={onCreateNew}>Create New</a>
+		</li>
+		<li>
+			<a href="#" on:click|preventDefault={buildWorldAPI}>Build</a>
 		</li>
 	</ul>
 </div>

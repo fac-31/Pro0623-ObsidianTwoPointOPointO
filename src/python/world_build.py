@@ -14,12 +14,12 @@ load_dotenv()
 DOCS_PATH = "llm-knowledge-graph/data/course/pdfs"
 
 llm = ChatOpenAI(
-    openai_api_key=os.getenv('OPENAI_API_KEY'), 
-    model_name="gpt-3.5-turbo"
+    openai_api_key=os.getenv('OPENAI_API_KEY'), # type: ignore
+    model_name="gpt-3.5-turbo" # type: ignore
 )
 
 embedding_provider = OpenAIEmbeddings(
-    openai_api_key=os.getenv('OPENAI_API_KEY'),
+    openai_api_key=os.getenv('OPENAI_API_KEY'), # type: ignore
     model="text-embedding-ada-002"
     )
 
@@ -52,10 +52,11 @@ def build_world(world):
     # Get Documents From Graph
     docs = graph.query(
         """
-    MATCH (d: Document)-[:DESCRIBES]->(: World {name: $world}) 
-    RETURN d AS doc
-    """,
-    { "world": world }
+        MATCH (w: World) WHERE elementId(w) = $world
+        MATCH (d: Document)-[:DESCRIBES]->(w) 
+        RETURN d AS doc
+        """,
+        { "world": world }
     )
 
     # Convert Graph Nodes into langchain Documents
@@ -124,7 +125,7 @@ def build_world(world):
                     )
 
         # add the graph documents to the graph
-        graph.add_graph_documents(graph_docs)
+        graph.add_graph_documents(graph_docs) # type: ignore
 
 if __name__ == "__main__":
     print("Building World")
