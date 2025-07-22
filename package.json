@@ -83,12 +83,17 @@
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {
+		"@langchain/community": "^0.3.48",
+		"@langchain/core": "^0.3.62",
+		"@langchain/openai": "^0.5.18",
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.50.3",
 		"@tailwindcss/vite": "^4.1.11",
 		"cytoscape": "^3.32.0",
-		"dotenv": "^17.2.0",
+		"dotenv": "^16.4.5",
+		"langchain": "^0.3.29",
 		"neo4j-driver": "^5.28.1",
+		"openai": "^4.104.0",
 		"paneforge": "^1.0.0",
 		"tailwindcss": "^4.1.11"
 	}

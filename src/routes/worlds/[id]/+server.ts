@@ -44,7 +44,12 @@ export const GET: RequestHandler = async ({ params }) => {
 			const elementId = node.elementId;
 			if (!nodes.has(elementId)) {
 				nodes.set(elementId, {
-					data: { id: elementId, label: node.labels[0], ...node.properties }
+					data: {
+						id: elementId,
+						name: node.properties.name,
+						type: node.labels[0],
+						...node.properties
+					}
 				});
 			}
 		};

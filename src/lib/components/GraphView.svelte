@@ -2,7 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
-	import { selectedNode } from '$lib/stores/selectedNode';
+	import { selectedNodesStore } from '$lib/stores/selectedNodes';
 
 	export let graphData: GraphData;
 
@@ -19,8 +19,8 @@
 				{
 					selector: 'node',
 					style: {
-						label: 'data(label)',
-						'background-color': '#0074D9',
+						label: 'data(name)',
+						'background-color': '#666666',
 						color: '#fff',
 						'text-valign': 'center',
 						'text-halign': 'center',
@@ -29,10 +29,11 @@
 						'border-width': 0
 					}
 				},
+
 				{
 					selector: 'edge',
 					style: {
-						label: 'data(label)',
+						label: 'data(name)',
 						'curve-style': 'bezier',
 						'target-arrow-shape': 'triangle',
 						'line-color': '#000', // Black edge line
@@ -68,7 +69,7 @@
 
 			// Tapped on background
 			if (target === cy) {
-				selectedNode.set(null);
+				// Keeping tabs open, but visually deselecting
 				cy.nodes().removeClass('selected');
 				cy.elements().removeClass('faded');
 				return;
@@ -77,7 +78,7 @@
 			// Tapped on a node
 			if (target.isNode && target.isNode()) {
 				console.log('Node data:', target.data());
-				selectedNode.set({ data: target.data() });
+				selectedNodesStore.addNode({ data: target.data() });
 
 				cy.nodes().removeClass('selected');
 				cy.elements().removeClass('faded');
@@ -88,6 +89,13 @@
 			}
 		});
 	});
+
+	$: if (cy && graphData) {
+		cy.elements().remove();
+		cy.add([...graphData.nodes, ...graphData.edges]);
+		cy.layout({ name: 'cose' }).run();
+		console.log('Graph data updated', graphData.nodes.length, graphData.edges.length);
+	}
 
 	onDestroy(() => {
 		cy?.destroy();
