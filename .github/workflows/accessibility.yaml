@@ -21,16 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run AI Accessibility Audit
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: node scripts/ai_accessibility_audit.js
-
       - name: Upload audit report
         uses: actions/upload-artifact@v4
         with:
-          name: ai-accessibility-report
-          path: ai_accessibility_report.md
+          name: ai-accessibility-actions
+          path: accessibility-actions.md
 
       - name: Add note to accessibility report
         run: |
@@ -40,6 +35,6 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: 'Accessibility Audit Report for ${{ github.sha }}'
-          content-filepath: ai_accessibility_report.md
+          content-filepath: accessibility-actions.md
           labels: accessibility, audit, jules
           token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
