@@ -1,17 +1,18 @@
 <script lang="ts">
+	import { worldId } from '$lib/stores/worldId';
 	import Dashboard from '$lib/components/Dashboard.svelte';
 	import type { GraphData } from '$lib/types/graph';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
-	import { selectedNode } from '$lib/stores/selectedNode';
+	import { activeNode } from '$lib/stores/selectedNodes';
 
-	export let data: { graphData: GraphData };
+	export let data: { graphData: GraphData; explanation: string };
 
 	const enterWorld = () => {
-		const node = get(selectedNode);
+		const node = get(activeNode);
 		if (node) {
-			const worldId = node.data.id;
-			goto(`/worlds/${worldId}`);
+			worldId.set(node.data.id);
+			goto(`/worlds/${$worldId}`);
 		} else {
 			console.error('something went wrong');
 		}
