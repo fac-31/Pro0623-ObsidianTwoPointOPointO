@@ -3,38 +3,32 @@
 	import { onMount } from 'svelte';
 
 	const daisyUiThemes = [
-		'light',
-		'dark',
+		'wireframe',
 		'cupcake',
-		'bumblebee',
 		'emerald',
-		'corporate',
-		'synthwave',
-		'retro',
-		'cyberpunk',
-		'valentine',
-		'halloween',
 		'garden',
-		'forest',
-		'aqua',
 		'lofi',
 		'pastel',
 		'fantasy',
-		'wireframe',
-		'black',
-		'luxury',
-		'dracula',
 		'cmyk',
 		'autumn',
-		'business',
 		'acid',
-		'lemonade',
-		'night',
-		'coffee',
 		'winter',
-		'dim',
 		'nord',
-		'sunset'
+		'retro',
+		'lemonade',
+		'cyberpunk',
+		'coffee',
+		'dim',
+		'sunset',
+		'night',
+		'luxury',
+		'dracula',
+		'aqua',
+		'forest',
+		'dark',
+		'synthwave',
+		'black'
 	];
 
 	onMount(() => {
@@ -57,7 +51,8 @@
 			id="theme-select"
 			class="select select-bordered"
 			bind:value={$appSettings.currentTheme}
-			on:change={(e) => document.documentElement.setAttribute('data-theme', (e.target as HTMLSelectElement).value)}
+			on:change={(e) =>
+				document.documentElement.setAttribute('data-theme', (e.target as HTMLSelectElement).value)}
 		>
 			{#each daisyUiThemes as theme}
 				<option value={theme}>{theme}</option>
@@ -69,51 +64,49 @@
 	<div class="grid grid-cols-2 gap-4">
 		<div class="form-control">
 			<label for="nodeFontSize" class="label">Node Font Size</label>
-			<input id="nodeFontSize" type="number" class="input input-bordered" bind:value={$appSettings.nodeFontSize} />
+			<input
+				id="nodeFontSize"
+				type="number"
+				class="input input-bordered"
+				bind:value={$appSettings.nodeFontSize}
+			/>
 		</div>
-		<div class="form-control">
-			<label for="edgeWidth" class="label">Edge Width</label>
-			<input id="edgeWidth" type="number" class="input input-bordered" bind:value={$appSettings.edgeWidth} />
-		</div>
-		<div class="form-control">
-			<label for="nodeBorderWidth" class="label">Node Border Width</label>
-			<input id="nodeBorderWidth" type="number" class="input input-bordered" bind:value={$appSettings.nodeBorderWidth} />
-		</div>
+		<label>
+			<input
+				id="wrapNodeText"
+				type="checkbox"
+				class="checkbox"
+				checked={true}
+				on:change={(e) => {
+					const checked = (e.target as HTMLInputElement).checked;
+					appSettings.update((s) => ({
+						...s,
+						wrapNodeText: !checked,
+						nodeTextMaxWidth: checked ? 80 : 1
+					}));
+				}}
+			/>
+			Wrap Text
+		</label>
+
 		<div class="form-control">
 			<label for="edgeFontSize" class="label">Edge Font Size</label>
-			<input id="edgeFontSize" type="number" class="input input-bordered" bind:value={$appSettings.edgeFontSize} />
+			<input
+				id="edgeFontSize"
+				type="number"
+				class="input input-bordered"
+				bind:value={$appSettings.edgeFontSize}
+			/>
 		</div>
-		<div class="form-control">
-			<label for="nodeTextMaxWidth" class="label">Node Text Max Width</label>
-			<input id="nodeTextMaxWidth" type="number" class="input input-bordered" bind:value={$appSettings.nodeTextMaxWidth} />
-		</div>
-		<div class="form-control">
-			<label for="edgeTextMaxWidth" class="label">Edge Text Max Width</label>
-			<input id="edgeTextMaxWidth" type="number" class="input input-bordered" bind:value={$appSettings.edgeTextMaxWidth} />
-		</div>
+
 		<div class="form-control">
 			<label for="nodeTextBackgroundPadding" class="label">Node Text Bg Padding</label>
-			<input id="nodeTextBackgroundPadding" type="text" class="input input-bordered" bind:value={$appSettings.nodeTextBackgroundPadding} />
-		</div>
-		<div class="form-control">
-			<label for="nodeOpacity" class="label">Node Opacity</label>
-			<input id="nodeOpacity" type="number" step="0.1" min="0" max="1" class="input input-bordered" bind:value={$appSettings.nodeOpacity} />
-		</div>
-		<div class="form-control">
-			<label for="edgeOpacity" class="label">Edge Opacity</label>
-			<input id="edgeOpacity" type="number" step="0.1" min="0" max="1" class="input input-bordered" bind:value={$appSettings.edgeOpacity} />
-		</div>
-		<div class="form-control">
-			<label for="selectedNodeBorderWidth" class="label">Selected Node Border Width</label>
-			<input id="selectedNodeBorderWidth" type="number" class="input input-bordered" bind:value={$appSettings.selectedNodeBorderWidth} />
-		</div>
-		<div class="form-control">
-			<label for="selectedNodeFontSize" class="label">Selected Node Font Size</label>
-			<input id="selectedNodeFontSize" type="number" class="input input-bordered" bind:value={$appSettings.selectedNodeFontSize} />
-		</div>
-		<div class="form-control">
-			<label for="selectedEdgeWidth" class="label">Selected Edge Width</label>
-			<input id="selectedEdgeWidth" type="number" class="input input-bordered" bind:value={$appSettings.selectedEdgeWidth} />
+			<input
+				id="nodeTextBackgroundPadding"
+				type="text"
+				class="input input-bordered"
+				bind:value={$appSettings.nodeTextBackgroundPadding}
+			/>
 		</div>
 	</div>
 </div>

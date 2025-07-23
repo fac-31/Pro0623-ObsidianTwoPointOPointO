@@ -1,14 +1,14 @@
 import { writable } from 'svelte/store';
 
 export const appSettings = writable({
-	currentTheme: 'light',
+	currentTheme: 'wireframe',
 	nodeFontSize: 7,
 	edgeWidth: 4,
 	nodeBorderWidth: 0,
 	edgeFontSize: 3,
 	nodeTextMaxWidth: 80,
 	edgeTextMaxWidth: 80,
-	nodeTextBackgroundPadding: '2px',
+	nodeTextBackgroundPadding: '3px',
 	nodeOpacity: 1,
 	edgeOpacity: 1,
 	selectedNodeBorderWidth: 1,

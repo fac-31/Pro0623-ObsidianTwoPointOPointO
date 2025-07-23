@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, tick } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
 	import { selectedNodesStore } from '$lib/stores/selectedNodes';
@@ -53,13 +53,13 @@
 		const errorContentColor = getResolvedColor('bg-error-content');
 
 		cy.style()
-			.resetToDefault()
 			.selector('node')
 			.style({
 				label: 'data(label)',
-				'background-color': neutralColor, // node colour
-				color: neutralContentColor, //text colour
-				'text-background-color': secondaryColor,
+				'background-color': baseContentColor, // node colour
+				color: base300Color,
+				'text-background-color': baseContentColor,
+				'text-background-shape': 'roundrectangle',
 				'text-valign': 'center',
 				'text-halign': 'center',
 				'font-size': settings.nodeFontSize,
@@ -77,7 +77,7 @@
 				'target-arrow-shape': 'triangle',
 				'line-color': neutralColor,
 				'target-arrow-color': neutralColor,
-				color: accentColor, // line colour
+				color: neutralContentColor, // line colour
 				'text-rotation': 'autorotate',
 				'font-size': settings.edgeFontSize,
 				width: settings.edgeWidth,
@@ -113,7 +113,8 @@
 		});
 
 		// Subscribe to appSettings store and apply styles on change
-		appSettings.subscribe((settings) => {
+		appSettings.subscribe(async (settings) => {
+			await tick(); // Ensure DOM is updated with new theme colors
 			applyCytoscapeStyle(settings);
 		});
 
