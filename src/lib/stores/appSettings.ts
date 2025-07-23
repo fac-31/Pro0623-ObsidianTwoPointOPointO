@@ -2,6 +2,9 @@ import { writable } from 'svelte/store';
 
 export const appSettings = writable({
 	currentTheme: 'wireframe',
+	wrapText: true,
+	curveStyle: 'bezier',
+	layoutName: 'cose',
 	nodeFontSize: 7,
 	edgeWidth: 4,
 	nodeBorderWidth: 0,

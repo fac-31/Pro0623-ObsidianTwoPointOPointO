@@ -26,7 +26,7 @@
 	}
 </script>
 
-<div class="flex flex-col h-full w-full rounded-xl bg-yellow relative">
+<div class="flex flex-col h-full w-full rounded-xl bg-base-300 relative">
 	<div class="flex-1 overflow-hidden">
 		{#if showGraph}
 			<GraphView {graphData} />

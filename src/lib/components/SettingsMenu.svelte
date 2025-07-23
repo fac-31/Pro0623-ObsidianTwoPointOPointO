@@ -54,9 +54,21 @@
 			on:change={(e) =>
 				document.documentElement.setAttribute('data-theme', (e.target as HTMLSelectElement).value)}
 		>
-			{#each daisyUiThemes as theme}
+			{#each daisyUiThemes as theme (theme)}
 				<option value={theme}>{theme}</option>
 			{/each}
+		</select>
+	</div>
+
+	<div class="form-control mb-4">
+		<label for="layout-select" class="label">Graph Layout</label>
+		<select id="layout-select" class="select select-bordered" bind:value={$appSettings.layoutName}>
+			<option value="breadthfirst">breadthfirst</option>
+			<option value="circle">circle</option>
+			<option value="concentric">concentric</option>
+			<option value="cose">cose</option>
+			<option value="grid">grid</option>
+			<option value="random">random</option>
 		</select>
 	</div>
 
@@ -66,36 +78,44 @@
 			<label for="nodeFontSize" class="label">Node Font Size</label>
 			<input
 				id="nodeFontSize"
-				type="number"
-				class="input input-bordered"
+				type="range"
+				min="1"
+				max="20"
+				class="range range-primary"
 				bind:value={$appSettings.nodeFontSize}
 			/>
 		</div>
-		<label>
+		<div class="form-control">
+			<label for="wrapText" class="label">Wrap Node Text</label>
 			<input
-				id="wrapNodeText"
+				id="wrapText"
 				type="checkbox"
-				class="checkbox"
-				checked={true}
-				on:change={(e) => {
-					const checked = (e.target as HTMLInputElement).checked;
-					appSettings.update((s) => ({
-						...s,
-						wrapNodeText: !checked,
-						nodeTextMaxWidth: checked ? 80 : 1
-					}));
-				}}
+				class="toggle toggle-primary"
+				bind:checked={$appSettings.wrapText}
 			/>
-			Wrap Text
-		</label>
+		</div>
 
 		<div class="form-control">
 			<label for="edgeFontSize" class="label">Edge Font Size</label>
 			<input
 				id="edgeFontSize"
-				type="number"
-				class="input input-bordered"
+				type="range"
+				min="1"
+				max="20"
+				class="range range-primary"
 				bind:value={$appSettings.edgeFontSize}
+			/>
+		</div>
+
+		<div class="form-control">
+			<label for="edgeWidth" class="label">Edge Width</label>
+			<input
+				id="edgeWidth"
+				type="range"
+				min="1"
+				max="10"
+				class="range range-primary"
+				bind:value={$appSettings.edgeWidth}
 			/>
 		</div>
 
@@ -103,11 +123,31 @@
 			<label for="nodeTextBackgroundPadding" class="label">Node Text Bg Padding</label>
 			<input
 				id="nodeTextBackgroundPadding"
-				type="text"
-				class="input input-bordered"
+				type="range"
+				min="0"
+				max="10"
+				class="range range-primary"
 				bind:value={$appSettings.nodeTextBackgroundPadding}
 			/>
 		</div>
+	</div>
+
+	<div class="form-control mb-4">
+		<label for="curveStyle-select" class="label">Curve Style</label>
+		<select
+			id="curveStyle-select"
+			class="select select-bordered"
+			bind:value={$appSettings.curveStyle}
+		>
+			<option value="bezier">bezier</option>
+			<option value="haystack">haystack</option>
+			<option value="segments">segments</option>
+			<option value="straight">straight</option>
+			<option value="taxi">taxi</option>
+			<option value="unbundled-bezier">unbundled-bezier</option>
+			<option value="round-segments">round-segments</option>
+			<option value="round-taxi">round-taxi</option>
+		</select>
 	</div>
 </div>
 

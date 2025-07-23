@@ -10,6 +10,7 @@
 
 	let container: HTMLDivElement;
 	let cy: cytoscape.Core;
+	let previousLayoutName: string;
 
 	const getResolvedColor = (className: string): string => {
 		const el = document.createElement('div');
@@ -22,35 +23,54 @@
 		return formatHex(oklch(color));
 	};
 
+	const getLayoutOptions = (settings: typeof $appSettings) => {
+		const baseOptions = {
+			name: settings.layoutName,
+			animate: true,
+			animationDuration: 500,
+			animationEasing: 'ease-in-out'
+		};
+
+		switch (settings.layoutName) {
+			case 'cose':
+				return {
+					...baseOptions,
+					animate: 'end'
+				};
+			case 'circle':
+			case 'grid':
+				return {
+					...baseOptions,
+					spacingFactor: 1 // Adjust the factor as needed
+				};
+			case 'breadthfirst':
+				return {
+					...baseOptions,
+					spacingFactor: 1 // Adjust the factor as needed
+				};
+			case 'concentric':
+				return {
+					...baseOptions,
+					minNodeSpacing: 1 // Adjust the factor as needed
+				};
+			case 'random':
+				return {
+					...baseOptions
+				};
+			default:
+				return baseOptions;
+		}
+	};
+
 	function applyCytoscapeStyle(settings: typeof $appSettings) {
 		if (!cy) return;
 
 		// Resolve colors dynamically based on the current DaisyUI theme
-		const primaryColor = getResolvedColor('bg-primary');
-		const primaryContentColor = getResolvedColor('bg-primary-content');
-
-		const secondaryColor = getResolvedColor('bg-secondary');
-		const secondaryContentColor = getResolvedColor('bg-secondary-content');
-
 		const accentColor = getResolvedColor('bg-accent');
-		const accentContentColor = getResolvedColor('bg-accent-content');
-
 		const neutralColor = getResolvedColor('bg-neutral');
 		const neutralContentColor = getResolvedColor('bg-neutral-content');
-
-		const base100Color = getResolvedColor('bg-base-100');
-		const base200Color = getResolvedColor('bg-base-200');
-		const base300Color = getResolvedColor('bg-base-300');
 		const baseContentColor = getResolvedColor('bg-base-content');
-
-		const infoColor = getResolvedColor('bg-info');
-		const infoContentColor = getResolvedColor('bg-info-content');
-		const successColor = getResolvedColor('bg-success');
-		const successContentColor = getResolvedColor('bg-success-content');
-		const warningColor = getResolvedColor('bg-warning');
-		const warningContentColor = getResolvedColor('bg-warning-content');
-		const errorColor = getResolvedColor('bg-error');
-		const errorContentColor = getResolvedColor('bg-error-content');
+		const base300Color = getResolvedColor('bg-base-300');
 
 		cy.style()
 			.selector('node')
@@ -65,15 +85,15 @@
 				'font-size': settings.nodeFontSize,
 				opacity: settings.nodeOpacity,
 				'border-width': settings.nodeBorderWidth,
-				'text-wrap': 'wrap',
-				'text-max-width': settings.nodeTextMaxWidth,
+				'text-wrap': settings.wrapText ? 'wrap' : 'none',
+				'text-max-width': settings.wrapText ? settings.nodeTextMaxWidth : 1,
 				'text-background-opacity': 1,
 				'text-background-padding': settings.nodeTextBackgroundPadding
 			})
 			.selector('edge')
 			.style({
 				label: 'data(label)',
-				'curve-style': 'bezier',
+				'curve-style': settings.curveStyle,
 				'target-arrow-shape': 'triangle',
 				'line-color': neutralColor,
 				'target-arrow-color': neutralColor,
@@ -108,13 +128,20 @@
 		cy = cytoscape({
 			container,
 			elements: [...graphData.nodes, ...graphData.edges],
-			layout: { name: 'cose' },
+			layout: getLayoutOptions($appSettings),
 			wheelSensitivity: 2
 		});
 
 		// Subscribe to appSettings store and apply styles on change
 		appSettings.subscribe(async (settings) => {
 			await tick(); // Ensure DOM is updated with new theme colors
+
+			// Re-run layout only if layoutName has changed
+			if (settings.layoutName !== previousLayoutName) {
+				cy.layout(getLayoutOptions(settings)).run();
+				previousLayoutName = settings.layoutName;
+			}
+
 			applyCytoscapeStyle(settings);
 		});
 
