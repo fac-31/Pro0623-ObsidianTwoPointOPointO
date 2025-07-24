@@ -26,7 +26,8 @@ export const GET: RequestHandler = async () => {
 
 		const graphData: GraphData = {
 			nodes: nodes,
-			edges: []
+			edges: [],
+			relTypes: []
 		};
 
 		return json(graphData);

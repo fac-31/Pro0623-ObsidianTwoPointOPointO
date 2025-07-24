@@ -7,6 +7,7 @@ import type { Node, Relationship } from 'neo4j-driver';
 export const GET: RequestHandler = async ({ params }) => {
 	const session = driver.session();
 	const worldId = params.id;
+	console.log(worldId);
 
 	try {
 		// World node
@@ -24,7 +25,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		const graphResult = await session.run(
 			`
 			MATCH (w) WHERE elementId(w) = $worldId
-			MATCH (w)--(n)
+			MATCH (n)<-[:HAS_ENTITY]-(c:Chunk)-[:PART_OF]->(d:Document)-[:DESCRIBES]->(w)
 			WITH collect(DISTINCT n) AS nodes
 			UNWIND nodes AS a
 			OPTIONAL MATCH (a)-[r]-(b)
@@ -45,10 +46,10 @@ export const GET: RequestHandler = async ({ params }) => {
 			if (!nodes.has(elementId)) {
 				nodes.set(elementId, {
 					data: {
+						...node.properties,
 						id: elementId,
-						name: node.properties.name,
-						type: node.labels[0],
-						...node.properties
+						name: node.properties.id,
+						type: node.labels[0]
 					}
 				});
 			}
@@ -66,14 +67,21 @@ export const GET: RequestHandler = async ({ params }) => {
 			}
 		}));
 
+		const relTypes = edges.map((edge) => edge.data.label);
+
 		const graphData: GraphData = {
 			nodes: Array.from(nodes.values()),
 			edges,
+			relTypes,
 			worldInfo: {
 				label: worldNode.labels[0],
 				...worldNode.properties
 			}
 		};
+
+		console.log(nodes);
+		console.log(graphData.nodes);
+		console.log(graphData.edges);
 
 		return json(graphData);
 	} catch (err) {
