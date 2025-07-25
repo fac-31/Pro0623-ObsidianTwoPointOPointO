@@ -20,7 +20,7 @@
 </script>
 
 <div class="flex flex-col h-full w-full rounded-xl bg-base-300 relative">
-	<div class="flex-1 overflow-hidden">
+	<div class="flex-1 overflow-auto">
 		{#if showGraph}
 			<GraphView {graphData} />
 		{:else}
