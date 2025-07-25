@@ -5,10 +5,11 @@
 	export let graphTitle: string;
 	export let buttons: { label: string; onClick: () => void; class?: string }[] = [];
 	export let worldContent: string | undefined = undefined;
+	export let explanation: string;
 
 	$: tabs = $selectedNodesStore.nodes.map((n) => ({
 		id: n.data.id,
-		label: n.data.label
+		label: n.data.name
 	}));
 
 	$: useDropdown = tabs.length > 10;

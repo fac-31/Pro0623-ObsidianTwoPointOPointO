@@ -7,7 +7,24 @@
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import { readable } from 'svelte/store';
 
+	export let explanation: string = '';
 	export let graphData: GraphData;
+	export let worldId: string = '';
+
+	let currentGraphData: GraphData = graphData;
+
+	function handleResult(event: CustomEvent) {
+		console.log('Dashboard: received event.detail:', event.detail);
+		const { graphData, explanation: newExplanation } = event.detail;
+
+		currentGraphData = {
+			nodes: [...graphData.nodes],
+			edges: [...graphData.edges]
+		};
+		console.log('Dashboard: currentGraphData now:', currentGraphData);
+
+		explanation = newExplanation;
+	}
 
 	// Dashboard Options
 	export let graphTitle: string;
@@ -43,7 +60,11 @@
 		{#if showSearchBar}
 			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
 		{/if}
-		<WorldView {graphData} showGraph={!showTextView} on:displayText={toggleTextView} />
+		<WorldView
+			graphData={currentGraphData}
+			showGraph={!showTextView}
+			on:displayText={toggleTextView}
+		/>
 	</Pane>
 	<PaneResizer
 		class={`${
@@ -62,7 +83,12 @@
 						defaultSize={$isSmallScreen ? 50 : 80}
 						minSize={$isSmallScreen ? 40 : 20}
 					>
-						<InfoPanel buttons={dashboardButtons} {graphTitle} worldContent={worldInfo?.content} />
+						<InfoPanel
+							{explanation}
+							buttons={dashboardButtons}
+							{graphTitle}
+							worldContent={worldInfo?.content}
+						/>
 					</Pane>
 				{/if}
 				{#if showQueryPanel}
@@ -72,7 +98,7 @@
 						minSize={$isSmallScreen ? 50 : 30}
 						maxSize={$isSmallScreen ? 50 : 20}
 					>
-						<QueryPanel />
+						<QueryPanel {worldId} on:result={handleResult} />
 					</Pane>
 				{/if}
 			</PaneGroup>
