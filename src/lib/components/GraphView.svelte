@@ -10,7 +10,6 @@
 
 	let container: HTMLDivElement;
 	let cy: cytoscape.Core;
-	let previousLayoutName: string;
 
 	const getResolvedColor = (className: string): string => {
 		const el = document.createElement('div');
@@ -31,7 +30,6 @@
 			animationEasing: 'ease-in-out'
 		};
 
-		// @ts-expect-error - settings.layout is not in the type definition for all layouts but is supported by the underlying layout extensions
 		const layoutOptions = settings.layout[settings.layoutName];
 
 		return {
@@ -109,13 +107,23 @@
 			wheelSensitivity: 2
 		});
 
+		let previousLayoutName = $appSettings.layoutName;
+		let previousLayoutConfig = { ...$appSettings.layout[$appSettings.layoutName] };
+
 		appSettings.subscribe(async (settings) => {
 			await tick();
-			cy.layout(getLayoutOptions(settings)).run();
 
-			if (settings.layoutName !== previousLayoutName) {
+			const currentLayoutConfig = settings.layout[settings.layoutName];
+
+			if (
+				settings.layoutName !== previousLayoutName ||
+				JSON.stringify(currentLayoutConfig) !== JSON.stringify(previousLayoutConfig)
+			) {
+				cy.layout(getLayoutOptions(settings)).run();
 				previousLayoutName = settings.layoutName;
+				previousLayoutConfig = { ...currentLayoutConfig };
 			}
+
 			applyCytoscapeStyle(settings);
 		});
 
@@ -129,8 +137,10 @@
 
 			if (target.isNode() || target.isEdge()) {
 				selectedNodesStore.addNode({ data: target.data() });
+
 				cy.elements().removeClass('selected').removeClass('faded');
 				target.addClass('selected');
+
 				const connected = target.closedNeighborhood();
 				cy.elements().difference(connected).addClass('faded');
 			}
