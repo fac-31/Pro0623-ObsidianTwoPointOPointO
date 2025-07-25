@@ -41,6 +41,7 @@
 </script>
 
 <div
+	data-testid="text-view"
 	role="presentation"
 	aria-hidden="true"
 	class="flex flex-wrap justify-center items-start gap-6 p-4 overflow-y-auto max-h-[calc(100vh-4rem)] mt-10"
