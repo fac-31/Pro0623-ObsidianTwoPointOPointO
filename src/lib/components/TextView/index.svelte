@@ -34,7 +34,7 @@
 <div
 	role="presentation"
 	aria-hidden="true"
-	class="flex flex-wrap justify-center gap-6 p-4 overflow-y-auto max-h-[calc(100vh-4rem)]"
+	class="flex flex-wrap justify-center gap-6 p-4 overflow-y-auto max-h-[calc(100vh-4rem)] mt-10"
 	onclick={handleClickOutside}
 >
 	{#each nodeTypes as type (type)}
