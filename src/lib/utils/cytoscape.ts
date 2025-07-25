@@ -98,6 +98,7 @@ export function applyCytoscapeStyle(cy: cytoscape.Core, settings: AppSettings) {
 		.style({
 			'line-color': accentColor,
 			'target-arrow-color': accentColor,
+            'font-size': settings.edgeFontSize + 3,
 			width: settings.selectedEdgeWidth
 		})
 		.update();

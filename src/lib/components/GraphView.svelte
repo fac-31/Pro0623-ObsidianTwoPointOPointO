@@ -41,16 +41,28 @@
 
 		cy.on('tap', (event) => {
 			const target = event.target;
+
+			// Tapping background clears selection
 			if (target === cy) {
 				cy.elements().removeClass('selected').removeClass('faded');
 				return;
 			}
-			if (target.isNode() || target.isEdge()) {
+
+			// Tapping a node: highlight and add to store
+			if (target.isNode()) {
 				selectedNodesStore.addNode({ data: target.data() });
 				cy.elements().removeClass('selected').removeClass('faded');
 				target.addClass('selected');
 				const connected = target.closedNeighborhood();
 				cy.elements().difference(connected).addClass('faded');
+			}
+
+			// Tapping an edge: highlight only
+			if (target.isEdge()) {
+				cy.elements().removeClass('selected').removeClass('faded');
+				target.addClass('selected');
+				const connected = target.connectedNodes();
+				cy.elements().difference(connected.union(target)).addClass('faded');
 			}
 		});
 	});

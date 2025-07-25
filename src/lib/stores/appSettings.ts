@@ -1,6 +1,11 @@
 import { writable } from 'svelte/store';
 import type { AppSettings } from '../types/AppSettings';
 
+const FONT_SIZE = 9;
+const EDGE_FONT_SIZE = 1
+const INCREASE_ON_SELECT = 4;
+
+
 export const appSettings = writable<AppSettings>({
 	currentTheme: 'wireframe',
 	wrapText: true,
@@ -30,16 +35,16 @@ export const appSettings = writable<AppSettings>({
 		}
 	},
 
-	nodeFontSize: 7,
-	edgeWidth: 4,
+	nodeFontSize: FONT_SIZE,
+	edgeWidth: 1,
 	nodeBorderWidth: 0,
-	edgeFontSize: 3,
+	edgeFontSize: EDGE_FONT_SIZE + INCREASE_ON_SELECT,
 	nodeTextMaxWidth: 80,
 	edgeTextMaxWidth: 80,
-	nodeTextBackgroundPadding: '3px',
+	nodeTextBackgroundPadding: '1px',
 	nodeOpacity: 1,
 	edgeOpacity: 1,
 	selectedNodeBorderWidth: 1,
-	selectedNodeFontSize: 9,
+	selectedNodeFontSize: FONT_SIZE + INCREASE_ON_SELECT,
 	selectedEdgeWidth: 6
 });
