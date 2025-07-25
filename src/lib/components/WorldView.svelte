@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { GraphData } from '$lib/types/graph';
 	import GraphView from './GraphView.svelte';
-	import TextView from './TextView.svelte';
+	import TextView from './TextView/index.svelte';
 	import FloatingButton from './FloatingButton.svelte';
 	import { createEventDispatcher } from 'svelte';
 
