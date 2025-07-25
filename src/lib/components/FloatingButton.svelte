@@ -23,6 +23,7 @@
 			console.error('Error building world:', error);
 		}
 	};
+	export let onToggleSettings: () => void = () => {};
 </script>
 
 <div class={`dropdown dropdown-top dropdown-center ${position}`}>
@@ -42,6 +43,9 @@
 		</li>
 		<li>
 			<a href="#" on:click|preventDefault={buildWorldAPI}>Build</a>
+		</li>
+		<li>
+			<button type="button" on:click={onToggleSettings}>Settings</button>
 		</li>
 	</ul>
 </div>
