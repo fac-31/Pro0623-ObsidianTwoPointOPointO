@@ -2,9 +2,11 @@
 	import type { GraphData, GraphNode } from '$lib/types/graph';
 	import { SvelteSet } from 'svelte/reactivity';
 	import TypeBox from './TypeBox.svelte';
+	import { onMount, onDestroy } from 'svelte';
 
 	export let graphData: GraphData;
 	let selectedNodeId: string | null = null;
+	let textViewContainer: HTMLDivElement; // Declare a variable to hold the div element
 
 	const nodeTypes = Array.from(new Set(graphData.nodes.map((node) => node.data.type)));
 
@@ -13,10 +15,17 @@
 	}
 
 	function handleClickOutside(event: MouseEvent) {
-		if (!(event.target as HTMLElement).closest('button')) {
+		if (textViewContainer && !textViewContainer.contains(event.target as Node)) {
 			selectedNodeId = null;
 		}
 	}
+
+	onMount(() => {
+		document.body.addEventListener('click', handleClickOutside);
+	});
+	onDestroy(() => {
+		document.body.removeEventListener('click', handleClickOutside);
+	});
 
 	$: connectedNodeIds = (() => {
 		if (!selectedNodeId) return new SvelteSet<string>();
@@ -34,8 +43,8 @@
 <div
 	role="presentation"
 	aria-hidden="true"
-	class="flex flex-wrap justify-center gap-6 p-4 overflow-y-auto max-h-[calc(100vh-4rem)] mt-10"
-	onclick={handleClickOutside}
+	class="flex flex-wrap justify-center items-start gap-6 p-4 overflow-y-auto max-h-[calc(100vh-4rem)] mt-10"
+	bind:this={textViewContainer}
 >
 	{#each nodeTypes as type (type)}
 		{console.log(type)}
