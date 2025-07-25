@@ -2,7 +2,6 @@
 	import type { GraphData, GraphNode } from '$lib/types/graph';
 	import { SvelteSet } from 'svelte/reactivity';
 	import TypeBox from './TypeBox.svelte';
-	import { onMount, onDestroy } from 'svelte';
 
 	export let graphData: GraphData;
 	let selectedNodeId: string | null = null;
@@ -13,19 +12,6 @@
 	function getNodesByType(type: string): GraphNode[] {
 		return graphData.nodes.filter((node) => node.data.type === type);
 	}
-
-	function handleClickOutside(event: MouseEvent) {
-		if (textViewContainer && !textViewContainer.contains(event.target as Node)) {
-			selectedNodeId = null;
-		}
-	}
-
-	onMount(() => {
-		document.body.addEventListener('click', handleClickOutside);
-	});
-	onDestroy(() => {
-		document.body.removeEventListener('click', handleClickOutside);
-	});
 
 	$: connectedNodeIds = (() => {
 		if (!selectedNodeId) return new SvelteSet<string>();

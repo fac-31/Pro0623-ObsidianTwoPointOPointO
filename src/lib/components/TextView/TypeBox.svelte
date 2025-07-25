@@ -19,16 +19,16 @@
 	}
 </script>
 
-<section class="border rounded p-4 bg-white shadow w-64">
+<section class="border rounded p-4 shadow w-64 bg-base-100">
 	<h2 class="text-lg font-semibold mb-2">{title}</h2>
 	{#if nodes.length > 0}
 		<ul class="flex flex-wrap gap-2">
 			{#each nodes as node (node.data.id)}
 				<button
-					class="btn m-1
-            {selectedNodeId === node.data.id ? 'bg-blue-500 text-white' : ''}
+					class="btn btn-outline
+            {selectedNodeId === node.data.id ? 'bg-primary text-primary-content' : ''}
             {selectedNodeId && connectedNodeIds.has(node.data.id) && selectedNodeId !== node.data.id
-						? 'bg-blue-100'
+						? 'bg-base-300'
 						: ''}"
 					onclick={() => handleClick(node)}
 				>
