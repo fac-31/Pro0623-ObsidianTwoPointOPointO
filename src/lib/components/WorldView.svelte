@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { GraphData } from '$lib/types/graph';
 	import GraphView from './GraphView.svelte';
-	import TextView from './TextView.svelte';
+	import TextView from './TextView/index.svelte';
 	import FloatingButton from './FloatingButton.svelte';
 	import SettingsMenu from './SettingsMenu.svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -27,7 +27,7 @@
 </script>
 
 <div class="flex flex-col h-full w-full rounded-xl bg-base-300 relative">
-	<div class="flex-1 overflow-hidden">
+	<div class="flex-1 overflow-auto">
 		{#if showGraph}
 			<GraphView {graphData} />
 		{:else}

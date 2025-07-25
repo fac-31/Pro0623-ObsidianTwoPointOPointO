@@ -56,9 +56,9 @@
 	class="h-full py-4 px-3"
 	data-testid="dashboard"
 >
-	<Pane defaultSize={80} minSize={20} class="relative">
+	<Pane defaultSize={80} minSize={20} class="relative overflow-y-auto">
 		{#if showSearchBar}
-			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
+			<div class="absolute top-2 left-2 z-10"><SearchBar /></div>
 		{/if}
 		<WorldView
 			graphData={currentGraphData}
