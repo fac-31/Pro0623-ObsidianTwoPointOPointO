@@ -2,9 +2,8 @@ import { writable } from 'svelte/store';
 import type { AppSettings } from '../types/AppSettings';
 
 const FONT_SIZE = 9;
-const EDGE_FONT_SIZE = 1
+const EDGE_FONT_SIZE = 1;
 const INCREASE_ON_SELECT = 4;
-
 
 export const appSettings = writable<AppSettings>({
 	currentTheme: 'wireframe',
