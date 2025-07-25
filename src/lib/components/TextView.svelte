@@ -1,90 +1,118 @@
 <script lang="ts">
-	import type { GraphData, GraphNode, GraphEdge } from '$lib/types/graph';
-	import './TextView.css';
-
+	import type { GraphData, GraphNode } from '$lib/types/graph';
 	export let graphData: GraphData;
 
-	let selectedNodeId: string = graphData.nodes[0]?.data.id ?? '';
+	let selectedNodeId: string | null = null;
 
-	function getNode(id: string): GraphNode | undefined {
-		return graphData.nodes.find((n) => n.data.id === id);
+	function getNodesByType(type: string): GraphNode[] {
+		return graphData.nodes.filter((node) => node.data.type === type);
 	}
 
-	function getIncoming(nodeId: string): GraphEdge[] {
-		return graphData.edges.filter((e) => e.data.target === nodeId);
+	function addFilter(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) {
+		const label = event.currentTarget.textContent?.trim();
+		const node = graphData.nodes.find((n) => n.data.label === label || n.data.name === label);
+
+		if (node) {
+			selectedNodeId = node.data.id;
+		} else {
+			selectedNodeId = null;
+		}
 	}
 
-	function getOutgoing(nodeId: string): GraphEdge[] {
-		return graphData.edges.filter((e) => e.data.source === nodeId);
-	}
+	function getConnectedNodeIds(): Set<string> {
+		if (!selectedNodeId) return new Set();
 
-	function selectNode(id: string) {
-		selectedNodeId = id;
+		const connectedIds = new Set<string>();
+		for (const edge of graphData.edges) {
+			if (edge.data.source === selectedNodeId) {
+				connectedIds.add(edge.data.target);
+			}
+			if (edge.data.target === selectedNodeId) {
+				connectedIds.add(edge.data.source);
+			}
+		}
+		return connectedIds;
 	}
 </script>
 
-<div class="container">
-	<div class="ascii-tree" role="tree" aria-label="Graph Text View">
-		{#if selectedNodeId}
-			<!-- Incoming nodes and connection lines without blank lines -->
-			{#each getIncoming(selectedNodeId) as edge, i (edge.data.id)}
-				<button
-					class="node-button incoming-node"
-					tabindex="0"
-					on:click={() => selectNode(edge.data.source)}
-					on:keydown={(e) => e.key === 'Enter' && selectNode(edge.data.source)}
-					aria-label={`Select node ${getNode(edge.data.source)?.data.label}`}
-					aria-selected="false"
-					role="treeitem"
-				>
-					{getNode(edge.data.source)?.data.label}
-				</button>
+<div class="m-2">
+	<div class="badge badge-outline">Outline</div>
+</div>
 
-				<div class="connection-line incoming-line">
-					└──[{edge.data.label}]──&gt;
-					{#if i === getIncoming(selectedNodeId).length - 1}
-						<span class="selected-node">{getNode(selectedNodeId)?.data.label}</span>
-					{/if}
-				</div>
-			{/each}
-
-			<!-- Add a blank line only between incoming and outgoing sections -->
-			{#if getIncoming(selectedNodeId).length > 0 && getOutgoing(selectedNodeId).length > 0}
-				<div class="blank-line"></div>
-			{/if}
-
-			<!-- Outgoing nodes -->
-			{#each getOutgoing(selectedNodeId) as edge, i (edge.data.id)}
-				<div class="connection-line outgoing-line">
-					└──[{edge.data.label}]──&gt;
-				</div>
-				<button
-					class="node-button outgoing-node"
-					tabindex="0"
-					on:click={() => selectNode(edge.data.target)}
-					on:keydown={(e) => e.key === 'Enter' && selectNode(edge.data.target)}
-					aria-label={`Select node ${getNode(edge.data.target)?.data.label}`}
-					aria-selected="false"
-					role="treeitem"
-				>
-					{getNode(edge.data.target)?.data.label}
-				</button>
-
-				{#if i < getOutgoing(selectedNodeId).length - 1}
-					<div class="blank-line"></div>
-				{/if}
-			{/each}
-		{/if}
-	</div>
-
-	<aside class="properties-box" aria-label="Selected node properties">
-		<h2>Selected Node Properties</h2>
-		{#if selectedNodeId}
-			<ul>
-				{#each Object.entries(getNode(selectedNodeId)?.data ?? {}) as [key, value] (key)}
-					<li><strong>{key}:</strong> {value}</li>
+<!-- Flex container to arrange boxes in a row that wraps and centers -->
+<div class="flex flex-wrap justify-center gap-6 p-4 overflow-y-auto max-h-[calc(100vh-4rem)]">
+	<!-- Locations Box -->
+	<section class="border rounded p-4 bg-white shadow w-64">
+		<h2 class="text-lg font-semibold mb-2">Locations</h2>
+		{#if getNodesByType('Location').length > 0}
+			<ul class="flex flex-wrap gap-2">
+				{#each getNodesByType('Location') as node}
+					<button
+						class="btn m-1
+              {selectedNodeId === node.data.id ? 'bg-blue-500 text-white' : ''}
+              {selectedNodeId &&
+						getConnectedNodeIds().has(node.data.id) &&
+						selectedNodeId !== node.data.id
+							? 'bg-blue-100'
+							: ''}"
+						on:click={addFilter}
+					>
+						{node.data.label ?? node.data.name}
+					</button>
 				{/each}
 			</ul>
+		{:else}
+			<p class="italic text-gray-400">No locations available</p>
 		{/if}
-	</aside>
+	</section>
+
+	<!-- Events Box -->
+	<section class="border rounded p-4 bg-white shadow w-64">
+		<h2 class="text-lg font-semibold mb-2">Events</h2>
+		{#if getNodesByType('Event').length > 0}
+			<ul class="flex flex-wrap gap-2">
+				{#each getNodesByType('Event') as node}
+					<button
+						class="btn m-1
+              {selectedNodeId === node.data.id ? 'bg-blue-500 text-white' : ''}
+              {selectedNodeId &&
+						getConnectedNodeIds().has(node.data.id) &&
+						selectedNodeId !== node.data.id
+							? 'bg-blue-100'
+							: ''}"
+						on:click={addFilter}
+					>
+						{node.data.label ?? node.data.name}
+					</button>
+				{/each}
+			</ul>
+		{:else}
+			<p class="italic text-gray-400">No events available</p>
+		{/if}
+	</section>
+
+	<!-- Characters Box -->
+	<section class="border rounded p-4 bg-white shadow w-64">
+		<h2 class="text-lg font-semibold mb-2">Characters</h2>
+		{#if getNodesByType('Character').length > 0}
+			<ul class="flex flex-wrap gap-2">
+				{#each getNodesByType('Character') as node}
+					<button
+						class="btn m-1
+              {selectedNodeId === node.data.id ? 'bg-blue-500 text-white' : ''}
+              {selectedNodeId &&
+						getConnectedNodeIds().has(node.data.id) &&
+						selectedNodeId !== node.data.id
+							? 'bg-blue-100'
+							: ''}"
+						on:click={addFilter}
+					>
+						{node.data.label ?? node.data.name}
+					</button>
+				{/each}
+			</ul>
+		{:else}
+			<p class="italic text-gray-400">No characters available</p>
+		{/if}
+	</section>
 </div>
