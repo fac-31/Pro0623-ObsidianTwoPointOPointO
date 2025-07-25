@@ -5,6 +5,30 @@ export const appSettings = writable({
 	wrapText: true,
 	curveStyle: 'bezier',
 	layoutName: 'cose',
+
+	// SpacingFactor values make it so changing the layout keeps spacing similar.
+	layout: {
+		cose: {
+			spacingFactor: 1.3,
+			animate: 'end'
+		},
+		circle: {
+			spacingFactor: 0.3
+		},
+		grid: {
+			spacingFactor: 0.3
+		},
+		breadthfirst: {
+			spacingFactor: 1
+		},
+		concentric: {
+			spacingFactor: 2
+		},
+		random: {
+			spacingFactor: 0.3
+		}
+	},
+
 	nodeFontSize: 7,
 	edgeWidth: 4,
 	nodeBorderWidth: 0,

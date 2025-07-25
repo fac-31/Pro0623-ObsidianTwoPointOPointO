@@ -31,40 +31,17 @@
 			animationEasing: 'ease-in-out'
 		};
 
-		switch (settings.layoutName) {
-			case 'cose':
-				return {
-					...baseOptions,
-					animate: 'end'
-				};
-			case 'circle':
-			case 'grid':
-				return {
-					...baseOptions,
-					spacingFactor: 1 // Adjust the factor as needed
-				};
-			case 'breadthfirst':
-				return {
-					...baseOptions,
-					spacingFactor: 1 // Adjust the factor as needed
-				};
-			case 'concentric':
-				return {
-					...baseOptions,
-					minNodeSpacing: 1 // Adjust the factor as needed
-				};
-			case 'random':
-				return {
-					...baseOptions
-				};
-			default:
-				return baseOptions;
-		}
+		// @ts-expect-error - settings.layout is not in the type definition for all layouts but is supported by the underlying layout extensions
+		const layoutOptions = settings.layout[settings.layoutName];
+
+		return {
+			...baseOptions,
+			...layoutOptions
+		};
 	};
 
 	function applyCytoscapeStyle(settings: typeof $appSettings) {
 		if (!cy) return;
-
 		// Resolve colors dynamically based on the current DaisyUI theme
 		const accentColor = getResolvedColor('bg-accent');
 		const neutralColor = getResolvedColor('bg-neutral');
@@ -132,20 +109,18 @@
 			wheelSensitivity: 2
 		});
 
-		// Subscribe to appSettings store and apply styles on change
 		appSettings.subscribe(async (settings) => {
-			await tick(); // Ensure DOM is updated with new theme colors
+			await tick();
+			// Always rerun the layout with the latest settings.
+			// The `animate: true` option in getLayoutOptions will handle the smooth transition.
+			cy.layout(getLayoutOptions(settings)).run();
 
-			// Re-run layout only if layoutName has changed
 			if (settings.layoutName !== previousLayoutName) {
-				cy.layout(getLayoutOptions(settings)).run();
 				previousLayoutName = settings.layoutName;
 			}
-
 			applyCytoscapeStyle(settings);
 		});
 
-		// Handle interactions
 		cy.on('tap', (event) => {
 			const target = event.target;
 
@@ -172,6 +147,5 @@
 </script>
 
 <div class="h-full w-full flex flex-col min-h-0">
-	<!-- Graph container -->
 	<div bind:this={container} class="h-full w-full" role="application" aria-label="Graph view"></div>
 </div>
