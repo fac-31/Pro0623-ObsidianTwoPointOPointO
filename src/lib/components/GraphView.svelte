@@ -20,7 +20,7 @@
 		const color = getComputedStyle(el).backgroundColor;
 
 		document.body.removeChild(el);
-		return formatHex(oklch(color));
+		return formatHex(oklch(color)) ?? '#000000';
 	};
 
 	const getLayoutOptions = (settings: typeof $appSettings) => {
@@ -63,14 +63,14 @@
 				opacity: settings.nodeOpacity,
 				'border-width': settings.nodeBorderWidth,
 				'text-wrap': settings.wrapText ? 'wrap' : 'none',
-				'text-max-width': settings.wrapText ? settings.nodeTextMaxWidth : 1,
+				'text-max-width': settings.wrapText ? `${settings.nodeTextMaxWidth}px` : '0px',
 				'text-background-opacity': 1,
 				'text-background-padding': settings.nodeTextBackgroundPadding
 			})
 			.selector('edge')
 			.style({
 				label: 'data(label)',
-				'curve-style': settings.curveStyle,
+				'curve-style': settings.curveStyle as cytoscape.Css.Edge['curve-style'],
 				'target-arrow-shape': 'triangle',
 				'line-color': neutralColor,
 				'target-arrow-color': neutralColor,
@@ -79,7 +79,7 @@
 				'font-size': settings.edgeFontSize,
 				width: settings.edgeWidth,
 				'text-wrap': 'wrap',
-				'text-max-width': settings.edgeTextMaxWidth
+				'text-max-width': `${settings.edgeTextMaxWidth}px`
 			})
 			.selector('.faded')
 			.style({
@@ -111,8 +111,6 @@
 
 		appSettings.subscribe(async (settings) => {
 			await tick();
-			// Always rerun the layout with the latest settings.
-			// The `animate: true` option in getLayoutOptions will handle the smooth transition.
 			cy.layout(getLayoutOptions(settings)).run();
 
 			if (settings.layoutName !== previousLayoutName) {
@@ -131,9 +129,7 @@
 
 			if (target.isNode() || target.isEdge()) {
 				selectedNodesStore.addNode({ data: target.data() });
-
 				cy.elements().removeClass('selected').removeClass('faded');
-
 				target.addClass('selected');
 				const connected = target.closedNeighborhood();
 				cy.elements().difference(connected).addClass('faded');
