@@ -5,6 +5,7 @@
 	export let ariaLabel: string = 'Floating action dropdown';
 	export let position: string = 'fixed bottom-6 right-6';
 	export let onDisplayText: () => void = () => {};
+	export const onCreateNew: () => void = () => {};
 
 	function createNew() {
 		infoPanelStore.showForm();

@@ -3,13 +3,14 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {
 	const { world_id } = await event.request.json();
-	const session = await event.locals.getSession();
+	const session = event.locals.session;
+	const user = event.locals.user;
 
-	if (!session?.user?.id) {
+	if (!session || !user || !user.id) {
 		return json({ message: 'Unauthorized' }, { status: 401 });
 	}
 
-	const user_id = session.user.id;
+	const user_id = user.id;
 
 	console.log('building world', { world_id, user_id });
 
@@ -21,5 +22,8 @@ export const POST: RequestHandler = async (event) => {
 		body: JSON.stringify({ world_id, user_id })
 	});
 
-	return res;
+	return new Response(await res.text(), {
+		status: res.status,
+		headers: { 'Content-Type': res.headers.get('content-type') || 'application/json' }
+	});
 };

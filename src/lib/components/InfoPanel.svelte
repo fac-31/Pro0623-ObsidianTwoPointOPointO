@@ -49,6 +49,7 @@
 			// Create a node format that the graph and tabs can use
 			const newNodeForGraph = {
 				data: {
+					name: newDocument.title,
 					id: newDocument.id,
 					label: newDocument.properties.title,
 					content: newDocument.properties.content,
