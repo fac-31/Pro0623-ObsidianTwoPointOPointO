@@ -1,18 +1,23 @@
 <script lang="ts">
+	import { infoPanelStore } from '$lib/stores/infoPanelStore';
+	import { page } from '$app/stores';
+
 	export let ariaLabel: string = 'Floating action dropdown';
 	export let position: string = 'fixed bottom-6 right-6';
 	export let onDisplayText: () => void = () => {};
-	export let onCreateNew: () => void = () => {};
 
-	import { page } from '$app/state';
+	function createNew() {
+		infoPanelStore.showForm();
+	}
 
 	const buildWorldAPI = async () => {
-		console.log('Building world with ID (API):', page.params.id);
+		const worldId = $page.params.id;
+		console.log('Building world with ID (API):', worldId);
 		try {
 			const response = await fetch(`/api/build`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ worldId: page.params.id })
+				body: JSON.stringify({ world_id: worldId })
 			});
 			if (!response.ok) {
 				throw new Error('Failed to build world');
@@ -39,7 +44,7 @@
 			<button type="button" on:click={onDisplayText}>Display Text</button>
 		</li>
 		<li>
-			<button type="button" on:click={onCreateNew}>Create New</button>
+			<button type="button" on:click={createNew}>Create New</button>
 		</li>
 		<li>
 			<a href="#" on:click|preventDefault={buildWorldAPI}>Build</a>
