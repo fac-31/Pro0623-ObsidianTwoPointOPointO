@@ -86,8 +86,6 @@
 				{#if showInfoPanel}
 					<Pane
 						class="min-h-20"
-						defaultSize={$isSmallScreen ? 50 : 80}
-						minSize={$isSmallScreen ? 40 : 20}
 					>
 						<InfoPanel
 							{worldId}
@@ -101,10 +99,9 @@
 				{/if}
 				{#if showQueryPanel}
 					<Pane
-						class="min-h-10 max-h-35"
-						defaultSize={$isSmallScreen ? 50 : 20}
-						minSize={$isSmallScreen ? 50 : 30}
-						maxSize={$isSmallScreen ? 50 : 20}
+						class="min-h-10"
+						minSize={$isSmallScreen ? 10 : 10}
+						maxSize={$isSmallScreen ? 20 : 100}
 					>
 						<QueryPanel {worldId} on:result={handleResult} />
 					</Pane>
