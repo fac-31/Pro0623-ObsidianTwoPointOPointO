@@ -45,7 +45,7 @@ if __name__ == "__main__":
     # Disable reload in production and use 0.0.0.0 as host
     uvicorn.run(
         "server:app",
-        host="localhost",  # Changed from localhost to 0.0.0.0
-        port=port       # Use PORT from environment
-             # Disable reload in production
+        host="0.0.0.0",  # Changed from localhost to 0.0.0.0
+        port=port,       # Use PORT from environment
+        reload=False     # Disable reload in production
     ) 

@@ -78,7 +78,7 @@ def build_world(world, userId):
     # Embed chunks and create nodes
     for chunk in chunks:
 
-        filename = chunk.metadata['id']
+        filename = chunk.metadata['title']
         chunk_id = f"{filename}.{chunk.metadata["start_index"]}"
         print("Processing -", chunk_id)
 
@@ -95,7 +95,7 @@ def build_world(world, userId):
         }
         
         graph.query("""
-            MATCH (d:Document {id: $filename})
+            MATCH (d:Document {title: $filename})
             MERGE (c:Chunk {id: $chunk_id})
             SET c.text = $text, c.createdBy = $createdBy
             MERGE (d)<-[:PART_OF]-(c)
