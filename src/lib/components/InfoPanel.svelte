@@ -3,7 +3,11 @@
 	import { selectedNodesStore, activeNode } from '$lib/stores/selectedNodes';
 	import { infoPanelStore } from '$lib/stores/infoPanelStore';
 	import CreateNewForm from './CreateNewForm.svelte';
+	import { createEventDispatcher } from 'svelte';
 
+	const dispatch = createEventDispatcher();
+
+	export let worldId: string;
 	export let graphTitle: string;
 	export let buttons: { label: string; onClick: () => void; class?: string }[] = [];
 	export let worldContent: string | undefined = undefined;
@@ -21,11 +25,49 @@
 		selectedNodesStore.setActiveNode(selectedId);
 	}
 
-	function handleSave(event: CustomEvent) {
+	async function handleSave(event: CustomEvent) {
 		console.log('Save clicked:', event.detail);
-		// Here you would typically handle the save logic,
-		// like sending the data to a server.
-		infoPanelStore.hideForm();
+
+		try {
+			const response = await fetch('/api/documents/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					...event.detail // This includes title and content
+				})
+			});
+
+			if (!response.ok) {
+				const errorResult = await response.json();
+				throw new Error(errorResult.message || 'Failed to save document');
+			}
+
+			const { document: newDocument } = await response.json();
+
+			// Create a node format that the graph and tabs can use
+			const newNodeForGraph = {
+				data: {
+					id: newDocument.id,
+					label: newDocument.properties.title,
+					content: newDocument.properties.content,
+					type: newDocument.labels[0]
+				}
+			};
+
+			// Dispatch event to update the main graph
+			dispatch('documentCreated', { node: newNodeForGraph });
+
+			// Add to the tabs in the info panel and make it active
+			selectedNodesStore.addNode(newNodeForGraph);
+			selectedNodesStore.setActiveNode(newNodeForGraph.data.id);
+		} catch (error) {
+			console.error('Error saving document:', error);
+			// Optionally, show an error notification to the user
+		} finally {
+			infoPanelStore.hideForm();
+		}
 	}
 </script>
 
@@ -47,7 +89,7 @@
 				</div>
 			{:else}
 				<Tabs
-					tabs={tabs}
+					{tabs}
 					activeTabId={$selectedNodesStore.activeNodeId}
 					setActiveTab={selectedNodesStore.setActiveNode}
 					closeTab={selectedNodesStore.removeNode}

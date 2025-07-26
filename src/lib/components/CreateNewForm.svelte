@@ -26,18 +26,23 @@
 		×
 	</button>
 	<div class="form-control">
-		<label class="label" for="title">
-			<span class="label-text">Title</span>
-		</label>
-		<input type="text" id="title" bind:value={title} class="input input-bordered" />
+		<input
+			type="text"
+			id="title"
+			bind:value={title}
+			class="input input-bordered"
+			placeholder="Title"
+		/>
 	</div>
 	<div class="form-control mt-4">
-		<label class="label" for="content">
-			<span class="label-text">Content</span>
-		</label>
-		<textarea id="content" bind:value={content} class="textarea textarea-bordered h-48"></textarea>
+		<textarea
+			id="content"
+			bind:value={content}
+			class="textarea textarea-bordered h-48"
+			placeholder="Write an epic tale"
+		></textarea>
 	</div>
 	<div class="mt-4">
-		<button class="btn btn-primary" on:click={save}>Save</button>
+		<button class="btn btn-primary" on:click={save}>Create!</button>
 	</div>
 </div>
