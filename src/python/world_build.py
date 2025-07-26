@@ -47,7 +47,7 @@ text_splitter = CharacterTextSplitter(
     add_start_index=True
 )
 
-def build_world(world):
+def build_world(world, userId):
 
     # Get Documents From Graph
     docs = graph.query(
@@ -90,13 +90,14 @@ def build_world(world):
             "filename": filename,
             "chunk_id": chunk_id,
             "text": chunk.page_content,
-            "embedding": chunk_embedding
+            "embedding": chunk_embedding,
+            "createdBy": userId
         }
         
         graph.query("""
             MATCH (d:Document {title: $filename})
             MERGE (c:Chunk {id: $chunk_id})
-            SET c.text = $text
+            SET c.text = $text, c.createdBy = $createdBy
             MERGE (d)<-[:PART_OF]-(c)
             WITH c
             CALL db.create.setNodeVectorProperty(c, 'textEmbedding', $embedding)
@@ -115,7 +116,7 @@ def build_world(world):
             )
 
             for node in graph_doc.nodes:
-
+                node.properties['createdBy'] = userId
                 graph_doc.relationships.append(
                     Relationship(
                         source=chunk_node,
@@ -131,4 +132,4 @@ if __name__ == "__main__":
     print("Building World")
     
     # Build World
-    build_world("Billy's World")
+    build_world("Billy's World", "user123")

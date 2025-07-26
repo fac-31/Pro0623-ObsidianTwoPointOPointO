@@ -25,6 +25,7 @@ app.add_middleware(
 class World(BaseModel):
     """ Model representing a world to be built. """
     world_id: str
+    user_id: str
 
 @app.get("/api/test")
 async def test_route():
@@ -34,8 +35,8 @@ async def test_route():
 @app.post("/api/build")
 async def build_route(world: World):
     """ Endpoint to trigger world building process. """
-    print(f"Building world: {world.world_id}")
-    build_world(world.world_id)
+    print(f"Building world: {world.world_id} for user: {world.user_id}")
+    build_world(world.world_id, world.user_id)
     return {"status": "ok", "message": "world has been built"}
 
 if __name__ == "__main__":
