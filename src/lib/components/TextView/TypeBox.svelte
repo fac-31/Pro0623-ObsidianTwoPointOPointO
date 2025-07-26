@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { GraphNode } from '$lib/types/graph';
 	import type { SvelteSet } from 'svelte/reactivity';
-	import { selectedNodesStore } from '$lib/stores/selectedNodes';
+	import { tabsStore } from '$lib/stores/tabs';
 
 	export let title: string;
 	export let nodes: GraphNode[];
@@ -14,7 +14,7 @@
 			onSelect(null);
 		} else {
 			onSelect(node.data.id);
-			selectedNodesStore.addNode(node);
+			tabsStore.addTab(node);
 		}
 	}
 </script>

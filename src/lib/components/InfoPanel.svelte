@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Tabs from './Tabs.svelte';
-	import { selectedNodesStore, activeNode } from '$lib/stores/selectedNodes';
+	import { tabsStore, activeTab } from '$lib/stores/tabs';
+	import SettingsMenu from './SettingsMenu.svelte';
 	import { infoPanelStore } from '$lib/stores/infoPanelStore';
 	import CreateNewForm from './CreateNewForm.svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -13,16 +14,16 @@
 	export let worldContent: string | undefined = undefined;
 	export let explanation: string;
 
-	$: tabs = $selectedNodesStore.nodes.map((n) => ({
-		id: n.data.id,
-		label: n.data.name
+	$: tabs = $tabsStore.tabs.map((t) => ({
+		id: t.data.id,
+		label: t.data.name
 	}));
 
 	$: useDropdown = tabs.length > 10;
 
 	function handleSelect(event: Event) {
 		const selectedId = (event.target as HTMLSelectElement).value;
-		selectedNodesStore.setActiveNode(selectedId);
+		tabsStore.setActiveTab(selectedId);
 	}
 
 	async function handleSave(event: CustomEvent) {
@@ -61,8 +62,8 @@
 			dispatch('documentCreated', { node: newNodeForGraph });
 
 			// Add to the tabs in the info panel and make it active
-			selectedNodesStore.addNode(newNodeForGraph);
-			selectedNodesStore.setActiveNode(newNodeForGraph.data.id);
+			tabsStore.addTab(newNodeForGraph);
+			tabsStore.setActiveTab(newNodeForGraph.data.id);
 		} catch (error) {
 			console.error('Error saving document:', error);
 			// Optionally, show an error notification to the user
@@ -82,7 +83,7 @@
 					<span class="font-bold">Tab:</span>
 					<select class="select select-bordered w-full max-w-xs" on:change={handleSelect}>
 						{#each tabs as tab (tab.id)}
-							<option value={tab.id} selected={tab.id === $selectedNodesStore.activeNodeId}
+							<option value={tab.id} selected={tab.id === $tabsStore.activeTabId}
 								>{tab.label}</option
 							>
 						{/each}
@@ -91,9 +92,9 @@
 			{:else}
 				<Tabs
 					{tabs}
-					activeTabId={$selectedNodesStore.activeNodeId}
-					setActiveTab={selectedNodesStore.setActiveNode}
-					closeTab={selectedNodesStore.removeNode}
+					activeTabId={$tabsStore.activeTabId}
+					setActiveTab={tabsStore.setActiveTab}
+					closeTab={tabsStore.removeTab}
 				/>
 			{/if}
 		{/if}
@@ -101,9 +102,11 @@
 		<div class="flex-1 rounded-xl overflow-hidden p-2 flex gap-4 min-h-0">
 			<!-- Left content area -->
 			<div class="flex-1 overflow-auto">
-				{#if $activeNode}
+				{#if $activeTab?.data.type === 'settings'}
+					<SettingsMenu />
+				{:else if $activeTab}
 					<div class="flex flex-wrap items-center gap-4 mb-2">
-						<h2 class="text-xl font-semibold">{$activeNode.data.label}</h2>
+						<h2 class="text-xl font-semibold">{$activeTab.data.label}</h2>
 						{#if buttons.length}
 							<div class="flex gap-2 flex-wrap">
 								{#each buttons as button (button.label)}
@@ -117,7 +120,7 @@
 							</div>
 						{/if}
 					</div>
-					<p>{$activeNode.data.content}</p>
+					<p>{$activeTab.data.content}</p>
 				{:else if graphTitle}
 					<h2 class="text-xl font-semibold">{graphTitle}</h2>
 					{#if worldContent}

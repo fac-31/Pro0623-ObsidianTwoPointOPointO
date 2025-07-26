@@ -4,12 +4,12 @@
 	import type { GraphData } from '$lib/types/graph';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
-	import { activeNode } from '$lib/stores/selectedNodes';
+	import { activeTab } from '$lib/stores/tabs';
 
 	export let data: { graphData: GraphData; explanation: string };
 
 	const enterWorld = () => {
-		const node = get(activeNode);
+		const node = get(activeTab);
 		if (node) {
 			worldId.set(node.data.id);
 			goto(`/worlds/${$worldId}`);

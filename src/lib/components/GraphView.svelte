@@ -2,7 +2,7 @@
 	import { onMount, onDestroy, tick } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
-	import { selectedNodesStore } from '$lib/stores/selectedNodes';
+	import { tabsStore } from '$lib/stores/tabs';
 	import { appSettings } from '$lib/stores/appSettings';
 	import { getLayoutOptions } from '$lib/utils/cytoscape';
 	import { applyCytoscapeStyle } from '$lib/utils/cytoscape';
@@ -50,7 +50,7 @@
 
 			// Tapping a node: highlight and add to store
 			if (target.isNode()) {
-				selectedNodesStore.addNode({ data: target.data() });
+								tabsStore.addTab({ data: target.data() });
 				cy.elements().removeClass('selected').removeClass('faded');
 				target.addClass('selected');
 				const connected = target.closedNeighborhood();

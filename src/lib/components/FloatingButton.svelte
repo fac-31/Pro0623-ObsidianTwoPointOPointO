@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { infoPanelStore } from '$lib/stores/infoPanelStore';
 	import { page } from '$app/stores';
+	import { tabsStore } from '$lib/stores/tabs';
 
 	export let ariaLabel: string = 'Floating action dropdown';
 	export let position: string = 'fixed bottom-6 right-6';
@@ -29,7 +30,10 @@
 			console.error('Error building world:', error);
 		}
 	};
-	export let onToggleSettings: () => void = () => {};
+
+	function openSettings() {
+		tabsStore.addTab({ data: { id: '1', name: 'Settings', type: 'settings' } });
+	}
 </script>
 
 <div class={`dropdown dropdown-top dropdown-center ${position}`}>
@@ -51,7 +55,7 @@
 			<a href="#" on:click|preventDefault={buildWorldAPI}>Build</a>
 		</li>
 		<li>
-			<button type="button" on:click={onToggleSettings}>Settings</button>
+			<button type="button" on:click={openSettings}>Settings</button>
 		</li>
 	</ul>
 </div>

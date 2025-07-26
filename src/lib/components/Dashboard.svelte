@@ -37,7 +37,7 @@
 	export let worldInfo: WorldInfo | undefined = undefined;
 	export let showQueryPanel: boolean = true;
 	export let showInfoPanel: boolean = true;
-	export const showInfoPanelTabs: boolean = false;
+	
 	export let showSearchBar: boolean = false;
 	export let dashboardButtons: { label: string; onClick: () => void; class?: string }[] = [];
 
@@ -49,7 +49,7 @@
 
 	const isSmallScreen = readable(false, (set) => {
 		if (typeof window === 'undefined') return;
-		const mediaQuery = window.matchMedia('(max-width: 1023px)');
+		const mediaQuery = window.matchMedia('(max-width: 700px)');
 		const onChange = () => set(mediaQuery.matches);
 		mediaQuery.addEventListener('change', onChange);
 		onChange(); // Set initial value
