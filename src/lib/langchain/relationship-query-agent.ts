@@ -79,7 +79,7 @@ export async function handleQuery(userQuery: string, worldId: string) {
 
         You MUST ALWAYS begin your Cypher query with this world-scoping pattern:
 
-        MATCH w:World WHERE elementId(w) = ${worldId}
+        MATCH w:World WHERE elementId(w) = '${worldId}'
         CALL apoc.path.subgraphAll(w, {}) YIELD nodes, relationships
         WITH nodes, relationships
 

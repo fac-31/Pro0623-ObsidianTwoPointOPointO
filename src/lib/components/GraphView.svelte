@@ -6,6 +6,15 @@
 
 	export let graphData: GraphData;
 
+	graphData.nodes = graphData.nodes.map((node) => ({
+		...node,
+		data: {
+			...node.data,
+			label: node.data.name,
+			size: `${Math.max(40, node.data.name.length * 7)}`
+		}
+	}));
+
 	let container: HTMLDivElement;
 	let cy: cytoscape.Core;
 
@@ -20,13 +29,39 @@
 					selector: 'node',
 					style: {
 						label: 'data(name)',
-						'background-color': '#666666',
-						color: '#fff',
+						'text-wrap': 'wrap',
+						'text-max-width': '100',
+						'background-color': 'black',
+						color: 'white',
 						'text-valign': 'center',
 						'text-halign': 'center',
-						'font-size': 5,
-						opacity: 1,
-						'border-width': 0
+						'font-size': 15,
+						'font-family': 'Orbitron, sans serif',
+						'font-weight': 400,
+						'text-outline-color': 'gray',
+						'text-outline-width': 0.6,
+						'border-width': 3,
+						'border-color': 'white',
+						width: '100',
+						height: '100',
+						padding: '10px',
+						shape: 'ellipse'
+					}
+				},
+				{
+					selector: 'node[type = "Character"]',
+					style: {
+						color: '#cae9fc',
+						'text-outline-color': '#32a6ed',
+						'border-color': '#cae9fc'
+					}
+				},
+				{
+					selector: 'node[type = "Event"]',
+					style: {
+						color: '#fab9ec',
+						'text-outline-color': '#e324ba',
+						'border-color': '#fab9ec'
 					}
 				},
 
@@ -36,13 +71,12 @@
 						label: 'data(name)',
 						'curve-style': 'bezier',
 						'target-arrow-shape': 'triangle',
-						'line-color': '#000', // Black edge line
-						'target-arrow-color': '#000', // Black arrow
-						color: '#fff', // White text label
-						'text-rotation': 'autorotate', // Label follows edge angle
+						'line-color': '#dcd6d7',
+						'target-arrow-color': '#dcd6d7',
+						color: '#dcd6d7',
+						'text-rotation': 'autorotate',
 						'text-wrap': 'wrap',
 						'text-max-width': '80px',
-						'font-size': 3,
 						width: 2
 					}
 				},
@@ -55,10 +89,8 @@
 				{
 					selector: '.selected',
 					style: {
-						'border-width': 1,
-						'border-color': '#143261',
-						'border-opacity': 1,
-						'font-size': 6
+						'border-color': '#ff6c7e',
+						'border-opacity': 1
 					}
 				}
 			]
