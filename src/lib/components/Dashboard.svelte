@@ -27,6 +27,12 @@
 		explanation = newExplanation;
 	}
 
+	function handleDocumentCreated(event: CustomEvent) {
+		const newNode = event.detail.node;
+		console.log('Dashboard: received new document node:', newNode);
+		currentGraphData.nodes = [...currentGraphData.nodes, newNode];
+	}
+
 	// Dashboard Options
 	export let graphTitle: string;
 	export let worldInfo: WorldInfo | undefined = undefined;
@@ -85,10 +91,12 @@
 						minSize={$isSmallScreen ? 40 : 20}
 					>
 						<InfoPanel
+							{worldId}
 							{explanation}
 							buttons={dashboardButtons}
 							{graphTitle}
 							worldContent={worldInfo?.content}
+							on:documentCreated={handleDocumentCreated}
 						/>
 					</Pane>
 				{/if}
