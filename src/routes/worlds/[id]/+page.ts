@@ -7,7 +7,7 @@ export const load: Load = async ({ params, fetch }) => {
 
 	const graphData: GraphData = await res.json();
 
-	graphData.nodes = graphData.nodes.map((node) => ({
+	graphData.nodes = graphData.nodes?.map((node) => ({
 		...node,
 		data: {
 			...node.data,
