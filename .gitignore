@@ -30,3 +30,6 @@ vite.config.ts.timestamp-*
 playwright/.auth
 
 /venv
+
+__pycache__/
+*.pyc
