@@ -27,6 +27,7 @@
 	}
 
 	function handleDocumentCreated(event: CustomEvent) {
+		console.log('dahsboard-worldId', worldId);
 		const newNode = event.detail.node;
 		console.log('Dashboard: received new document node:', newNode);
 		currentGraphData.nodes = [...currentGraphData.nodes, newNode];
