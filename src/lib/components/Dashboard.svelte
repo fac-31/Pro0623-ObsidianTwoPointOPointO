@@ -7,7 +7,31 @@
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import { readable } from 'svelte/store';
 
+	export let explanation: string = '';
 	export let graphData: GraphData;
+	export let worldId: string = '';
+
+	let currentGraphData: GraphData = graphData;
+
+	function handleResult(event: CustomEvent) {
+		console.log('Dashboard: received event.detail:', event.detail);
+		const { graphData, explanation: newExplanation } = event.detail;
+
+		currentGraphData = {
+			nodes: [...graphData.nodes],
+			edges: [...graphData.edges]
+		};
+		console.log('Dashboard: currentGraphData now:', currentGraphData);
+
+		explanation = newExplanation;
+	}
+
+	function handleDocumentCreated(event: CustomEvent) {
+		console.log('dahsboard-worldId', worldId);
+		const newNode = event.detail.node;
+		console.log('Dashboard: received new document node:', newNode);
+		currentGraphData.nodes = [...currentGraphData.nodes, newNode];
+	}
 
 	// Dashboard Options
 	export let graphTitle: string;
@@ -39,11 +63,15 @@
 	class="h-full py-4 px-3"
 	data-testid="dashboard"
 >
-	<Pane defaultSize={80} minSize={20} class="relative">
+	<Pane defaultSize={80} minSize={20} class="relative overflow-y-auto">
 		{#if showSearchBar}
-			<div class="absolute top-4 left-4 z-10"><SearchBar /></div>
+			<div class="absolute top-2 left-2 z-10"><SearchBar /></div>
 		{/if}
-		<WorldView {graphData} showGraph={!showTextView} on:displayText={toggleTextView} />
+		<WorldView
+			graphData={currentGraphData}
+			showGraph={!showTextView}
+			on:displayText={toggleTextView}
+		/>
 	</Pane>
 	<PaneResizer
 		class={`${
@@ -62,7 +90,14 @@
 						defaultSize={$isSmallScreen ? 50 : 80}
 						minSize={$isSmallScreen ? 40 : 20}
 					>
-						<InfoPanel buttons={dashboardButtons} {graphTitle} worldContent={worldInfo?.content} />
+						<InfoPanel
+							{worldId}
+							{explanation}
+							buttons={dashboardButtons}
+							{graphTitle}
+							worldContent={worldInfo?.content}
+							on:documentCreated={handleDocumentCreated}
+						/>
 					</Pane>
 				{/if}
 				{#if showQueryPanel}
@@ -72,7 +107,7 @@
 						minSize={$isSmallScreen ? 50 : 30}
 						maxSize={$isSmallScreen ? 50 : 20}
 					>
-						<QueryPanel />
+						<QueryPanel {worldId} on:result={handleResult} />
 					</Pane>
 				{/if}
 			</PaneGroup>

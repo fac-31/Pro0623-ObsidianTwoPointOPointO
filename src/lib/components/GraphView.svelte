@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, tick } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
 	import { selectedNodesStore } from '$lib/stores/selectedNodes';
+	import { appSettings } from '$lib/stores/appSettings';
+	import { getLayoutOptions } from '$lib/utils/cytoscape';
+	import { applyCytoscapeStyle } from '$lib/utils/cytoscape';
 
 	export let graphData: GraphData;
 
@@ -13,81 +16,63 @@
 		cy = cytoscape({
 			container,
 			elements: [...graphData.nodes, ...graphData.edges],
-			layout: { name: 'cose' },
-			wheelSensitivity: 2,
-			style: [
-				{
-					selector: 'node',
-					style: {
-						label: 'data(label)',
-						'background-color': '#666666',
-						color: '#fff',
-						'text-valign': 'center',
-						'text-halign': 'center',
-						'font-size': 5,
-						opacity: 1,
-						'border-width': 0
-					}
-				},
-				{
-					selector: 'edge',
-					style: {
-						label: 'data(label)',
-						'curve-style': 'bezier',
-						'target-arrow-shape': 'triangle',
-						'line-color': '#000', // Black edge line
-						'target-arrow-color': '#000', // Black arrow
-						color: '#fff', // White text label
-						'text-rotation': 'autorotate', // Label follows edge angle
-						'text-wrap': 'wrap',
-						'text-max-width': '80px',
-						'font-size': 3,
-						width: 2
-					}
-				},
-				{
-					selector: '.faded',
-					style: {
-						opacity: 0.1
-					}
-				},
-				{
-					selector: '.selected',
-					style: {
-						'border-width': 1,
-						'border-color': '#143261',
-						'border-opacity': 1,
-						'font-size': 6
-					}
-				}
-			]
+			layout: getLayoutOptions($appSettings),
+			wheelSensitivity: 2
+		});
+
+		let previousLayoutName = $appSettings.layoutName;
+		let previousLayoutConfig = { ...$appSettings.layout[$appSettings.layoutName] };
+
+		appSettings.subscribe(async (settings) => {
+			await tick();
+			const currentLayoutConfig = settings.layout[settings.layoutName];
+
+			if (
+				settings.layoutName !== previousLayoutName ||
+				JSON.stringify(currentLayoutConfig) !== JSON.stringify(previousLayoutConfig)
+			) {
+				cy.layout(getLayoutOptions(settings)).run();
+				previousLayoutName = settings.layoutName;
+				previousLayoutConfig = { ...currentLayoutConfig };
+			}
+
+			applyCytoscapeStyle(cy, settings);
 		});
 
 		cy.on('tap', (event) => {
 			const target = event.target;
 
-			// Tapped on background
+			// Tapping background clears selection
 			if (target === cy) {
-				// Keeping tabs open, but visually deselecting
-				cy.nodes().removeClass('selected');
-				cy.elements().removeClass('faded');
+				cy.elements().removeClass('selected').removeClass('faded');
 				return;
 			}
 
-			// Tapped on a node
-			if (target.isNode && target.isNode()) {
-				console.log('Node data:', target.data());
+			// Tapping a node: highlight and add to store
+			if (target.isNode()) {
 				selectedNodesStore.addNode({ data: target.data() });
-
-				cy.nodes().removeClass('selected');
-				cy.elements().removeClass('faded');
-
+				cy.elements().removeClass('selected').removeClass('faded');
 				target.addClass('selected');
 				const connected = target.closedNeighborhood();
 				cy.elements().difference(connected).addClass('faded');
 			}
+
+			// Tapping an edge: highlight only
+			if (target.isEdge()) {
+				cy.elements().removeClass('selected').removeClass('faded');
+				target.addClass('selected');
+				const connected = target.connectedNodes();
+				cy.elements().difference(connected.union(target)).addClass('faded');
+			}
 		});
 	});
+
+	$: if (cy && graphData) {
+		cy.elements().remove();
+		cy.add([...graphData.nodes, ...graphData.edges]);
+		cy.layout({ name: 'cose' }).run();
+		console.log('Graph data updated', graphData.nodes.length, graphData.edges.length);
+	}
 
 	onDestroy(() => {
 		cy?.destroy();
