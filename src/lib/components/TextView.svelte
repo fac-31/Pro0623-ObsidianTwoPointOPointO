@@ -1,3 +1,5 @@
+[INFO] Your configured model (gemini-2.5-pro) was temporarily unavailable. Switched to gemini-2.5-flash for this session.
+```svelte
 <script lang="ts">
 	import type { GraphData, GraphNode, GraphEdge } from '$lib/types/graph';
 	import './TextView.css';
@@ -32,7 +34,6 @@
 					class="node-button incoming-node"
 					tabindex="0"
 					on:click={() => selectNode(edge.data.source)}
-					on:keydown={(e) => e.key === 'Enter' && selectNode(edge.data.source)}
 					aria-label={`Select node ${getNode(edge.data.source)?.data.label}`}
 					aria-selected="false"
 					role="treeitem"
@@ -40,7 +41,7 @@
 					{getNode(edge.data.source)?.data.label}
 				</button>
 
-				<div class="connection-line incoming-line">
+				<div class="connection-line incoming-line" aria-hidden="true">
 					└──[{edge.data.label}]──&gt;
 					{#if i === getIncoming(selectedNodeId).length - 1}
 						<span class="selected-node">{getNode(selectedNodeId)?.data.label}</span>
@@ -50,19 +51,18 @@
 
 			<!-- Add a blank line only between incoming and outgoing sections -->
 			{#if getIncoming(selectedNodeId).length > 0 && getOutgoing(selectedNodeId).length > 0}
-				<div class="blank-line"></div>
+				<div class="blank-line" aria-hidden="true"></div>
 			{/if}
 
 			<!-- Outgoing nodes -->
 			{#each getOutgoing(selectedNodeId) as edge, i (edge.data.id)}
-				<div class="connection-line outgoing-line">
+				<div class="connection-line outgoing-line" aria-hidden="true">
 					└──[{edge.data.label}]──&gt;
 				</div>
 				<button
 					class="node-button outgoing-node"
 					tabindex="0"
 					on:click={() => selectNode(edge.data.target)}
-					on:keydown={(e) => e.key === 'Enter' && selectNode(edge.data.target)}
 					aria-label={`Select node ${getNode(edge.data.target)?.data.label}`}
 					aria-selected="false"
 					role="treeitem"
@@ -71,7 +71,7 @@
 				</button>
 
 				{#if i < getOutgoing(selectedNodeId).length - 1}
-					<div class="blank-line"></div>
+					<div class="blank-line" aria-hidden="true"></div>
 				{/if}
 			{/each}
 		{/if}
@@ -88,3 +88,4 @@
 		{/if}
 	</aside>
 </div>
+```

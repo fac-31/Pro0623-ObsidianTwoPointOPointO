@@ -49,8 +49,12 @@
 		class={`${
 			$isSmallScreen ? 'h-5 w-full p-4' : 'w-5 h-full'
 		} flex items-center justify-center bg-base-100 `}
+		aria-label="Resize panels"
 	>
-		<div class={`bg-neutral-content/30 ${$isSmallScreen ? 'w-4/5 h-1' : 'h-4/5 w-1'}`}></div>
+		<div
+			class={`bg-neutral-content/30 ${$isSmallScreen ? 'w-4/5 h-1' : 'h-4/5 w-1'}`}
+			aria-hidden="true"
+		></div>
 	</PaneResizer>
 
 	<Pane defaultSize={30} minSize={25}>

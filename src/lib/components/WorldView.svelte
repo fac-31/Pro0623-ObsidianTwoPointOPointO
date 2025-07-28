@@ -19,8 +19,8 @@
 	}
 </script>
 
-<div class="flex flex-col h-full w-full rounded-xl bg-base-300 relative">
-	<div class="flex-1 overflow-hidden">
+<div role="region" aria-label="World view" class="flex flex-col h-full w-full rounded-xl bg-base-300 relative">
+	<div class="flex-1 overflow-hidden" aria-live="polite">
 		{#if showGraph}
 			<GraphView {graphData} />
 		{:else}

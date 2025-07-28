@@ -13,6 +13,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>{formState === 'logIn' ? 'Log In' : 'Sign Up'}</title>
+</svelte:head>
+
 <section class="flex flex-col items-center justify-center h-screen">
 	{#if formState === 'logIn'}
 		<AuthForm
@@ -26,8 +30,8 @@
 			formData={form}
 		/>
 		<button
-			onclick={() => toggleForm('signUp')}
-			class="text-sm text-black hover:underline cursor-pointer"
+			on:click={() => toggleForm('signUp')}
+			class="text-sm text-black hover:underline"
 		>
 			Don't Have an Account? Sign Up
 		</button>
@@ -44,8 +48,8 @@
 			formData={form}
 		/>
 		<button
-			onclick={() => toggleForm('logIn')}
-			class="text-sm text-black hover:underline cursor-pointer"
+			on:click={() => toggleForm('logIn')}
+			class="text-sm text-black hover:underline"
 		>
 			Already Have an Account? Log In
 		</button>

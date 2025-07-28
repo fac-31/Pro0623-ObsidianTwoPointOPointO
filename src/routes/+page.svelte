@@ -82,10 +82,10 @@
 	</p>
 
 	{#if errorMessage}
-		<p class="text-red-600">Error: {errorMessage}</p>
+		<p role="alert" class="text-red-600">Error: {errorMessage}</p>
 	{/if}
 
-	<button onclick={() => send(readUsers)} class="px-3 py-1 border rounded hover:bg-gray-100">
+	<button on:click={() => send(readUsers)} class="px-3 py-1 border rounded hover:bg-gray-100">
 		Get Users
 	</button>
 
@@ -98,23 +98,31 @@
 	{/if}
 
 	<h2 class="text-lg font-medium">Add New User</h2>
-	<form onsubmit={() => send(writeUser)} class="space-y-2">
-		<label class="block">
+	<form on:submit|preventDefault={() => send(writeUser)} class="space-y-2">
+		<label for="new-user-name" class="block">
 			User
-			<input type="text" bind:value={newName} class="block mt-1 border px-2 py-1 w-full rounded" />
+			<input
+				id="new-user-name"
+				type="text"
+				bind:value={newName}
+				class="block mt-1 border px-2 py-1 w-full rounded"
+			/>
 		</label>
 		<button type="submit" class="px-3 py-1 border rounded hover:bg-gray-100"> Add User </button>
 	</form>
 
 	{#if newUser}
-		<p>New User <strong>{newUser.properties.name}</strong> Created</p>
+		<p role="status" aria-live="polite">
+			New User <strong>{newUser.properties.name}</strong> Created
+		</p>
 	{/if}
 
 	<h2 class="text-lg font-medium">Delete User</h2>
-	<form onsubmit={() => send(deleteUser)} class="space-y-2">
-		<label class="block">
+	<form on:submit|preventDefault={() => send(deleteUser)} class="space-y-2">
+		<label for="delete-user-name" class="block">
 			User
 			<input
+				id="delete-user-name"
 				type="text"
 				bind:value={deleteName}
 				class="block mt-1 border px-2 py-1 w-full rounded"
@@ -123,7 +131,7 @@
 		<button type="submit" class="px-3 py-1 border rounded hover:bg-gray-100"> Delete User </button>
 	</form>
 	<div>
-		<button onclick={seedData} class="px-3 py-1 border rounded hover:bg-gray-100"
+		<button on:click={seedData} class="px-3 py-1 border rounded hover:bg-gray-100"
 			>Seed Data Button</button
 		>
 		<p>But there's no need because the db is already seeded!</p>
