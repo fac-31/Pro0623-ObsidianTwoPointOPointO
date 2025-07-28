@@ -42,10 +42,10 @@ class AccessibilityCLI {
 
 	private loadGuidelines(): string {
 		try {
-			const content = readFileSync('accessibility.md', 'utf-8');
+			const content = readFileSync('accessibility/accessibility.md', 'utf-8');
 			return content;
 		} catch (error) {
-			console.error('❌ Could not load access-info.md');
+			console.error('❌ Could not load accessibility.md');
 			process.exit(1);
 		}
 	}
