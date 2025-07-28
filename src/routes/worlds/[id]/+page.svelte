@@ -11,7 +11,7 @@
 </script>
 
 <Dashboard
-	worldId={worldId}
+	{worldId}
 	graphData={data.graphData}
 	graphTitle={data.graphTitle}
 	worldInfo={data.worldInfo}
