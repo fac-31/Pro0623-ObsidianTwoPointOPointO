@@ -1,3 +1,4 @@
+```svelte
 <script lang="ts">
 	import Tabs from './Tabs.svelte';
 	import { selectedNodesStore, activeNode } from '$lib/stores/selectedNodes';
@@ -23,8 +24,12 @@
 	{#if tabs.length > 0}
 		{#if useDropdown}
 			<div class="flex items-center">
-				<span class="font-bold">Tab:</span>
-				<select class="select select-bordered w-full max-w-xs" on:change={handleSelect}>
+				<label for="tab-select" class="font-bold">Tab:</label>
+				<select
+					id="tab-select"
+					class="select select-bordered w-full max-w-xs"
+					on:change={handleSelect}
+				>
 					{#each tabs as tab (tab.id)}
 						<option value={tab.id} selected={tab.id === $selectedNodesStore.activeNodeId}
 							>{tab.label}</option
@@ -73,3 +78,5 @@
 		</div>
 	</div>
 </div>
+```
+I have updated `src/lib/components/InfoPanel.svelte` and created `PR.md`. I will now proceed to the next file. What is the next code block you would like me to analyze?
