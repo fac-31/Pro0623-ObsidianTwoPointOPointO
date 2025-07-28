@@ -15,7 +15,7 @@
 
 	$: tabs = $selectedNodesStore.nodes.map((n) => ({
 		id: n.data.id,
-		label: n.data.name
+		label: n.data.name || n.data.title
 	}));
 
 	$: useDropdown = tabs.length > 10;

@@ -30,7 +30,7 @@ graph = Neo4jGraph(
 )
 
 template = ChatPromptTemplate([
-    ("system", "You are a Knowledge Graph Builder. Build relationships and nodes that accurately represent the chunk text provided. Where you can, give character nodes the properties: name, age. Dot not create nodes or relationships that are not represented in the chunk text provided")
+    ("system", "You are a Knowledge Graph Builder. Build relationships and nodes that accurately represent the chunk text provided. Where you can, give character nodes the properties: name, age. Dot not create nodes or relationships that are not represented in the chunk text provided. For each node created, create an EXISTS_IN relationship between the node and the World node that the chunk and associated document describe.")
 ])
 
 doc_transformer = LLMGraphTransformer(
