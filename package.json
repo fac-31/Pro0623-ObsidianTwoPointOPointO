@@ -18,7 +18,8 @@
 		"test:watch": "vitest",
 		"test:a11y": "ts-node scripts/axe-test.ts",
 		"test:e2e": "playwright test",
-		"commit": "cz"
+		"commit": "cz",
+		"access": "ts-node accessibility/accessibility-cli.ts"
 	},
 	"config": {
 		"commitizen": {
