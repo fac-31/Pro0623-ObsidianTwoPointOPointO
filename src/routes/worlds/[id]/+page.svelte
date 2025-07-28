@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 	import Dashboard from '$lib/components/Dashboard.svelte';
 	import type { GraphData, WorldInfo } from '$lib/types/graph';
-	import WorldView from '$lib/components/WorldView.svelte';
 	export let data: { graphData: GraphData; graphTitle: string; worldInfo?: WorldInfo };
 
 	// Get the world ID directly from the URL parameters. This is the reliable SvelteKit way.
