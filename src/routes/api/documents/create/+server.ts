@@ -16,8 +16,8 @@ export const POST: RequestHandler = async (event) => {
 	console.log(`Authenticated user with ID: ${userId}`);
 
 	// 2. Get data from the request body
-	const { title, content } = await event.request.json();
-	console.log('Request body:', { title, content });
+	const { title, content, worldId } = await event.request.json();
+	console.log('Request body:', { title, content, worldId });
 
 	if (!title || !content) {
 		console.error('Validation failed: Missing required fields.');
@@ -32,14 +32,18 @@ export const POST: RequestHandler = async (event) => {
 		const result = await session.executeWrite((tx) =>
 			tx.run(
 				`
+	MATCH (w) WHERE elementId(w) = $worldId
+
     CREATE (d:Document {
       title: $title,
       content: $content,
-      createdBy: $userId
-    })
-    RETURN d
+      createdBy: $userId,
+	  worldId: $worldId
+    })-[:DESCRIBES]->(w)
+
+	RETURN d
     `,
-				{ userId, title, content }
+				{ userId, title, content, worldId }
 			)
 		);
 		console.log('Cypher query executed successfully.');
@@ -66,6 +70,24 @@ export const POST: RequestHandler = async (event) => {
 		const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
 		return json({ message: 'Failed to create document', error: errorMessage }, { status: 500 });
 	} finally {
-		await session.close();
+		console.log('Building world with ID (API):', worldId);
+		try {
+			const url = new URL(event.request.url);
+			const absoluteUrl = url.origin + '/api/build';
+			const response = await event.fetch(absoluteUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ world_id: worldId })
+			});
+			if (!response.ok) {
+				console.log('Failed to build world');
+			}
+			const result = await response.json();
+			console.log('World built successfully:', result);
+		} catch (error) {
+			console.error('Error building world:', error);
+		} finally {
+			await session.close();
+		}
 	}
 };
