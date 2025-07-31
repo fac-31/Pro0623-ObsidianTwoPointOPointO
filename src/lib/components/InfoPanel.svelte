@@ -5,6 +5,7 @@
 	import { infoPanelStore } from '$lib/stores/infoPanelStore';
 	import CreateNewForm from './CreateNewForm.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import CreateWorld from './CreateWorld.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -73,37 +74,43 @@
 	}
 </script>
 
+<!-- TABS ABOVE PANEL -->
+{#if !$infoPanelStore.showCreateNewForm && tabs.length > 0}
+	<div class="mb-2">
+		{#if useDropdown}
+			<div class="flex items-center">
+				<span class="font-bold">Tab:</span>
+				<select class="select select-bordered w-full max-w-xs ml-2" on:change={handleSelect}>
+					{#each tabs as tab (tab.id)}
+						<option value={tab.id} selected={tab.id === $tabsStore.activeTabId}>
+							{tab.label}
+						</option>
+					{/each}
+				</select>
+			</div>
+		{:else}
+			<Tabs
+				{tabs}
+				activeTabId={$tabsStore.activeTabId}
+				setActiveTab={tabsStore.setActiveTab}
+				closeTab={tabsStore.removeTab}
+			/>
+		{/if}
+	</div>
+{/if}
+
+<!-- MAIN INFO PANEL CONTENT -->
 <div class="rounded-4xl border-3 border-bg-base-300 text-base p-4 h-full w-full flex flex-col">
 	{#if $infoPanelStore.showCreateNewForm}
 		<CreateNewForm on:save={handleSave} />
 	{:else}
-		{#if tabs.length > 0}
-			{#if useDropdown}
-				<div class="flex items-center">
-					<span class="font-bold">Tab:</span>
-					<select class="select select-bordered w-full max-w-xs" on:change={handleSelect}>
-						{#each tabs as tab (tab.id)}
-							<option value={tab.id} selected={tab.id === $tabsStore.activeTabId}
-								>{tab.label}</option
-							>
-						{/each}
-					</select>
-				</div>
-			{:else}
-				<Tabs
-					{tabs}
-					activeTabId={$tabsStore.activeTabId}
-					setActiveTab={tabsStore.setActiveTab}
-					closeTab={tabsStore.removeTab}
-				/>
-			{/if}
-		{/if}
-
 		<div class="flex-1 rounded-xl overflow-hidden p-2 flex gap-4 min-h-0">
 			<!-- Left content area -->
 			<div class="flex-1 overflow-auto">
 				{#if $activeTab?.data.type === 'settings'}
 					<SettingsMenu />
+				{:else if $activeTab?.data.type === 'create-world'}
+					<CreateWorld />
 				{:else if $activeTab}
 					<div class="flex flex-wrap items-center gap-4 mb-2">
 						<h2 class="text-xl font-semibold">{$activeTab.data.label}</h2>

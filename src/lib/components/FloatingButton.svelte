@@ -34,6 +34,9 @@
 	function openSettings() {
 		tabsStore.addTab({ data: { id: '1', name: 'Settings', type: 'settings' } });
 	}
+	function openCreateWorld() {
+		tabsStore.addTab({ data: { id: '2', name: 'Create World', type: 'create-world' } });
+	}
 </script>
 
 <div class={`dropdown dropdown-top dropdown-center ${position}`}>
@@ -56,6 +59,9 @@
 		</li>
 		<li>
 			<button type="button" on:click={openSettings}>Settings</button>
+		</li>
+		<li>
+			<button type="button" on:click={openCreateWorld}>Create World</button>
 		</li>
 	</ul>
 </div>

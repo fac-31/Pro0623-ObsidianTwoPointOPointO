@@ -5,16 +5,18 @@
 	export let closeTab: (id: string) => void;
 </script>
 
-<div role="tablist" class="tabs tabs-lift">
+<div role="tablist" class="tabs tabs-border tabs-scroll flex-nowrap">
 	{#each tabs as tab (tab.id)}
-		<div class="relative flex items-center">
+		<div class="relative inline-flex items-center">
 			<button
 				role="tab"
 				class="tab pr-6 {tab.id === activeTabId ? 'tab-active' : ''}"
 				on:click={() => setActiveTab(tab.id)}
 				id={`tab-${tab.id}`}
 			>
-				{tab.label}
+				<span title={tab.label}>
+					{tab.label.slice(0, 15)}...
+				</span>
 			</button>
 			<button
 				type="button"
@@ -27,3 +29,13 @@
 		</div>
 	{/each}
 </div>
+
+<style>
+	.tabs-scroll {
+		overflow-x: auto;
+		overflow-y: hidden;
+		white-space: nowrap;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: thin;
+	}
+</style>
