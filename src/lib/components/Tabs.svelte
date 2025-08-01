@@ -35,7 +35,5 @@
 		overflow-x: auto;
 		overflow-y: hidden;
 		white-space: nowrap;
-		-webkit-overflow-scrolling: touch;
-		scrollbar-width: thin;
 	}
 </style>

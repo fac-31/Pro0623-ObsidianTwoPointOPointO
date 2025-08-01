@@ -50,7 +50,8 @@
 
 			// Tapping a node: highlight and add to store
 			if (target.isNode()) {
-								tabsStore.addTab({ data: target.data() });
+				console.log(target.data());
+				tabsStore.addTab({ data: target.data() });
 				cy.elements().removeClass('selected').removeClass('faded');
 				target.addClass('selected');
 				const connected = target.closedNeighborhood();

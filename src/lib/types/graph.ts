@@ -13,7 +13,7 @@ export type GraphEdge = {
 		source: string;
 		target: string;
 		label: string;
-		[key: string]: string;
+		content: string;
 	};
 };
 

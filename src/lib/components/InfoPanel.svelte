@@ -20,7 +20,7 @@
 		label: t.data.name
 	}));
 
-	$: useDropdown = tabs.length > 10;
+	$: useDropdown = tabs.length > 4;
 
 	function handleSelect(event: Event) {
 		const selectedId = (event.target as HTMLSelectElement).value;
@@ -48,7 +48,6 @@
 
 			const { document: newDocument } = await response.json();
 
-			// Create a node format that the graph and tabs can use
 			const newNodeForGraph = {
 				data: {
 					name: newDocument.title,
@@ -59,15 +58,12 @@
 				}
 			};
 
-			// Dispatch event to update the main graph
 			dispatch('documentCreated', { node: newNodeForGraph });
 
-			// Add to the tabs in the info panel and make it active
 			tabsStore.addTab(newNodeForGraph);
 			tabsStore.setActiveTab(newNodeForGraph.data.id);
 		} catch (error) {
 			console.error('Error saving document:', error);
-			// Optionally, show an error notification to the user
 		} finally {
 			infoPanelStore.hideForm();
 		}
@@ -79,8 +75,7 @@
 	<div class="mb-2">
 		{#if useDropdown}
 			<div class="flex items-center">
-				<span class="font-bold">Tab:</span>
-				<select class="select select-bordered w-full max-w-xs ml-2" on:change={handleSelect}>
+				<select class="select select-bordered w-full ml-2" on:change={handleSelect}>
 					{#each tabs as tab (tab.id)}
 						<option value={tab.id} selected={tab.id === $tabsStore.activeTabId}>
 							{tab.label}
@@ -112,8 +107,11 @@
 				{:else if $activeTab?.data.type === 'create-world'}
 					<CreateWorld />
 				{:else if $activeTab}
+					<!-- Header: name, type badge, buttons -->
 					<div class="flex flex-wrap items-center gap-4 mb-2">
-						<h2 class="text-xl font-semibold">{$activeTab.data.label}</h2>
+						<h2 class="text-xl font-semibold">{$activeTab.data.name}</h2>
+						<div class="badge badge-outline">{$activeTab.data.type}</div>
+
 						{#if buttons.length}
 							<div class="flex gap-2 flex-wrap">
 								{#each buttons as button (button.label)}
@@ -127,8 +125,18 @@
 							</div>
 						{/if}
 					</div>
-					<p>{$activeTab.data.content}</p>
+
+					<!-- Content (or no content): on new line -->
+					<p>{JSON.stringify($activeTab.data)}</p>
+					{#if $activeTab.data.content}
+						<div class="prose max-w-none mt-2">
+							{$activeTab.data.content}
+						</div>
+					{:else}
+						<p class="text-gray-400 italic mt-2">No content</p>
+					{/if}
 				{:else if graphTitle}
+					<!-- Default Message if no tab is active -->
 					<h2 class="text-xl font-semibold">{graphTitle}</h2>
 					{#if worldContent}
 						<p>{worldContent}</p>

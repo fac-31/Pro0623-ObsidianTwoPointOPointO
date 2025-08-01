@@ -1,7 +1,7 @@
 import type { GraphNode } from '$lib/types/graph';
 import { writable, derived } from 'svelte/store';
 
-export type Tab = GraphNode | { data: { id: string; name: string; type: 'settings' } };
+export type Tab = GraphNode 
 
 interface TabsStore {
 	tabs: Tab[];
