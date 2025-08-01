@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import type { GraphData } from '$lib/types/graph';
+	import { tabsStore } from '$lib/stores/tabs';
 
 	const dispatch = createEventDispatcher();
 
@@ -40,7 +41,18 @@
 
 			const response = await res.json();
 			console.log('LLM response:', response);
-			dispatch('result', response);
+
+			// Create a new tab with the question as the label and the LLM response as content
+			const newTab = {
+				data: {
+					id: `query-${Date.now()}`,
+					name: query, // Use the query as the tab name
+					label: query, // Use the query as the tab label
+					content: response, // LLM response as content
+					type: 'QueryResponse' // A new type for query responses
+				}
+			};
+			tabsStore.addTab(newTab);
 			query = '';
 		} catch (err) {
 			console.error('Error submitting query:', err);
