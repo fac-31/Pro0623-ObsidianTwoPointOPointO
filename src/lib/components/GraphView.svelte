@@ -2,7 +2,7 @@
 	import { onMount, onDestroy, tick } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import type { GraphData } from '$lib/types/graph';
-	import { tabsStore } from '$lib/stores/tabs';
+	import { tabsStore, activeTab } from '$lib/stores/tabs';
 	import { appSettings } from '$lib/stores/appSettings';
 	import { getLayoutOptions } from '$lib/utils/cytoscape';
 	import { applyCytoscapeStyle } from '$lib/utils/cytoscape';
@@ -37,6 +37,20 @@
 			}
 
 			applyCytoscapeStyle(cy, settings);
+		});
+
+		activeTab.subscribe((tab) => {
+			if (cy && tab) {
+				cy.elements().removeClass('selected').removeClass('faded');
+				const node = cy.getElementById(tab.data.id);
+				if (node.isNode()) {
+					node.addClass('selected');
+					const connected = node.closedNeighborhood();
+					cy.elements().difference(connected).addClass('faded');
+				}
+			} else if (cy) {
+				cy.elements().removeClass('selected').removeClass('faded');
+			}
 		});
 
 		cy.on('tap', (event) => {

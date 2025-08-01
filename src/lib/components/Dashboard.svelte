@@ -96,6 +96,7 @@
 							worldContent={worldInfo?.content}
 							bind:editedContent
 							on:documentCreated={handleDocumentCreated}
+							graphData={currentGraphData}
 						/>
 					</Pane>
 				{/if}

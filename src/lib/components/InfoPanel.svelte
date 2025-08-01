@@ -6,6 +6,7 @@
 	import CreateNewForm from './CreateNewForm.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import CreateWorld from './CreateWorld.svelte';
+import type { GraphData } from '$lib/types/graph';
 
 	const dispatch = createEventDispatcher();
 
@@ -20,6 +21,29 @@
 	export let worldContent: string | undefined = undefined;
 	export let explanation: string;
 	export let editedContent: string | undefined;
+	export let graphData: GraphData;
+
+	$: adjacencyList = (() => {
+		if (!$activeTab || !graphData) return [];
+
+		const connections: string[] = [];
+		const activeNodeId = $activeTab.data.id;
+
+		// Helper to get node label by ID
+		const getNodeLabel = (nodeId: string) => {
+			const node = graphData.nodes.find(n => n.data.id === nodeId);
+			return node?.data.label || node?.data.name || nodeId;
+		};
+
+		for (const edge of graphData.edges) {
+			if (edge.data.source === activeNodeId) {
+				connections.push(`${edge.data.label} -> ${getNodeLabel(edge.data.target)}`);
+			} else if (edge.data.target === activeNodeId) {
+				connections.push(`${getNodeLabel(edge.data.source)} <- ${edge.data.label}`);
+			}
+		}
+		return connections;
+	})();
 
 	$: tabs = $tabsStore.tabs.map((t) => ({
 		id: t.data.id,
@@ -150,6 +174,15 @@
 						</div>
 					{:else}
 						<p class="text-gray-400 italic mt-2">No content</p>
+					{/if}
+
+					{#if adjacencyList.length > 0}
+						<h3 class="text-lg font-semibold mt-4">Connections:</h3>
+						<ul class="list-disc list-inside ml-4">
+							{#each adjacencyList as connection}
+								<li>{connection}</li>
+							{/each}
+						</ul>
 					{/if}
 				{:else if graphTitle}
 					<!-- Default Message if no tab is active -->

@@ -5,7 +5,7 @@
 
 	export let graphData: GraphData;
 	let selectedNodeId: string | null = null;
-	let textViewContainer: HTMLDivElement;
+	let textViewContainer: HTMLDivElement; // Declare a variable to hold the div element
 
 	const nodeTypes = Array.from(new Set(graphData.nodes.map((node) => node.data.type)));
 
@@ -24,48 +24,6 @@
 
 		return connected;
 	})();
-
-	// Connected neighbors and their relationship info
-	type NeighborWithRelation = {
-		node: GraphNode;
-		relationship: {
-			id: string;
-			label: string;
-			properties: Record<string, any>;
-		};
-	};
-
-	$: neighborsWithRelations = (() => {
-		if (!selectedNodeId) return [];
-
-		const connected: NeighborWithRelation[] = [];
-
-		for (const edge of graphData.edges) {
-			let neighborId: string | null = null;
-
-			if (edge.data.source === selectedNodeId) {
-				neighborId = edge.data.target;
-			} else if (edge.data.target === selectedNodeId) {
-				neighborId = edge.data.source;
-			}
-
-			if (neighborId) {
-				const neighborNode = graphData.nodes.find((n) => n.data.id === neighborId);
-				if (neighborNode) {
-					connected.push({
-						node: neighborNode,
-						relationship: {
-							id: edge.data.id,
-							label: edge.data.label,
-							properties: edge.data
-						}
-					});
-				}
-			}
-		}
-
-		return connected;
-	})();
 </script>
 
 <div
@@ -76,12 +34,12 @@
 	bind:this={textViewContainer}
 >
 	{#each nodeTypes as type (type)}
+		{console.log(type)}
 		<TypeBox
 			title={type}
 			nodes={getNodesByType(type)}
 			{selectedNodeId}
 			{connectedNodeIds}
-			{neighborsWithRelations}
 			onSelect={(id) => (selectedNodeId = id)}
 		/>
 	{/each}
