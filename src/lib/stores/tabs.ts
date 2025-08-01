@@ -1,7 +1,7 @@
 import type { GraphNode } from '$lib/types/graph';
 import { writable, derived } from 'svelte/store';
 
-export type Tab = GraphNode 
+export type Tab = GraphNode & { editing?: boolean }; 
 
 interface TabsStore {
 	tabs: Tab[];
@@ -60,11 +60,39 @@ const createTabsStore = () => {
 		}));
 	};
 
+	const setTabEditing = (tabId: string, editing: boolean) => {
+		update((store) => {
+			const newTabs = store.tabs.map((tab) => {
+				if (tab.data.id === tabId) {
+					return { ...tab, editing };
+				}
+				return tab;
+			});
+			return { ...store, tabs: newTabs };
+		});
+	};
+
+	const updateTabContent = (tabId: string, content: string | undefined) => {
+		update((store) => {
+			const newTabs = store.tabs.map((tab) => {
+				if (tab.data.id === tabId) {
+					const newTab = { ...tab };
+					newTab.data = { ...tab.data, content: content };
+					return newTab;
+				}
+				return tab;
+			});
+			return { ...store, tabs: newTabs };
+		});
+	};
+
 	return {
 		subscribe,
 		addTab,
 		removeTab,
-		setActiveTab
+		setActiveTab,
+		setTabEditing,
+		updateTabContent
 	};
 };
 

@@ -18,19 +18,19 @@ export const appSettings = writable<AppSettings>({
 			animate: 'end'
 		},
 		circle: {
-			spacingFactor: 0.3
+			spacingFactor: 1
 		},
 		grid: {
-			spacingFactor: 0.3
+			spacingFactor: 1
 		},
 		breadthfirst: {
 			spacingFactor: 1
 		},
 		concentric: {
-			spacingFactor: 2
+			spacingFactor: 1
 		},
 		random: {
-			spacingFactor: 0.3
+			spacingFactor: 1
 		}
 	},
 

@@ -40,6 +40,7 @@
 	
 	export let showSearchBar: boolean = false;
 	export let dashboardButtons: { label: string; onClick: () => void; class?: string }[] = [];
+	export let editedContent: string | undefined;
 
 	let showTextView = false;
 
@@ -93,6 +94,7 @@
 							buttons={dashboardButtons}
 							{graphTitle}
 							worldContent={worldInfo?.content}
+							bind:editedContent
 							on:documentCreated={handleDocumentCreated}
 						/>
 					</Pane>

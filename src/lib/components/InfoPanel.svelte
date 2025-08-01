@@ -11,9 +11,15 @@
 
 	export let worldId: string;
 	export let graphTitle: string;
-	export let buttons: { label: string; onClick: () => void; class?: string }[] = [];
+	export let buttons: {
+		label: string;
+		onClick: () => void;
+		class?: string;
+		location?: string;
+	}[] = [];
 	export let worldContent: string | undefined = undefined;
 	export let explanation: string;
+	export let editedContent: string | undefined;
 
 	$: tabs = $tabsStore.tabs.map((t) => ({
 		id: t.data.id,
@@ -114,7 +120,7 @@
 
 						{#if buttons.length}
 							<div class="flex gap-2 flex-wrap">
-								{#each buttons as button (button.label)}
+								{#each buttons.filter((b) => b.location === 'header') as button (button.label)}
 									<button
 										class={`btn btn-sm ${button.class ?? 'btn-secondary'}`}
 										on:click={button.onClick}
@@ -127,8 +133,16 @@
 					</div>
 
 					<!-- Content (or no content): on new line -->
-					<p>{JSON.stringify($activeTab.data)}</p>
-					{#if $activeTab.data.content}
+					{#if $activeTab.editing}
+						<textarea class="textarea textarea-bordered w-full" bind:value={editedContent}></textarea>
+						<div class="flex gap-2 mt-2">
+							{#each buttons.filter((b) => b.location === 'content') as button (button.label)}
+								<button class={`btn ${button.class ?? ''}`} on:click={button.onClick}>
+									{button.label}
+								</button>
+							{/each}
+						</div>
+					{:else if $activeTab.data.content}
 						<div class="prose max-w-none mt-2">
 							{$activeTab.data.content}
 						</div>
