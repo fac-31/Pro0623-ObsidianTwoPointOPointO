@@ -20,11 +20,12 @@ export const GET: RequestHandler = async ({ params }) => {
 
 		const worldNode: Node = worldResult.records[0].get('w');
 
-		// Neighbor nodes and their internal relationships
+		// Neighbor nodes and their internal relationships, excluding User and Document nodes
 		const graphResult = await session.run(
 			`
 			MATCH (w) WHERE elementId(w) = $worldId
 			MATCH (w)--(n)
+			WHERE NONE(label IN labels(n) WHERE label IN ['User', 'Document'])
 			WITH collect(DISTINCT n) AS nodes
 			UNWIND nodes AS a
 			OPTIONAL MATCH (a)-[r]-(b)
@@ -87,15 +88,15 @@ export const GET: RequestHandler = async ({ params }) => {
 export const POST: RequestHandler = async ({ request }) => {
 	const { worldId } = await request.json();
 	console.log('Received build request for world ID:', worldId);
+
 	const res = await fetch('http://localhost:8001/api/build', {
 		method: 'POST',
-		body: JSON.stringify({
-			world_id: worldId
-		}),
+		body: JSON.stringify({ world_id: worldId }),
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	});
+
 	const data = await res.json();
 	return json(data, { status: 201 });
 };
