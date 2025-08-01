@@ -18,7 +18,9 @@
 		}
 	};
 
-	const enterWorldButton = [{ label: 'Enter World', onClick: enterWorld, class: 'btn-primary', location: 'header'}];
+	const enterWorldButton = [
+		{ label: 'Enter World', onClick: enterWorld, class: 'btn-primary', location: 'header' }
+	];
 </script>
 
 <Dashboard

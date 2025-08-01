@@ -37,7 +37,7 @@
 	export let worldInfo: WorldInfo | undefined = undefined;
 	export let showQueryPanel: boolean = true;
 	export let showInfoPanel: boolean = true;
-	
+
 	export let showSearchBar: boolean = false;
 	export let dashboardButtons: { label: string; onClick: () => void; class?: string }[] = [];
 	export let editedContent: string | undefined;
@@ -85,9 +85,7 @@
 		{#if showQueryPanel || showInfoPanel}
 			<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
 				{#if showInfoPanel}
-					<Pane
-						class="min-h-20"
-					>
+					<Pane class="min-h-20">
 						<InfoPanel
 							{worldId}
 							{explanation}
@@ -106,7 +104,7 @@
 						minSize={$isSmallScreen ? 10 : 10}
 						maxSize={$isSmallScreen ? 20 : 100}
 					>
-						<QueryPanel {worldId} on:result={handleResult} />
+						<QueryPanel {worldId} on:result={handleResult} graphData={currentGraphData} />
 					</Pane>
 				{/if}
 			</PaneGroup>

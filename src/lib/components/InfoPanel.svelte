@@ -6,7 +6,7 @@
 	import CreateNewForm from './CreateNewForm.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import CreateWorld from './CreateWorld.svelte';
-import type { GraphData } from '$lib/types/graph';
+	import type { GraphData } from '$lib/types/graph';
 
 	const dispatch = createEventDispatcher();
 
@@ -31,7 +31,7 @@ import type { GraphData } from '$lib/types/graph';
 
 		// Helper to get node label by ID
 		const getNodeLabel = (nodeId: string) => {
-			const node = graphData.nodes.find(n => n.data.id === nodeId);
+			const node = graphData.nodes.find((n) => n.data.id === nodeId);
 			return node?.data.label || node?.data.name || nodeId;
 		};
 
@@ -141,7 +141,7 @@ import type { GraphData } from '$lib/types/graph';
 					<div class="flex flex-wrap items-center gap-4 mb-2">
 						<h2 class="text-xl font-semibold">{$activeTab.data.name}</h2>
 						<div class="badge badge-outline">{$activeTab.data.type}</div>
-						{console.log("asdfasdf ", JSON.stringify($activeTab.data))}
+						{console.log('asdfasdf ', JSON.stringify($activeTab.data))}
 						{#if buttons.length && $activeTab?.data.type !== 'User'}
 							{console.log('asdfasdfasdf: ', JSON.stringify($activeTab?.data))}
 							<div class="flex gap-2 flex-wrap">

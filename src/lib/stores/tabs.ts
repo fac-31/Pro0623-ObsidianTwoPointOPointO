@@ -1,7 +1,7 @@
 import type { GraphNode } from '$lib/types/graph';
 import { writable, derived } from 'svelte/store';
 
-export type Tab = GraphNode & { editing?: boolean }; 
+export type Tab = GraphNode & { editing?: boolean };
 
 interface TabsStore {
 	tabs: Tab[];
@@ -100,6 +100,5 @@ export const tabsStore = createTabsStore();
 
 export const activeTab = derived(
 	tabsStore,
-	($tabsStore) =>
-		$tabsStore.tabs.find((t) => t.data.id === $tabsStore.activeTabId) || null
+	($tabsStore) => $tabsStore.tabs.find((t) => t.data.id === $tabsStore.activeTabId) || null
 );

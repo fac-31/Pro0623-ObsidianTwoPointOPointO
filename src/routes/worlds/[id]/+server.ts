@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	const worldId = params.id;
 
 	try {
-		// World node
+		// Fetch the World node
 		const worldResult = await session.run(`MATCH (w) WHERE elementId(w) = $worldId RETURN w`, {
 			worldId
 		});
@@ -20,12 +20,12 @@ export const GET: RequestHandler = async ({ params }) => {
 
 		const worldNode: Node = worldResult.records[0].get('w');
 
-		// Neighbor nodes and their internal relationships, excluding User and Document nodes
+		// Fetch neighbors and internal relationships (excluding User, but INCLUDING Document)
 		const graphResult = await session.run(
 			`
 			MATCH (w) WHERE elementId(w) = $worldId
 			MATCH (w)--(n)
-			WHERE NONE(label IN labels(n) WHERE label IN ['User', 'Document'])
+			WHERE NONE(label IN labels(n) WHERE label = 'User')
 			WITH collect(DISTINCT n) AS nodes
 			UNWIND nodes AS a
 			OPTIONAL MATCH (a)-[r]-(b)
@@ -40,6 +40,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		const neighborNodes = graphRecord.get('nodes');
 		const relationships = graphRecord.get('relationships');
 
+		// Convert nodes to GraphNode format
 		const nodes = new Map<string, GraphNode>();
 		const addNode = (node: Node) => {
 			const elementId = node.elementId;
@@ -57,6 +58,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
 		neighborNodes.forEach(addNode);
 
+		// Convert relationships to GraphEdge format
 		const edges: GraphEdge[] = relationships.map((rel: Relationship) => ({
 			data: {
 				id: rel.elementId,

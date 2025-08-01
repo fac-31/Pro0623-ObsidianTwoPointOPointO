@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import type { GraphData } from '$lib/types/graph';
 
 	const dispatch = createEventDispatcher();
 
 	export let worldId: string;
+	export let graphData: GraphData; // Add this line
 	let query = '';
 	// let loading = false;
 	// let error = '';
@@ -15,10 +17,38 @@
 		}
 	}
 
-	async function handleSubmit(event: Event) {
+	// The dumbed down query call
+	async function handleDumbSubmit(event: Event) {
 		event.preventDefault();
 
-		console.log(worldId);
+		// Extract and join all document contents
+		const joinedContent = graphData.nodes
+			.filter((node) => node.data.type === 'Document' && node.data.content)
+			.map((node) => node.data.content)
+			.join('\n\n---\n\n'); // optional delimiter between docs
+
+		console.log('Sending document content:', joinedContent); // for dev visibility
+
+		try {
+			const res = await fetch('/api/dumb-query', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query, docs: joinedContent })
+			});
+
+			if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
+			const response = await res.json();
+			console.log('LLM response:', response);
+			dispatch('result', response);
+			query = '';
+		} catch (err) {
+			console.error('Error submitting query:', err);
+		}
+	}
+
+	async function handleSubmit(event: Event) {
+		event.preventDefault();
 
 		try {
 			const res = await fetch('/api/query', {
@@ -49,7 +79,7 @@
 
 <div class="rounded-4xl border-3 border-bg-base-300 text-base p-4 h-full flex flex-col">
 	<div class="p-1 rounded-xl h-full w-full relative">
-		<form on:submit|preventDefault={handleSubmit}>
+		<form on:submit|preventDefault={handleDumbSubmit}>
 			<textarea
 				class="textarea textarea-ghost w-full h-32 rounded-xl"
 				placeholder="Ask me something"
