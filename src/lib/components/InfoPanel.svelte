@@ -117,9 +117,9 @@
 					<div class="flex flex-wrap items-center gap-4 mb-2">
 						<h2 class="text-xl font-semibold">{$activeTab.data.name}</h2>
 						<div class="badge badge-outline">{$activeTab.data.type}</div>
-
-						{#if buttons.length && $activeTab?.data.label !== 'User'}
-							{console.log("asdfasdfasdf: ", JSON.stringify($activeTab?.data))}
+						{console.log("asdfasdf ", JSON.stringify($activeTab.data))}
+						{#if buttons.length && $activeTab?.data.type !== 'User'}
+							{console.log('asdfasdfasdf: ', JSON.stringify($activeTab?.data))}
 							<div class="flex gap-2 flex-wrap">
 								{#each buttons.filter((b) => b.location === 'header') as button (button.label)}
 									<button
