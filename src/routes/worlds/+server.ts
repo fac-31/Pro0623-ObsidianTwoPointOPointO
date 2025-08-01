@@ -10,7 +10,7 @@ export const GET: RequestHandler = async () => {
 		const result = await session.run(
 			`
 			MATCH (u:User)-[:OWNS]->(n)
-			RETURN u.name AS user, elementId(u) AS userId, n.name AS node, elementId(n) AS nodeId
+			RETURN u.name AS user, elementId(u) AS userId, labels(u) as userLabels, n.name AS node, elementId(n) AS nodeId, labels(n) as nodeLabels
 			`
 		);
 
@@ -22,8 +22,10 @@ export const GET: RequestHandler = async () => {
 		for (const rec of result.records) {
 			const user = rec.get('user');
 			const userId = rec.get('userId');
+			const userLabels = rec.get('userLabels');
 			const node = rec.get('node');
 			const nodeId = rec.get('nodeId');
+			const nodeLabels = rec.get('nodeLabels');
 
 			// Add user node
 			if (!nodeIds.has(userId)) {
@@ -31,7 +33,8 @@ export const GET: RequestHandler = async () => {
 					data: {
 						id: userId,
 						label: 'User',
-						name: user
+						name: user,
+						type: userLabels[0]
 					}
 				});
 				nodeIds.add(userId);
@@ -43,7 +46,8 @@ export const GET: RequestHandler = async () => {
 					data: {
 						id: nodeId,
 						label: 'Node',
-						name: node
+						name: node,
+						type: nodeLabels[0]
 					}
 				});
 				nodeIds.add(nodeId);

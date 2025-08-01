@@ -15,5 +15,13 @@ export const load: Load = async ({ fetch }) => {
 		}
 	}));
 
+	graphData.nodes = graphData.nodes.map((node) => ({
+		...node,
+		data: {
+			...node.data,
+			label: node.data.name || node.data.title || 'Untitled'
+		}
+	}));
+
 	return { graphData };
 };

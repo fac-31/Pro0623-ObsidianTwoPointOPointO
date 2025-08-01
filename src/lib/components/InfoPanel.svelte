@@ -118,7 +118,8 @@
 						<h2 class="text-xl font-semibold">{$activeTab.data.name}</h2>
 						<div class="badge badge-outline">{$activeTab.data.type}</div>
 
-						{#if buttons.length}
+						{#if buttons.length && $activeTab?.data.label !== 'User'}
+							{console.log("asdfasdfasdf: ", JSON.stringify($activeTab?.data))}
 							<div class="flex gap-2 flex-wrap">
 								{#each buttons.filter((b) => b.location === 'header') as button (button.label)}
 									<button
@@ -134,7 +135,8 @@
 
 					<!-- Content (or no content): on new line -->
 					{#if $activeTab.editing}
-						<textarea class="textarea textarea-bordered w-full" bind:value={editedContent}></textarea>
+						<textarea class="textarea textarea-bordered w-full" bind:value={editedContent}
+						></textarea>
 						<div class="flex gap-2 mt-2">
 							{#each buttons.filter((b) => b.location === 'content') as button (button.label)}
 								<button class={`btn ${button.class ?? ''}`} on:click={button.onClick}>
