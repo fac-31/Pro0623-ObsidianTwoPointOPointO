@@ -18,7 +18,7 @@ class AccessibilityCLI {
 			}).trim();
 			console.log(`📍 Current branch: ${this.currentBranch}`);
 		} catch (error) {
-			console.error('❌ Failed to get current branch. Are you in a git repository?');
+			console.error('❌ Failed to get current branch. Are you in a git repository?', error);
 			process.exit(1);
 		}
 	}
@@ -33,7 +33,7 @@ class AccessibilityCLI {
 			execSync('gemini --version', { stdio: 'pipe' });
 			console.log('✅ Gemini CLI available');
 		} catch (error) {
-			console.error('❌ Gemini CLI not found. Install with: npm install -g @google/gemini-cli');
+			console.error('❌ Gemini CLI not found. Install with: npm install -g @google/gemini-cli', error);
 			process.exit(1);
 		}
 	}
@@ -43,7 +43,7 @@ class AccessibilityCLI {
 			const content = readFileSync('accessibility/accessibility.md', 'utf-8');
 			return content;
 		} catch (error) {
-			console.error('❌ Could not load accessibility.md');
+			console.error('❌ Could not load accessibility.md', error);
 			process.exit(1);
 		}
 	}
@@ -53,7 +53,7 @@ class AccessibilityCLI {
 			console.log(`🌿 Creating new branch: ${this.newBranch}`);
 			execSync(`git checkout -b ${this.newBranch}`, { stdio: 'inherit' });
 		} catch (error) {
-			console.error('❌ Failed to create new branch');
+			console.error('❌ Failed to create new branch', error);
 			process.exit(1);
 		}
 	}
@@ -66,7 +66,7 @@ class AccessibilityCLI {
 
 			return gitFiles;
 		} catch (error) {
-			console.error('❌ Failed to get git files');
+			console.error('❌ Failed to get git files', error);
 			return [];
 		}
 	}
@@ -81,6 +81,7 @@ class AccessibilityCLI {
 
 		const PRTemplate = readFileSync('accessibility/PR-template.md', 'utf-8');
 		const PR = readFileSync('accessibility/PR.md', 'utf-8');
+		console.log('PR template loaded:', PR.substring(0, 100) + '...');
 		const fileContent = readFileSync(file, 'utf-8');
 		const prompt = `Based on the following accessibility guidelines, please fix the issues in the provided code block. Only output the corrected code, with no other text, explanations, or markdown formatting. Do not change the content, functionality or visual output of any code, just make syntax accessibility improvements. If an accessibility issue such as color contrast, or moving elements does require content/output changes, write this information to the PR so that we can make those changes manually. After you have made changes to a file, write the changes to PR.md. Do not delete any of PR.md, just add to it. \n\nGuidelines:\n${guidelines}\n\nCode:\n${fileContent}\n\nPR template:\n${PRTemplate}`;
 
@@ -124,7 +125,7 @@ class AccessibilityCLI {
 			});
 			return true;
 		} catch (error) {
-			console.error('❌ Failed to commit changes');
+			console.error('❌ Failed to commit changes', error);
 			return false;
 		}
 	}
@@ -134,7 +135,7 @@ class AccessibilityCLI {
 			console.log('🚀 Pushing branch to remote...');
 			execSync(`git push -u origin ${this.newBranch}`, { stdio: 'inherit' });
 		} catch (error) {
-			console.error('❌ Failed to push branch');
+			console.error('❌ Failed to push branch', error);
 			process.exit(1);
 		}
 	}
@@ -143,6 +144,7 @@ class AccessibilityCLI {
 		try {
 			console.log('📋 Creating pull request...');
 			const prBody = readFileSync('PR.md', 'utf-8');
+			console.log('PR body loaded:', prBody.substring(0, 50) + '...');
 
 			execSync(
 				`gh pr create --title "Automated Accessibility Improvements (Gemini CLI)" --body-file accessibility/PR.md --base ${this.currentBranch}`,
@@ -153,7 +155,7 @@ class AccessibilityCLI {
 
 			console.log('✅ Pull request created successfully!');
 		} catch (error) {
-			console.error('❌ Failed to create PR. Make sure GitHub CLI is installed and authenticated.');
+			console.error('❌ Failed to create PR. Make sure GitHub CLI is installed and authenticated.', error);
 		}
 	}
 
@@ -162,7 +164,7 @@ class AccessibilityCLI {
 			console.log(`🔄 Switching back to ${this.currentBranch}`);
 			execSync(`git checkout ${this.currentBranch}`, { stdio: 'inherit' });
 		} catch (error) {
-			console.log('⚠️  Could not switch back to original branch');
+			console.log('⚠️  Could not switch back to original branch', error);
 		}
 	}
 
