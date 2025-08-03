@@ -33,7 +33,10 @@ class AccessibilityCLI {
 			execSync('gemini --version', { stdio: 'pipe' });
 			console.log('✅ Gemini CLI available');
 		} catch (error) {
-			console.error('❌ Gemini CLI not found. Install with: npm install -g @google/gemini-cli', error);
+			console.error(
+				'❌ Gemini CLI not found. Install with: npm install -g @google/gemini-cli',
+				error
+			);
 			process.exit(1);
 		}
 	}
@@ -155,7 +158,10 @@ class AccessibilityCLI {
 
 			console.log('✅ Pull request created successfully!');
 		} catch (error) {
-			console.error('❌ Failed to create PR. Make sure GitHub CLI is installed and authenticated.', error);
+			console.error(
+				'❌ Failed to create PR. Make sure GitHub CLI is installed and authenticated.',
+				error
+			);
 		}
 	}
 
