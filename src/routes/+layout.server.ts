@@ -31,13 +31,15 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession } }) => 
 		await neo4jsession.close();
 	}
 
-	return { 
-		session, 
-		user, 
-		profile: profile ? {
-			elementId: profile.elementId,
-			labels: profile.labels,
-			properties: profile.properties
-		} : null 
+	return {
+		session,
+		user,
+		profile: profile
+			? {
+					elementId: profile.elementId,
+					labels: profile.labels,
+					properties: profile.properties
+				}
+			: null
 	};
 };
