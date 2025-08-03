@@ -19,6 +19,7 @@
 	const logout = async () => {
 		await supabase.auth.signOut();
 		invalidate('supabase:auth');
+		location.reload();
 	};
 </script>
 
