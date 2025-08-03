@@ -4,7 +4,7 @@
 	import '../app.css';
 
 	const { data, children } = $props();
-	const { supabase, session, profile } = $derived(data);
+	const { supabase, session, user, profile } = $derived(data);
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, newSession) => {
