@@ -1,4 +1,5 @@
 <script lang="ts">
+
 	let worldName = '';
 	let summary = '';
 	let isLoading = false;
@@ -26,6 +27,7 @@
 
 			const result = await response.json();
 			console.log('World created:', result);
+			window.location.reload();
 
 			// Optional: reset fields
 			worldName = '';

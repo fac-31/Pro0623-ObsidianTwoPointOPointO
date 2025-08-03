@@ -15,7 +15,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		});
 
 		if (worldResult.records.length === 0) {
-			return new Response('World not found', { status: 404 });
+			return json({ nodes: [], edges: [], worldInfo: {} });
 		}
 
 		const worldNode: Node = worldResult.records[0].get('w');
@@ -37,6 +37,18 @@ export const GET: RequestHandler = async ({ params }) => {
 		);
 
 		const graphRecord = graphResult.records[0];
+
+		if (!graphRecord) {
+			return json({
+				nodes: [],
+				edges: [],
+				worldInfo: {
+					label: worldNode.labels[0],
+					...worldNode.properties
+				}
+			});
+		}
+
 		const neighborNodes = graphRecord.get('nodes');
 		const relationships = graphRecord.get('relationships');
 

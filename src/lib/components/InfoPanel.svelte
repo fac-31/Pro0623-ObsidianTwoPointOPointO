@@ -173,7 +173,7 @@
 							{$activeTab.data.content}
 						</div>
 					{:else}
-						<p class="text-gray-400 italic mt-2">No content</p>
+						<p class="text-gray-400 italic mt-2">No notes</p>
 					{/if}
 
 					{#if adjacencyList.length > 0}

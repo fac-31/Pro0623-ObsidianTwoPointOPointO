@@ -7,6 +7,14 @@ export const load: Load = async ({ params, fetch }) => {
 
 	const graphData: GraphData = await res.json();
 
+	if (!graphData || !graphData.nodes) {
+		return {
+			graphData: { nodes: [], edges: [], worldInfo: {} },
+			graphTitle: 'World not found',
+			worldInfo: {}
+		};
+	}
+
 	graphData.nodes = graphData.nodes?.map((node) => ({
 		...node,
 		data: {
