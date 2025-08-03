@@ -47,7 +47,14 @@ const supabase: Handle = async ({ event, resolve }) => {
 			return { session: null, user: null, profile: null };
 		}
 
-		return { session, user };
+		// Fetch profile data
+		const { data: profile } = await event.locals.supabase
+			.from('profiles')
+			.select('*')
+			.eq('id', user.id)
+			.single();
+
+		return { session, user, profile };
 	};
 
 	return resolve(event, {
@@ -62,9 +69,10 @@ const supabase: Handle = async ({ event, resolve }) => {
 };
 
 const authGuard: Handle = async ({ event, resolve }) => {
-	const { session, user } = await event.locals.safeGetSession();
+	const { session, user, profile } = await event.locals.safeGetSession();
 	event.locals.session = session;
 	event.locals.user = user;
+	event.locals.profile = profile;
 
 	if (
 		!event.locals.session &&
