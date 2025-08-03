@@ -23,14 +23,16 @@ export const GET: RequestHandler = async ({ params }) => {
 		// Neighbor nodes and their internal relationships
 		const graphResult = await session.run(
 			`
-			MATCH (w) WHERE elementId(w) = $worldId
-			MATCH (w)--(n)
-			WITH collect(DISTINCT n) AS nodes
-			UNWIND nodes AS a
-			OPTIONAL MATCH (a)-[r]-(b)
-			WHERE b IN nodes AND elementId(a) < elementId(b)
-			WITH nodes, collect(DISTINCT r) AS relationships
-			RETURN nodes, relationships
+MATCH (w) WHERE elementId(w) = $worldId
+MATCH (w)--(n)
+WHERE NOT (n:Document) AND NOT (n:Chunk)
+WITH collect(DISTINCT n) AS nodes
+UNWIND nodes AS a
+OPTIONAL MATCH (a)-[r]-(b)
+WHERE b IN nodes AND NOT (b:Document OR b:Chunk) AND elementId(a) < elementId(b)
+WITH nodes, collect(DISTINCT r) AS relationships
+RETURN nodes, relationships
+
 			`,
 			{ worldId }
 		);
@@ -44,7 +46,12 @@ export const GET: RequestHandler = async ({ params }) => {
 			const elementId = node.elementId;
 			if (!nodes.has(elementId)) {
 				nodes.set(elementId, {
-					data: { id: elementId, label: node.labels[0], ...node.properties }
+					data: {
+						id: elementId,
+						name: node.properties.name,
+						type: node.labels[0],
+						...node.properties
+					}
 				});
 			}
 		};
@@ -77,4 +84,20 @@ export const GET: RequestHandler = async ({ params }) => {
 	} finally {
 		await session.close();
 	}
+};
+
+export const POST: RequestHandler = async ({ request }) => {
+	const { worldId } = await request.json();
+	console.log('Received build request for world ID:', worldId);
+	const res = await fetch('http://localhost:8001/api/build', {
+		method: 'POST',
+		body: JSON.stringify({
+			world_id: worldId
+		}),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	const data = await res.json();
+	return json(data, { status: 201 });
 };

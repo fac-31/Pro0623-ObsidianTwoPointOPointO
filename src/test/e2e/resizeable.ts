@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 // Already logged in via auth.setup.ts
 
-test('Worlds page has info pannel and canvas that is resizeable', async ({ page }) => {
+test('World view is resizeable', async ({ page }) => {
 	await page.goto('/worlds');
 	await expect(page.getByRole('heading', { name: 'Select a world.' })).toBeVisible();
 
