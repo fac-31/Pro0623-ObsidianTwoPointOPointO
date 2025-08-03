@@ -51,7 +51,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 		const { data: profile } = await event.locals.supabase
 			.from('profiles')
 			.select('*')
-			.eq('id', user.id)
+			.eq('id', user!.id)
 			.single();
 
 		return { session, user, profile };
