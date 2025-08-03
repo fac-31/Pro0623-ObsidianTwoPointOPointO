@@ -82,35 +82,38 @@
 	</PaneResizer>
 
 	<Pane defaultSize={30} minSize={25}>
-		{#if showQueryPanel || showInfoPanel}
-			<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
-				{#if showInfoPanel}
-					<Pane
-						class="min-h-20"
-						defaultSize={$isSmallScreen ? 50 : 80}
-						minSize={$isSmallScreen ? 40 : 20}
-					>
-						<InfoPanel
-							{worldId}
-							{explanation}
-							buttons={dashboardButtons}
-							{graphTitle}
-							worldContent={worldInfo?.content}
-							on:documentCreated={handleDocumentCreated}
-						/>
-					</Pane>
-				{/if}
-				{#if showQueryPanel}
-					<Pane
-						class="min-h-10 max-h-35"
-						defaultSize={$isSmallScreen ? 50 : 20}
-						minSize={$isSmallScreen ? 50 : 30}
-						maxSize={$isSmallScreen ? 50 : 20}
-					>
-						<QueryPanel {worldId} on:result={handleResult} />
-					</Pane>
-				{/if}
-			</PaneGroup>
-		{/if}
+		<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
+			{#if showInfoPanel}
+				<Pane
+					class="min-h-20"
+					defaultSize={$isSmallScreen ? 50 : 80}
+					minSize={$isSmallScreen ? 40 : 20}
+				>
+					<InfoPanel
+						{worldId}
+						{explanation}
+						buttons={dashboardButtons}
+						{graphTitle}
+						worldContent={worldInfo?.content}
+						on:documentCreated={handleDocumentCreated}
+					/>
+				</Pane>
+			{/if}
+			{#if showInfoPanel && showQueryPanel}
+				<PaneResizer class="h-5 w-full flex items-center justify-center bg-base-100">
+					<div class="w-4/5 h-1 bg-neutral-content/30"></div>
+				</PaneResizer>
+			{/if}
+			{#if showQueryPanel}
+				<Pane
+					class="min-h-10 max-h-35"
+					defaultSize={$isSmallScreen ? 50 : 20}
+					minSize={$isSmallScreen ? 50 : 30}
+					maxSize={$isSmallScreen ? 50 : 20}
+				>
+					<QueryPanel {worldId} on:result={handleResult} />
+				</Pane>
+			{/if}
+		</PaneGroup>
 	</Pane>
 </PaneGroup>

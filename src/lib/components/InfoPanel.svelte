@@ -11,7 +11,7 @@
 	export let graphTitle: string;
 	export let buttons: { label: string; onClick: () => void; class?: string }[] = [];
 	export let worldContent: string | undefined = undefined;
-	export let explanation: string;
+	export const explanation: string = '';
 
 	$: tabs = $selectedNodesStore.nodes.map((n) => ({
 		id: n.data.id,

@@ -48,7 +48,7 @@
 			<button type="button" on:click={createNew}>Create New</button>
 		</li>
 		<li>
-			<a href="#" on:click|preventDefault={buildWorldAPI}>Build</a>
+			<button type="button" on:click={buildWorldAPI}>Build</button>
 		</li>
 		<li>
 			<button type="button" on:click={onToggleSettings}>Settings</button>

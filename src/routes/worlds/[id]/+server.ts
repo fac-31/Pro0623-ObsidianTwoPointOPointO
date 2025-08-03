@@ -23,14 +23,16 @@ export const GET: RequestHandler = async ({ params }) => {
 		// Neighbor nodes and their internal relationships
 		const graphResult = await session.run(
 			`
-			MATCH (w) WHERE elementId(w) = $worldId
-			MATCH (w)--(n)
-			WITH collect(DISTINCT n) AS nodes
-			UNWIND nodes AS a
-			OPTIONAL MATCH (a)-[r]-(b)
-			WHERE b IN nodes AND elementId(a) < elementId(b)
-			WITH nodes, collect(DISTINCT r) AS relationships
-			RETURN nodes, relationships
+MATCH (w) WHERE elementId(w) = $worldId
+MATCH (w)--(n)
+WHERE NOT (n:Document) AND NOT (n:Chunk)
+WITH collect(DISTINCT n) AS nodes
+UNWIND nodes AS a
+OPTIONAL MATCH (a)-[r]-(b)
+WHERE b IN nodes AND NOT (b:Document OR b:Chunk) AND elementId(a) < elementId(b)
+WITH nodes, collect(DISTINCT r) AS relationships
+RETURN nodes, relationships
+
 			`,
 			{ worldId }
 		);
