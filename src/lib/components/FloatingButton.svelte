@@ -42,16 +42,44 @@
 
 	<ul class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-sm">
 		<li>
-			<button type="button" on:click={onDisplayText}>Display Text</button>
+			<a
+				href="#"
+				role="button"
+				on:click={onDisplayText}
+				on:keydown={(e) => e.key === 'Enter' && onDisplayText()}
+			>
+				Display Text
+			</a>
 		</li>
 		<li>
-			<button type="button" on:click={createNew}>Create New</button>
+			<a
+				href="#"
+				role="button"
+				on:click={createNew}
+				on:keydown={(e) => e.key === 'Enter' && createNew()}
+			>
+				Create New
+			</a>
 		</li>
 		<li>
-			<button type="button" on:click={buildWorldAPI}>Build</button>
+			<a
+				href="#"
+				role="button"
+				on:click={buildWorldAPI}
+				on:keydown={(e) => e.key === 'Enter' && buildWorldAPI()}
+			>
+				Build
+			</a>
 		</li>
 		<li>
-			<button type="button" on:click={onToggleSettings}>Settings</button>
+			<a
+				href="#"
+				role="button"
+				on:click={onToggleSettings}
+				on:keydown={(e) => e.key === 'Enter' && onToggleSettings()}
+			>
+				Settings
+			</a>
 		</li>
 	</ul>
 </div>

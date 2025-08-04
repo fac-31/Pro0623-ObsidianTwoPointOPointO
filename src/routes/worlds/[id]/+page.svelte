@@ -9,6 +9,10 @@
 	console.log('pageworldsId', worldId);
 </script>
 
+<svelte:head>
+	<title>World: {data.graphTitle}</title>
+</svelte:head>
+
 <Dashboard
 	{worldId}
 	graphData={data.graphData}
