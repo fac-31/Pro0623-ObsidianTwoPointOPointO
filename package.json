@@ -19,7 +19,8 @@
 		"test:a11y": "ts-node scripts/axe-test.ts",
 		"test:e2e": "playwright test",
 		"commit": "cz",
-		"access": "tsx accessibility/accessibilityCli.ts"
+		"access": "tsx accessibility/accessibilityCli.ts",
+		"swagger:serve": "swagger-ui-watcher swagger.yaml"
 	},
 	"config": {
 		"commitizen": {
@@ -76,6 +77,7 @@
 		"start-server-and-test": "^2.0.12",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
+		"swagger-ui-watcher": "^2.1.14",
 		"tailwindcss": "^4.1.11",
 		"ts-node": "^10.9.2",
 		"tsx": "^4.20.3",
