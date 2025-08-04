@@ -2,3 +2,12 @@
 @plugin "daisyui" {
 	themes: all;
 }
+
+:focus {
+	outline: 3px solid #facc15; /* yellow-400 */
+	outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+	outline: none;
+}

@@ -50,6 +50,7 @@
 <div class="rounded-4xl border-3 border-bg-base-300 text-base p-4 h-full flex flex-col">
 	<div class="p-1 rounded-xl h-full w-full relative">
 		<form on:submit|preventDefault={handleSubmit}>
+			<label for="query" class="sr-only">Ask me something</label>
 			<textarea
 				class="textarea textarea-ghost w-full h-32 rounded-xl"
 				placeholder="Ask me something"
