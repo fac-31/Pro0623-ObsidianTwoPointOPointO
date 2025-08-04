@@ -70,66 +70,84 @@ export async function handleQuery(userQuery: string, worldId: string) {
 	console.log('Query type:', queryType);
 
 	const cypherPrompt = `
-        You are a Cypher expert working with a Neo4j graph.
+	You are a Cypher expert working with a Neo4j graph.
 
-        GRAPH SCHEMA:
-        ${schema}
+	GRAPH SCHEMA:
+	${schema}
 
-        Each graph is scoped to a specific world by using a \`World\` node with a unique \`name\` property.
+	Each graph is scoped to a specific world using a 'World' node.
 
-        You MUST ALWAYS begin your Cypher query with this world-scoping pattern:
+	ALWAYS begin your Cypher query with this scoping pattern:
 
-        MATCH (w:World) WHERE elementId(w) = ${worldId}
-        CALL apoc.path.subgraphAll(w, {}) YIELD nodes, relationships
-        WITH nodes, relationships
+	MATCH (w:World) WHERE elementId(w) = "${worldId}"
+	CALL apoc.path.subgraphAll(w, {}) YIELD nodes, relationships
+	WITH nodes, relationships
 
-        IMPORTANT RULES:
-        - Always scope your query to the specified world using the pattern above.
-        - Only return nodes that are relevant to the user's question.
-        - Only include relationships that are **meaningfully connected** to the returned nodes.
-        - It is acceptable for \`relationships\` to be an **empty list** if the query doesn’t require them (e.g. FIND_NODE, NODE_PROPERTY, STATISTIC).
-        - Never return the entire subgraph unless explicitly requested.
+	QUERY RULES:
+	- Only return nodes relevant to the user's question.
+	- If returning relationships, they MUST be returned as explicit objects with the following structure:
+	{
+		id: id(r),
+		type: type(r),
+		source: id(startNode(r)),
+		target: id(endNode(r)),
+		properties: properties(r)
+	}
+	- Do not return raw Neo4j relationship objects.
+	- Expand the node set to include directly connected nodes via those relationships.
+	- Use 'apoc.coll.toSet(...)'' to deduplicate nodes.
+	- Use 'COLLECT(...)' for relationships and RETURN only once.
+	- Never return the entire graph unless explicitly asked.
 
-        The format of your return must always be:
+	RETURN FORMAT:
+	RETURN nodes, relationships
 
-        RETURN nodes, relationships
+	Where:
+	- 'nodes' is a list of Neo4j native node objects (NOT plain objects).
+	- 'relationships' is a list of maps as described above.
 
-        To achieve this:
-        - Use UNWIND on the collected \`nodes\` and \`relationships\` if you need to filter.
-        - Filter relationships using a list comprehension like:
-          \`[r IN relationships WHERE startNode(r) IN nodes AND endNode(r) IN nodes]\`
-        - Then return:
-          \`RETURN nodes, relationships\`
+	QUERY TYPES:
+	- FIND_NODE: Return the node(s) matching a name or property, and also return all directly connected nodes and relationships. Do NOT return only the queried node.
+	- NODE_PROPERTY: Return the node and any meaningful connections that help interpret the property.
+	- DIRECT_CONNECTION: Return two nodes and their direct relationship.
+	- NEIGHBORS: Return a node, its immediate neighbors, and their connecting relationships.
+	- MULTIHOP_PATH: Return a multistep path between two nodes.
+	- LIST_CATEGORY: Return all nodes of a given label.
+	- STATISTIC: Return a count or metric. Relationships may be omitted.
 
-        DO NOT:
-        - Return raw node or relationship variables like \`RETURN n\`, \`RETURN r\`, or \`RETURN p\`.
-        - Return unfiltered or irrelevant parts of the graph.
-        - Return relationships unless they are directly connected to the returned nodes.
+	USER QUESTION: "${userQuery}"
+	QUERY TYPE: ${queryType}
 
-        QUERY TYPES YOU MAY HANDLE:
-        - **FIND_NODE**: Return a node by name or unique property. Include only directly connected nodes and relationships if relevant.
-        - **NODE_PROPERTY**: Same as FIND_NODE. Relationships may be empty.
-        - **DIRECT_CONNECTION**: Return two nodes and the relationship(s) directly connecting them.
-        - **NEIGHBORS**: Return a node and all its immediate neighbors and the relationships connecting them.
-        - **MULTIHOP_PATH**: Return a meaningful path or chain of connections (e.g. shortestPath) between nodes.
-        - **LIST_CATEGORY**: Return all nodes of a certain label in the world (e.g. all Characters, all Places).
-        - **STATISTIC**: Return nodes used to summarize a count or metric. Relationships can be empty.
+	QUERY TEMPLATES:
+	**FIND_NODE**:
+	MATCH (w:World) WHERE elementId(w) = "${worldId}"
+	CALL apoc.path.subgraphAll(w, {}) YIELD nodes, relationships
+	WITH nodes, relationships
 
-        QUERY TYPE: ${queryType}
+	UNWIND nodes AS n
+	WITH n, relationships
+	WHERE n.name = "<NODE_NAME>"
 
-        USER'S QUESTION: "${userQuery}"
+	WITH COLLECT(n) AS queriedNodes, relationships
+	UNWIND queriedNodes AS qn
+	MATCH (qn)-[r]-(connectedNode)
 
-        OUTPUT:
-        A single valid Cypher query that:
-        - Returns at least one node.
-        - Uses the correct scoping pattern.
-        - Returns only meaningful nodes and relationships.
-        - May return \`relationships\` as an empty list.
-        - If you return an empty list for relationships, you MUST alias it: \`[] AS relationships\`.
-        - NEVER write \`WITH ..., []\` without \`AS relationships\`; this will break the query.
-        - Uses: \`RETURN nodes, relationships\`
+	WITH queriedNodes,
+		COLLECT(DISTINCT connectedNode) AS neighbors,
+		COLLECT(DISTINCT {
+			id: id(r),
+			type: type(r),
+			source: id(startNode(r)),
+			target: id(endNode(r)),
+			properties: properties(r)
+		}) AS relationships
 
-        DO NOT add any comments or explanation — only return the Cypher query.
+	WITH apoc.coll.toSet(queriedNodes + neighbors) AS nodes, relationships
+	RETURN nodes, relationships
+
+	Cypher Output:
+	A single valid Cypher query using the above rules.
+	DO NOT include any comments, explanation, or extra output — ONLY the Cypher query.
     `.trim();
 
 	function extractMessageContent(content: unknown): string {
@@ -151,7 +169,6 @@ export async function handleQuery(userQuery: string, worldId: string) {
 	const cypher = extractMessageContent(cypherResponse.content);
 	console.log(cypher);
 	const rawResult = await graph.query(cypher);
-	console.log(rawResult);
 	console.dir(rawResult[0], { depth: null });
 
 	const nodes = new Map<string, GraphNode>();
@@ -161,62 +178,36 @@ export async function handleQuery(userQuery: string, worldId: string) {
 	const resultRelationships = rawResult[0].relationships ?? [];
 
 	for (const node of resultNodes) {
-		if (node?.identity && node?.labels) {
-			// Neo4j Node instance
-			nodes.set(node.identity.toString(), {
-				data: {
-					id: node.identity.toString(),
-					name: node.properties.name ?? 'Anon',
-					type: node.labels?.[0] ?? 'Unknown',
-					...node.properties
-				}
-			});
-		} else if (node?.name || node?.id) {
-			// Plain object node (likely from COLLECT(n))
-			const id = node.id?.toString?.() ?? node.name ?? crypto.randomUUID();
-			nodes.set(id, {
-				data: {
-					id,
-					label: 'Unknown',
-					...node
-				}
-			});
-		} else {
-			console.warn('Skipping unrecognized node structure:', node);
-		}
+		const id = node.identity?.toString?.() ?? node.id?.toString?.();
+		const name = node.name ?? 'Anon';
+		const type = node.labels?.[0] ?? 'Unknown';
+
+		nodes.set(id, {
+			data: {
+				id,
+				name,
+				type,
+				label: name,
+				...node.properties
+			}
+		});
 	}
 
 	for (const rel of resultRelationships) {
-		// Case 1: Neo4j native Relationship object
-		if (rel?.identity && rel?.start && rel?.end && rel?.type) {
-			edges.push({
-				data: {
-					id: rel.identity.toString(),
-					source: rel.start.toString(),
-					target: rel.end.toString(),
-					label: rel.type,
-					...rel.properties
-				}
-			});
-		}
-		// Case 2: Already-unwrapped object (e.g. from a custom Cypher RETURN)
-		else if ((rel?.id || rel?.source || rel?.target) && typeof rel?.type === 'string') {
-			const id = rel.id?.toString?.() ?? crypto.randomUUID();
-			const source = rel.source?.toString?.() ?? 'unknown';
-			const target = rel.target?.toString?.() ?? 'unknown';
+		const id = rel.id?.toString?.() ?? rel.identity?.toString?.();
+		const source = rel.source?.toString?.() ?? rel.start?.toString?.();
+		const target = rel.target?.toString?.() ?? rel.end?.toString?.();
+		const label = rel.type;
 
-			edges.push({
-				data: {
-					id,
-					source,
-					target,
-					label: rel.type,
-					...rel
-				}
-			});
-		} else {
-			console.warn('Skipping unrecognized relationship structure:', rel);
-		}
+		edges.push({
+			data: {
+				id,
+				source,
+				target,
+				label,
+				...(rel.properties ?? {})
+			}
+		});
 	}
 
 	console.log('now here');
@@ -226,7 +217,7 @@ export async function handleQuery(userQuery: string, worldId: string) {
 		edges
 	};
 
-	console.log(graphData);
+	console.log(JSON.stringify(graphData, null, 2));
 
 	if (graphData.nodes.length === 0) {
 		throw new Error('No relevant data found for this query.');
