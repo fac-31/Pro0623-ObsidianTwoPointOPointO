@@ -13,6 +13,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Login / Signup</title>
+</svelte:head>
+
 <section class="flex flex-col items-center justify-center h-screen">
 	{#if formState === 'logIn'}
 		<AuthForm
