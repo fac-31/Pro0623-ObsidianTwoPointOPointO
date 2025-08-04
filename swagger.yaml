@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: ObsidianTwoPointOPointO API
+  description: API for ObsidianTwoPointOPointO, a tool for building and querying worlds.
+  version: 1.0.0
+servers:
+  - url: /api
+paths:
+  /build:
+    post:
+      summary: Build a world
+      description: Triggers a Python script to build a "world".
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                world_id:
+                  type: string
+                  description: The ID of the world to build.
+      responses:
+        '200':
+          description: World built successfully.
+        '400':
+          description: Missing world_id.
+        '500':
+          description: Failed to build world.
+  /documents/create:
+    post:
+      summary: Create a new document
+      description: Creates a new document in the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the document.
+                content:
+                  type: string
+                  description: The content of the document.
+                worldId:
+                  type: string
+                  description: The ID of the world this document belongs to.
+      responses:
+        '201':
+          description: Document created successfully.
+        '400':
+          description: Missing required fields.
+        '401':
+          description: Unauthorized.
+        '500':
+          description: Failed to create document.
+  /query:
+    post:
+      summary: Handle a query
+      description: Handles a query using the relationship-query-agent.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The query to handle.
+                worldId:
+                  type: string
+                  description: The ID of the world to query against.
+      responses:
+        '200':
+          description: Query handled successfully.
