@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>{data.graphTitle}</title>
+</svelte:head>
+
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Dashboard from '$lib/components/Dashboard.svelte';

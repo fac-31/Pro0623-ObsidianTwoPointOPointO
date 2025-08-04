@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>World Builder</title>
+</svelte:head>
+
 <script lang="ts">
 	import Dashboard from '$lib/components/Dashboard.svelte';
 	import type { GraphData } from '$lib/types/graph';

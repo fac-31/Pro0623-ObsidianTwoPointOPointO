@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>Login / Signup</title>
+</svelte:head>
+
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import AuthForm from '$lib/components/AuthForm.svelte';
