@@ -113,7 +113,7 @@
 				<input id="select_all" onclick={selectAll} type="checkbox" checked={areAllSelected} />
 				Select All
 			</label>
-			{#each Object.keys(relTypes) as relType}
+			{#each Object.keys(relTypes) as relType (relType)}
 				<label class="block" for={relType}>
 					<input
 						id={relType}
