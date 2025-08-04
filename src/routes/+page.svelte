@@ -20,6 +20,10 @@
 	const enterWorldButton = [{ label: 'Enter World', onClick: enterWorld, class: 'btn-primary' }];
 </script>
 
+<svelte:head>
+	<title>World Selection</title>
+</svelte:head>
+
 <Dashboard
 	graphData={data.graphData}
 	showSearchBar={true}

@@ -105,7 +105,7 @@
 			<div class="flex-1 overflow-auto">
 				{#if $activeNode}
 					<div class="flex flex-wrap items-center gap-4 mb-2">
-						<h2 class="text-xl font-semibold">{$activeNode.data.label}</h2>
+						<h1 class="text-xl font-semibold">{$activeNode.data.label}</h1>
 						{#if buttons.length}
 							<div class="flex gap-2 flex-wrap">
 								{#each buttons as button (button.label)}
@@ -121,7 +121,7 @@
 					</div>
 					<p>{$activeNode.data.content}</p>
 				{:else if graphTitle}
-					<h2 class="text-xl font-semibold">{graphTitle}</h2>
+					<h1 class="text-xl font-semibold">{graphTitle}</h1>
 					{#if worldContent}
 						<p>{worldContent}</p>
 					{/if}
