@@ -91,17 +91,18 @@ def build_world(world, userId):
             "chunk_id": chunk_id,
             "text": chunk.page_content,
             "embedding": chunk_embedding,
-            "createdBy": userId
+            "createdBy": userId,
+            "world": world
         }
         
         graph.query("""
-            MATCH (d:Document {title: $filename})
+            MATCH (d:Document {title: $filename, worldId: $world})
             MERGE (c:Chunk {id: $chunk_id})
             SET c.text = $text, c.createdBy = $createdBy
             MERGE (d)<-[:PART_OF]-(c)
             WITH c
             CALL db.create.setNodeVectorProperty(c, 'textEmbedding', $embedding)
-            """, 
+            """,
             properties
         )
 

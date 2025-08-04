@@ -19,7 +19,8 @@
 
 		currentGraphData = {
 			nodes: [...graphData.nodes],
-			edges: [...graphData.edges]
+			edges: [...graphData.edges],
+			relTypes: [...graphData.relTypes]
 		};
 		console.log('Dashboard: currentGraphData now:', currentGraphData);
 

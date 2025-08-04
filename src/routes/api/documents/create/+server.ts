@@ -87,11 +87,12 @@ export const POST: RequestHandler = async (event) => {
 		} catch (error) {
 			console.error('Error building world:', error);
 		} finally {
+			/*
 			await session.executeWrite((tx) =>
 				tx.run(
 					`
                     MATCH (w) WHERE elementId(w) = $worldId
-                    MATCH (n)-[]-(c:Chunk)-[]-(d:Document)-[]-(w)
+                    MATCH (n)<-[:HAS_ENTITY]-(c:Chunk)-[:PART_OF]->(d:Document)-[:DESCRIBES]->(w)
                     MERGE (n)-[:EXISTS_IN]->(w)
 					SET n.name = n.id
 					REMOVE n.id
@@ -99,6 +100,7 @@ export const POST: RequestHandler = async (event) => {
 					{ worldId }
 				)
 			);
+			*/
 			await session.close();
 		}
 	}

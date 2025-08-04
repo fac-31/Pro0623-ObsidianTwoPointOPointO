@@ -7,6 +7,7 @@ import type { Node, Relationship } from 'neo4j-driver';
 export const GET: RequestHandler = async ({ params }) => {
 	const session = driver.session();
 	const worldId = params.id;
+	console.log(worldId);
 
 	try {
 		// World node
@@ -23,59 +24,80 @@ export const GET: RequestHandler = async ({ params }) => {
 		// Neighbor nodes and their internal relationships
 		const graphResult = await session.run(
 			`
-MATCH (w) WHERE elementId(w) = $worldId
-MATCH (w)--(n)
-WHERE NOT (n:Document) AND NOT (n:Chunk)
-WITH collect(DISTINCT n) AS nodes
-UNWIND nodes AS a
-OPTIONAL MATCH (a)-[r]-(b)
-WHERE b IN nodes AND NOT (b:Document OR b:Chunk) AND elementId(a) < elementId(b)
-WITH nodes, collect(DISTINCT r) AS relationships
-RETURN nodes, relationships
-
+			MATCH (w) WHERE elementId(w) = $worldId
+			MATCH (n)<-[:HAS_ENTITY]-(c:Chunk)-[:PART_OF]->(d:Document)-[:DESCRIBES]->(w)
+			WITH collect(DISTINCT n) AS nodes
+			UNWIND nodes AS a
+			OPTIONAL MATCH (a)-[r]-(b)
+			WHERE b IN nodes AND elementId(a) < elementId(b)
+			WITH nodes, collect(DISTINCT r) AS relationships
+			RETURN nodes, relationships
 			`,
 			{ worldId }
 		);
 
 		const graphRecord = graphResult.records[0];
-		const neighborNodes = graphRecord.get('nodes');
-		const relationships = graphRecord.get('relationships');
+		let graphData: GraphData;
 
-		const nodes = new Map<string, GraphNode>();
-		const addNode = (node: Node) => {
-			const elementId = node.elementId;
-			if (!nodes.has(elementId)) {
-				nodes.set(elementId, {
-					data: {
-						id: elementId,
-						name: node.properties.name,
-						type: node.labels[0],
-						...node.properties
-					}
-				});
-			}
-		};
+		console.log('Graph data:', graphRecord);
 
-		neighborNodes.forEach(addNode);
+		if (graphRecord) {
+			const neighborNodes = graphRecord.get('nodes');
+			const relationships = graphRecord.get('relationships');
 
-		const edges: GraphEdge[] = relationships.map((rel: Relationship) => ({
-			data: {
-				id: rel.elementId,
-				source: rel.startNodeElementId,
-				target: rel.endNodeElementId,
-				label: rel.type,
-				...rel.properties
-			}
-		}));
+			const nodes = new Map<string, GraphNode>();
+			const addNode = (node: Node) => {
+				const elementId = node.elementId;
+				if (!nodes.has(elementId)) {
+					nodes.set(elementId, {
+						data: {
+							...node.properties,
+							id: elementId,
+							name: node.properties.id,
+							type: node.labels[0]
+						}
+					});
+				}
+			};
 
-		const graphData: GraphData = {
-			nodes: Array.from(nodes.values()),
-			edges,
-			worldInfo: {
-				label: worldNode.labels[0],
-				...worldNode.properties
-			}
-		};
+			neighborNodes.forEach(addNode);
+
+			const edges: GraphEdge[] = relationships.map((rel: Relationship) => ({
+				data: {
+					id: rel.elementId,
+					source: rel.startNodeElementId,
+					target: rel.endNodeElementId,
+					label: rel.type,
+					...rel.properties
+				}
+			}));
+
+			const relTypes = edges.map((edge) => edge.data.label);
+
+			graphData = {
+				nodes: Array.from(nodes.values()),
+				edges,
+				relTypes,
+				worldInfo: {
+					label: worldNode.labels[0],
+					...worldNode.properties
+				}
+			};
+
+			console.log(nodes);
+			console.log(graphData.nodes);
+			console.log(graphData.edges);
+		} else {
+			graphData = {
+				nodes: [],
+				edges: [],
+				relTypes: [],
+				worldInfo: {
+					label: worldNode.labels[0],
+					...worldNode.properties
+				}
+			} as GraphData;
+		}
 
 		return json(graphData);
 	} catch (err) {
