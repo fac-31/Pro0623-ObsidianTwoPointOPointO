@@ -15,7 +15,7 @@
 
 	$: tabs = $selectedNodesStore.nodes.map((n) => ({
 		id: n.data.id,
-		label: n.data.name
+		label: n.data.name || n.data.title
 	}));
 
 	$: useDropdown = tabs.length > 10;
@@ -27,6 +27,7 @@
 
 	async function handleSave(event: CustomEvent) {
 		console.log('Save clicked:', event.detail);
+		console.log('WorldId', worldId);
 
 		try {
 			const response = await fetch('/api/documents/create', {
@@ -35,7 +36,8 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					...event.detail // This includes title and content
+					...event.detail,
+					worldId
 				})
 			});
 
