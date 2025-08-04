@@ -25,5 +25,6 @@ export type WorldInfo = {
 export type GraphData = {
 	nodes: GraphNode[];
 	edges: GraphEdge[];
+	relTypes: string[];
 	worldInfo?: WorldInfo;
 };

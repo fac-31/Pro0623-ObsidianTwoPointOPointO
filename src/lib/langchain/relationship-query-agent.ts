@@ -212,9 +212,12 @@ export async function handleQuery(userQuery: string, worldId: string) {
 
 	console.log('now here');
 
+	const relTypes = edges.map((edge) => edge.data.label);
+
 	const graphData: GraphData = {
 		nodes: Array.from(nodes.values()),
-		edges
+		edges,
+		relTypes
 	};
 
 	console.log(JSON.stringify(graphData, null, 2));

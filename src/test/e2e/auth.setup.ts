@@ -17,7 +17,6 @@ setup('login and save storage state', async ({ page }) => {
 	await page.getByRole('button', { name: 'Log In' }).click();
 
 	// Confirm user is logged in
-	await page.getByRole('link', { name: 'Tester Dashboard' }).click();
 	await expect(page.getByRole('heading', { name: 'Hello testing' })).toBeVisible();
 
 	await page.context().storageState({ path: authFile });
