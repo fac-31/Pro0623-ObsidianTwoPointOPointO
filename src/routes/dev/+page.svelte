@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>Dev Page</title>
+</svelte:head>
+
 <script lang="ts">
 	// this is the old landing page of the app with developer functions. Thought I'd keep it here in case we want a dev page/portal
 	import driver from '$lib/db/neo4j';
@@ -83,7 +87,7 @@
 	</p>
 
 	{#if errorMessage}
-		<p class="text-red-600">Error: {errorMessage}</p>
+		<p class="text-red-600" role="alert">Error: {errorMessage}</p>
 	{/if}
 
 	<button onclick={() => send(readUsers)} class="px-3 py-1 border rounded hover:bg-gray-100">
