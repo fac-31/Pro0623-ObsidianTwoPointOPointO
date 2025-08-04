@@ -106,6 +106,45 @@ OPENAI_API_KEY=your_openai_key
 npm run dev
 ```
 
+## 🔧 Running the Python Server
+
+### 1. Create a Virtual Environment
+```bash
+# macOS/Linux
+python3 -m venv venv
+
+# Windows
+python -m venv venv
+```
+
+### 2. Activate the Virtual Environment
+```bash
+# macOS/Linux
+source venv/bin/activate
+
+# Windows (Git Bash or similar)
+source venv/Scripts/activate
+```
+
+### 3. Install Required Modules
+```bash
+pip install -r src/python/requirements.txt
+```
+
+### 4. Run the Server from Project Root
+```bash
+# macOS/Linux
+python3 src/python/server.py
+
+# Windows
+python src/python/server.py
+```
+
+### 5. Deactivate the Virtual Environment
+```bash
+deactivate
+```
+---
 ### Available Scripts
 
 - `npm run dev` - Start development server
