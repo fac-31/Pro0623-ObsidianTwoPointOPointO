@@ -64,7 +64,7 @@
 	class="h-full py-4 px-3"
 	data-testid="dashboard"
 >
-	<Pane defaultSize={80} minSize={20} class="relative overflow-y-auto">
+	<Pane defaultSize={80} minSize={20} class="relative overflow-y-auto" role="main">
 		{#if showSearchBar}
 			<div class="absolute top-2 left-2 z-10"><SearchBar /></div>
 		{/if}
@@ -82,13 +82,15 @@
 		<div class={`bg-neutral-content/30 ${$isSmallScreen ? 'w-4/5 h-1' : 'h-4/5 w-1'}`}></div>
 	</PaneResizer>
 
-	<Pane defaultSize={30} minSize={25}>
+	<Pane defaultSize={30} minSize={25} role="complementary">
 		<PaneGroup direction="vertical" class="h-full gap-4" data-testid="query-info-panel-group">
 			{#if showInfoPanel}
 				<Pane
 					class="min-h-20"
 					defaultSize={$isSmallScreen ? 50 : 80}
 					minSize={$isSmallScreen ? 40 : 20}
+					role="region"
+					aria-label="Information Panel"
 				>
 					<InfoPanel
 						{worldId}
@@ -111,6 +113,8 @@
 					defaultSize={$isSmallScreen ? 50 : 20}
 					minSize={$isSmallScreen ? 50 : 30}
 					maxSize={$isSmallScreen ? 50 : 20}
+					role="region"
+					aria-label="Query Panel"
 				>
 					<QueryPanel {worldId} on:result={handleResult} />
 				</Pane>
