@@ -19,7 +19,9 @@
 </script>
 
 <form method="POST" {action} class="flex flex-col gap-2 m-4">
-	{#if formData?.error}<p class="error">{formData?.message}</p>{/if}
+	{#if formData?.error}
+		<p class="error" role="alert">{formData?.message}</p>
+	{/if}
 	{#each entries as entry (entry.name)}
 		<label for={entry.name} class="flex flex-col gap-2">
 			{entry.label}

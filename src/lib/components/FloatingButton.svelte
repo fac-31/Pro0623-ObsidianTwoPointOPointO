@@ -42,16 +42,16 @@
 
 	<ul class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-sm">
 		<li>
-			<button type="button" on:click={onDisplayText}>Display Text</button>
+			<button type="button" on:click={onDisplayText} on:keydown|self={(e) => e.key === 'Enter' && onDisplayText()}>Display Text</button>
 		</li>
 		<li>
-			<button type="button" on:click={createNew}>Create New</button>
+			<button type="button" on:click={createNew} on:keydown|self={(e) => e.key === 'Enter' && createNew()}>Create New</button>
 		</li>
 		<li>
-			<button type="button" on:click={buildWorldAPI}>Build</button>
+			<button type="button" on:click={buildWorldAPI} on:keydown|self={(e) => e.key === 'Enter' && buildWorldAPI()}>Build</button>
 		</li>
 		<li>
-			<button type="button" on:click={onToggleSettings}>Settings</button>
+			<button type="button" on:click={onToggleSettings} on:keydown|self={(e) => e.key === 'Enter' && onToggleSettings()}>Settings</button>
 		</li>
 	</ul>
 </div>
